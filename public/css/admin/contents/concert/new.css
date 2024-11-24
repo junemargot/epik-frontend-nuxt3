@@ -62,7 +62,7 @@
   align-items: stretch; /* 입력란 높이 맞추기 설정 */
 }
 
-input[type=text] {
+input[type="text"] {
   width: 100%;
   box-sizing: border-box;
   padding: 10px 12px;

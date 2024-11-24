@@ -168,7 +168,7 @@ const fetchAllData = async () => {
 // Concert 데이터 가져오기
 // const fetchConcertItems = async () => {
 //   const { data: concertData, error: concertError } = await useFetch(`/api/v1/member/concert/${id}/bookmark`, {
-//     baseURL: 'http://localhost:8080',
+//     baseURL: 'http://localhost:8081',
 //   })
 
 //   if (concertError.value) {
@@ -182,7 +182,7 @@ const fetchAllData = async () => {
 // Musical 데이터 가져오기
 // const fetchMusicalItems = async () => {
 //   const { data: musicalData, error: musicalError } = await useFetch(`/api/v1/member/musical/${id}/bookmark`, {
-//     baseURL: 'http://localhost:8080',
+//     baseURL: 'http://localhost:8081',
 //   })
 
 //   if (musicalError.value) {
@@ -196,7 +196,7 @@ const fetchAllData = async () => {
 // Exhibition 데이터 가져오기
 // const fetchExhibitionItems = async () => {
 //   const { data: exhibitionData, error: exhibitionError } = await useFetch(`/api/v1/member/exhibition/${id}/bookmark`, {
-//     baseURL: 'http://localhost:8080',
+//     baseURL: 'http://localhost:8081',
 //   })
 
 //   if (exhibitionError.value) {
