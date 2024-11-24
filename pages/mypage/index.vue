@@ -204,6 +204,7 @@ fieldset{
 .mypage__fuction-icons li a:hover {
   font-weight: bold; /* 호버 시 폰트 두께를 bold로 변경 */
   transform: scale(1.005); /* 호버 시 아이콘과 텍스트 크기 살짝 증가 */
+  cursor: pointer;
 }
 
 /* 메뉴 내 아이콘 텍스트 */
@@ -217,6 +218,7 @@ fieldset{
 .mypage__menulist li a:hover .mypage__icon-wrap,
 .mypage__fuction-icons li a:hover .mypage__icon-wrap {
   font-weight: bold; /* 호버 시 아이콘 텍스트도 볼드 처리 */
+  cursor: pointer;
 }
 
 /* 메뉴 내 아이콘 크기 조정 */
@@ -229,6 +231,7 @@ fieldset{
 .mypage__menulist li a:hover .mypage__angleright-icon,
 .mypage__fuction-icons li a:hover i {
   transform: scale(1.2); /* 호버 시 아이콘 크기 살짝 커짐 */
+  cursor: pointer;
 }
 
 </style>

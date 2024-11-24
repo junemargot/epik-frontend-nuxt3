@@ -157,4 +157,20 @@ function showMoreItems() {
 
 <style scoped>
 @import url('/public/css/musical/index.css');
+
+.slider-item img {
+  cursor: pointer;
+}
+
+.picks {
+  margin-left: 5px; /* 원하는 만큼 왼쪽으로 이동 */
+}
+
+.region {
+  margin-left: -20px; /* 원하는 만큼 왼쪽으로 이동 */
+}
+
+.region__title {
+  margin-left: 15px; /* 원하는 만큼 오른쪽으로 이동 */
+}
 </style>
