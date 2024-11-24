@@ -1,0 +1,84 @@
+.block-list__members {
+  width: 360px;
+  height: 410px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+  /* 수직 스크롤 추가 */
+  padding-right: 10px;
+  /* 스크롤바가 생기면 오른쪽 공간 확보 */
+  position: relative;
+  /* 위치 지정된 자식 요소들이 절대 위치로 배치될 수 있게 함 */
+
+
+}
+
+.block-list__member {
+
+  padding: 8px;
+  border-bottom: 1px solid var(--color-grey-4);
+  /* 항목 사이에 구분선 추가 */
+
+}
+
+.block-list__img {
+  width: 45px;
+  height: 45px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+  border: none;
+}
+
+.block-list__nickname {
+  position: absolute;
+  margin-top: 19px;
+  margin-left: 10px;
+
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.unblock_btn {
+  position: absolute;
+  margin-top: 15px;
+  margin-left: 215px;
+}
+
+.unblock_btn.active {
+  position: absolute;
+  margin-top: 15px;
+  margin-left: 215px;
+
+  height: 26px;
+  width: 80px;
+
+  border: 1.5px solid var(--accent-1);
+  background-color: var(--background-1);
+
+  color: var(--blcak);
+  font-size: 13px;
+
+  border-radius: var(--border-2);
+}
+
+.block-wrap {
+  margin: auto;
+  width: 960px;
+  height: auto;
+  min-height: 100%;
+  background-color: #F2F2F2;
+}
+  
+.small-wrap {
+  width: 353px;
+  height: auto;
+
+  margin-left: 314px;
+  margin-right: 314px;
+  margin-top: 96px;
+  margin-bottom: 110px;
+}

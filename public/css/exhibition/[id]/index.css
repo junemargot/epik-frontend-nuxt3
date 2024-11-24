@@ -1,0 +1,266 @@
+.wrap {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-color: #F2F2F2;
+}
+
+
+/* 맨 위로 버튼 */
+#go-top {
+  position: fixed; /* 화면에 고정 */
+  bottom: 20px; /* 아래에서 20px */
+  right: 20px; /* 오른쪽에서 20px */
+  padding: 10px 15px;
+  background-color: #f2f2f2;
+  color: #222222; /* 기본 텍스트 색상 */
+  border: none; /* 테두리 제거 */
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* 부드러운 효과 */
+}
+
+.hidden {
+  display: none; /* 숨김 클래스 */
+}
+
+#go-top i {
+  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 */
+}
+
+#go-top:hover {
+  background-color: #EA3921; /* 호버 시 배경색 변경 */
+  color: #ffffff; /* 호버 시 텍스트 색상 변경 */
+}
+
+
+/* section 1 제목*/
+.musical {
+  width: 960px;
+  box-sizing: border-box;
+  background-color: var(--background);
+}
+
+.musical__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 65px 77px 0;
+}
+
+.musical__header h1 {
+  font-size: 30px;
+  font-family: 'pretendard-bold';
+  margin: 0;
+}
+
+.musical__icons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.musical__icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.musical__icon i {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+hr {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  width: 823px;
+}
+
+/* section 2 포스터*/
+.musical__content {
+  padding: 30px 77px;
+  display: flex;
+}
+
+.musical__content img {
+  width: 320px;
+  height: 460px;
+}
+
+.musical__info {
+  margin-left: 50px;
+  margin-top: 15px;
+  flex: 1;
+}
+
+.musical__info-row {
+  font-family: 'pretendard-medium';
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 18px;
+  margin-bottom: 10px; /* 각 행 사이의 간격 */
+}
+
+.musical__info-label {
+  width: 100px; /* 고정된 너비로 라벨 정렬 */
+  margin-right: 10px; /* 라벨과 값 사이의 간격 */
+  margin-top: 0px;
+}
+
+.musical__info-value {
+  margin: 0; /* 값의 마진 제거 */
+}
+
+.musical__price-list {
+  margin: 0;
+  padding: 0;
+}
+
+.musical__price-list li {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+.musical__booking-links {
+  display: flex; /* 플렉스 박스로 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.musical__booking-links a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #000;
+}  
+
+/* section 3 공연소개*/
+.musical__intro {
+  padding: 0 77px;
+}
+
+.musical__intro h2 {
+  font-family: 'pretendard-bold';
+  font-size: 30px;
+  margin: 0 0 20px 0;
+}
+
+.musical__video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+#youtube-video {
+  width: 773px;
+  height: 455px;
+}
+
+.musical__schedule {
+  font-family: 'pretendard-semibold';
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 43px;
+  text-align: center;
+}
+
+.musical__images img {
+  display: block;
+  width: 700px;
+  margin: 0 auto;
+}
+
+/* section 4  상세정보*/
+.musical__addinfo {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.musical__addinfo h1 {
+  font-family: 'pretendard-bold';
+  font-size: 23px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.musical__addinfo-address {
+  font-size: 18px;
+}
+
+.musical__addinfo-address-detail {
+  display: flex;
+  margin-left: 20px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  font-size: 18px;
+} 
+
+.musical__addinfo-address-detail .first{
+  width: 18px;
+  height: 18px;
+  margin-right: 2px;
+  border: 1px solid #132D8E;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #132D8E;
+  color: white;
+}
+
+.musical__addinfo-address-detail .second{
+  width: 18px;
+  height: 18px;
+  margin-right: 2px;
+  border: 1px solid #128E18;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #128E18;
+  color: white;
+}
+
+.musical__map {
+  margin-bottom: 50px;
+  width: 789px;
+  height: 435px;
+}
+
+.musical__hours {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+.musical__hours span {
+  margin-bottom: 4px;
+} 
+
+.musical__hours i {
+  margin-right: 9px;
+}
+
+.musical__hours p {
+  margin-left: 26px;
+  line-height: 22px;
+}
+
+.musical-detail__sns {
+  margin-bottom: 40px;
+} 
+
+.musical-detail__sns a {
+  display: block;
+  margin: 15px 0px;
+  font-size: 18px;
+}
+
+#map {
+  width: 100% !important;
+  height: 400px !important;
+  max-width: 100%;
+}

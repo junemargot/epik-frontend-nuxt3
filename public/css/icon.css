@@ -1,0 +1,272 @@
+/*버튼관련 속성*/
+
+/*작은 사이즈 보더 빨강 버튼*/
+.btn {
+  height: 45px;
+  width: 80px;
+
+  border-radius: var(--border-5);
+  margin-left: 4px;
+
+  border: 1px solid var(--accent-1);
+
+  font-size: var(--font--size-7);
+  color: var(--accent-1);
+  font-weight: bold;
+
+}
+
+.long_btn {
+  width: 340px;
+  height: 45px;
+
+  border-radius: var(--border-5);
+
+  border: 1px solid var(--accent-1);
+
+  font-size: var(--font--size-8);
+  color: var(--accent-1);
+  font-weight: bold;
+}
+
+.grey-long_btn {
+  width: 340px;
+  height: 45px;
+
+  border-radius: var(--border-5);
+
+  border: 1px solid var(--color-grey-4);
+
+  font-size: var(--font--size-6);
+  color: var(--color-grey-4);
+  font-weight: bold;
+}
+
+
+.btn_nomargin {
+  height: 45px;
+  width: 80px;
+  border-radius: var(--border-5);
+
+  border: 1px solid var(--accent-1);
+}
+
+/*배경이 빨간색 버튼*/
+.red_btn {
+  background-color: var(--accent-1);
+  color: var(--color-grey-1);
+  font-size: var(--font--size-6);
+  font-weight: bold;
+}
+
+
+/*보더 빨간색 버튼*/
+
+.personal-inqury-btn {
+  height: 21px;
+  width: 71px;
+
+  color: black;
+  font-size: 10px;
+
+  border: 1px solid var(--accent-1);
+  border-radius: var(--border-5);
+}
+
+
+
+.small_btn_white {
+  height: 45px;
+  width: 75px;
+
+  border: 1px solid var(--accent-1);
+
+  color: var(--blcak);
+  font-weight: bold;
+
+  border-radius: var(--border-5);
+
+  background-color: var(--color-grey-1);
+
+}
+
+.small_btn_grey {
+  height: 45px;
+  width: 75px;
+
+  border: 1px solid var(--color-grey-9);
+  background-color: var(--color-grey-9);
+
+  color: var(--color-grey-1);
+  font-weight: bold;
+
+  border-radius: var(--border-5);
+
+}
+
+.unblock_btn {
+  height: 26px;
+  width: 80px;
+
+  border: 1px solid var(--color-grey-4);
+  background-color: var(--color-grey-4);
+
+  color: var(--blcak);
+  font-size: 13px;
+
+  border-radius: var(--border-2);
+
+}
+
+.small_btn_grey_click {
+  height: 23px;
+  width: 58px;
+
+  background-color: var(--color-grey-5);
+  border: 2px solid var(--color-grey-9);
+  color: var(--black);
+
+  border-radius: var(--border-5);
+  font-size: var(--font--size-6);
+  font-weight: bold;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-right: 5px;
+
+}
+
+.small_btn_grey_unclick {
+  height: 23px;
+  width: 58px;
+
+  background-color: var(--color-grey-2);
+  border: 1.5px solid var(--color-grey-6);
+  color: var(--color-grey-6);
+
+  border-radius: var(--border-5);
+  font-weight: bold;
+  font-size: var(--font--size-5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-right: 6px;
+
+}
+
+/*--- form ---*/
+
+.form {
+  border-radius: var(--border-5);
+  border: 1px solid var(--color-grey-4);
+  text-indent: 10px;
+
+  background-color: var(--color-grey-1);
+
+  height: 45px;
+  width: 340px;
+}
+
+.short_form {
+  border-radius: var(--border-5);
+  border: 1px solid var(--color-grey-4);
+  text-indent: 10px;
+
+  background-color: var(--color-grey-1);
+
+
+  height: 45px;
+  width: 253px;
+}
+
+
+.middle_form {
+  border-radius: var(--border-5);
+  border: 1px solid var(--color-grey-4);
+  text-indent: 10px;
+
+  background-color: var(--color-grey-1);
+
+  height: 101px;
+  width: 340px;
+
+  padding-top: 10px
+}
+
+.mid_big_form {
+  border-radius: var(--border-5);
+  border: 1px solid var(--color-grey-4);
+  text-indent: 10px;
+
+  background-color: var(--color-grey-1);
+
+  height: 200px;
+  width: 340px;
+
+  padding-top: 10px
+}
+
+.big_form {
+  border-radius: var(--border-5);
+  border: 1px solid var(--color-grey-4);
+  text-indent: 10px;
+
+  background-color: var(--color-grey-1);
+
+  height: 374px;
+  width: 340px;
+
+  padding-top: 10px
+}
+
+.non_change {
+  background-color: var(--color--border-1);
+}
+
+.select_short {
+  width: 154px;
+  height: 45px;
+
+  border-radius: var(--border-5);
+  border: 1px solid #BDBDBD;
+  /* background-color: var(--color--login-1); */
+  text-indent: 10px;
+}
+
+/*--textarea--*/
+textarea:focus {
+  outline: none;
+  /* 포커스 시 외곽선(아웃라인) 제거 */
+  /* 포커스 상태에서 보더 색을 변경하지 않음 */
+}
+
+
+/*아이콘, 비포 관련 속성*/
+
+/*마이페이지 아이콘 비포 처리에 사용*/
+.icon_b::before {
+  content: "";
+
+  width: 26px;
+  height: 26px;
+
+  background-repeat: no-repeat;
+}
+
+.icon_a::after {
+  content: "";
+
+  background-image: url('/public/imges/login/navericon.png');
+
+  width: 26px;
+  height: 26px;
+
+  position: absolute;
+  margin-left: 255px;
+
+
+}

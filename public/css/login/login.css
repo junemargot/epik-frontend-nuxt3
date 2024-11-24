@@ -1,0 +1,168 @@
+/*--log-in__info--*/
+
+.log-in__title {
+	text-align: center;
+}
+
+.log-in__text {
+	text-align: center;
+	font-size: var(--font--size-6);
+
+	margin-top: 8px;
+}
+
+
+/*--log-in__form--*/
+
+.log-in__form {
+	margin-top: 35px;
+	height: 190px;
+
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-content: space-around;
+	justify-content: space-around;
+}
+
+
+/*--log-in__social--*/
+
+.log-in__social {
+	margin-top: 15px;
+
+	display: flex;
+	justify-content: center;
+
+	justify-content: space-around;
+}
+
+
+.log-in__icons {
+	width: 332px;
+
+	display: flex;
+	justify-content: center;
+
+	justify-content: space-around;
+
+}
+
+.log-in__icon {
+	width: 55px;
+	height: 96px;
+
+	text-align: center;
+	font-size: var(--font--size-5);
+}
+
+/*----log-in__icons------*/
+
+
+.log-in__kakao::before {
+	content: "";
+
+	background-image: url('/public/images/login/kakaoicon.png');
+	background-size: 55px;
+
+	display: inline-flex;
+
+	width: 55px;
+	height: 55px;
+}
+
+.log-in__naver::before {
+	content: "";
+
+	background-image: url('/public/images/login/navericon.png');
+	background-size: 55px;
+
+	display: inline-flex;
+
+	width: 55px;
+	height: 55px;
+}
+
+.log-in__google::before {
+	content: "";
+
+	background-image: url('/public/images/login/googleicon.png');
+	background-size: 55px;
+
+	display: inline-flex;
+
+	width: 55px;
+	height: 55px;
+}
+
+/*--log-in__search--*/
+
+.log-in__search {
+	display: flex;
+	justify-content: space-around;
+
+	width: 332px;
+
+	border-top: solid 1px var(--color-grey-4);
+
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 33px;
+}
+
+.log-in__search-form {
+	margin-top: 25px;
+	display: flex;
+}
+
+.log-in__search-id,
+.log-in__search-password {
+	margin-right: 4px;
+	margin-left: 4px;
+
+	color: var(--color-grey-7);
+	font-size: var(--font--size-6);
+	text-decoration-line: underline;
+}
+
+/*--search-id, search-pw--*/
+.search-id__notfound,
+.search-id__found {
+	font-size: var(--font--size-6);
+	text-align: center;
+	margin-top: 50px;
+}
+
+/*--sign-in__info--*/
+
+.sign-in__terms {
+	border-top: solid 1px var(--color-grey-6);
+	margin-top: 23px;
+}
+
+/*--버튼 클릭 후 액티브--*/
+.sendBtnVisible.active,
+.checkBtnVisible.active{
+
+		background-color: var(--color-grey-3);
+
+}
+
+.login-in-wrap {
+  margin: auto;
+  width: 960px;
+  height: auto;
+  min-height: 100%;
+  background-color: #F2F2F2;
+}
+
+
+.small-wrap {
+  width: 353px;
+  height: auto;
+
+  margin-left: 314px;
+  margin-right: 314px;
+  margin-top: 96px;
+  margin-bottom: 110px;
+}

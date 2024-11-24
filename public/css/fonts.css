@@ -1,0 +1,62 @@
+@font-face {
+  font-family: dahlia-regular;
+  src: url('/public/fonts/dahlia-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: dahlia-bold;
+  src: url('/public/fonts/dahlia-bold.woff') format('woff');
+}
+
+/* @font-face {
+  font-family: pretendard-regular;
+  src: url('/public/fonts/Pretendard-Regular.woff') format('woff');
+} */
+
+@font-face {
+  font-family: pretendard-medium;
+  src: url('/public/fonts/Pretendard-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: pretendard-semibold;
+  src: url('/public/fonts/Pretendard-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: pretendard-bold;
+  src: url('/public/fonts/Pretendard-Bold.woff') format('woff');
+}
+
+
+
+/* 윤경 */
+/* @font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('/public/fonts/Pretendard-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard-SemiBold';
+  src: url('/public/fonts/Pretendard-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url('/public/fonts/Pretendard-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard-ExtraBold';
+  src: url('/public/fonts/Pretendard-ExtraBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Dahlia-Regular';
+  src: url('/public/fonts/dahlia-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Dahlia-Bold';
+  src: url('/public/fonts/dahlia-bold.woff') format('woff');
+} */

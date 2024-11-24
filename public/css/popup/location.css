@@ -1,0 +1,210 @@
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-color: #F2F2F2;
+}
+
+.popup {
+  background-color: var(--background);
+  width: 960px;
+  margin: 0 auto; /* 수평 중앙 정렬 */
+}
+
+/* Popup styles */
+.popup h2 {
+  margin-top: 30px;
+  font-family: 'pretendard-bold';
+  font-size: 28px;
+  margin-bottom: 17px;
+}
+
+.popup__header {
+  display: flex;
+  justify-content: center;
+  margin-left: 30px;
+}
+
+.popup__header h2 {
+  margin-right: 10px;
+}
+
+.popup__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.popup__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.popup__item {
+  position: relative; /* 자식 요소의 절대 위치를 기준으로 설정 */
+  flex: 1;
+  height: 180px;
+  width: calc(50% - 10px);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  transition: all 0.3s ease;
+}
+
+.popup__item:hover {
+  border-color: #F62F2F;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.025);
+  transform: translateY(-1px);
+}
+
+.popup__item img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin: 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  flex-shrink: 0; /* 이미지가 축소되지 않도록 설정 */
+}
+
+.popup__info-list {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'pretendard-bold';
+  font-size: 16px;
+}
+
+.popup__p {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'pretendard-bold';
+  font-size: 13px;
+}
+
+.popup__badges {
+  position: absolute; /* 부모 요소를 기준으로 절대 위치 설정 */
+  top: 15px; /* 이미지 위에서의 상단 위치 */
+  left: 15px; /* 이미지 위에서의 좌측 위치 */
+  z-index: 1; /* 이미지 위에 표시되도록 z-index 설정 */
+  font-family: 'pretendard-bold';
+  font-size: 12px;
+  background-color: #efefef;
+  padding: 4px 8px;
+  border-radius: 15px;
+  border: 1px solid #F62F2F;
+  width: auto; /* 텍스트 내용에 맞게 자동 조정 */
+  height: auto; /* 텍스트 내용에 맞게 자동 조정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup__date {
+  font-family: 'pretendard-medium';
+  font-size:14px;
+  margin-top: 5px; 
+}
+
+.popup__locations {
+  margin-top: 50px;
+  font-family: 'pretendard-medium';
+  font-size:14px; 
+}
+
+.popup__distance {
+  font-family: 'pretendard-medium';
+  font-size:14px; 
+}
+
+.popup__header-divider {
+  border: none;
+  height: 1px;
+  background-color: #c0c0c0;
+  width: 719px; /* 전체 너비를 차지하도록 설정 */
+  margin: 40px 0; /* 제목과의 간격 조정 */
+  display: inline-block; /* 제목 옆에 정렬되도록 설정 */
+}
+
+.popup__divider {
+  border: none;
+  height: 1px;
+  background-color: #c0c0c0;
+  width: 100%; /* 전체 너비를 차지하도록 설정 */
+  margin: 20px 0; /* 팝업 아이템 간의 간격 추가 */
+  display: block; /* 전체 라인 너비를 차지하도록 블록으로 변경 */
+}
+
+/* 검색창 스타일 */
+#map-container {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+}
+
+#map {
+  width: 876px;
+  height: 533px; /* 고정 크기 설정 */
+  position: relative;
+}
+
+#search-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 525px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+#search-input {
+  width: 100%;
+  height: 100%;
+  padding: 0 40px 0 15px;
+  border: none;
+  border-radius: 15px;
+  font-size: 14px;
+  outline: none;
+}
+
+#search-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+}
+
+#current-location-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#current-location-button i {
+  font-size: 18px;
+  color: #555;
+}

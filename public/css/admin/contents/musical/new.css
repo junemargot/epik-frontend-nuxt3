@@ -1,0 +1,250 @@
+/* popup reg css */
+.contents-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 40px 0 40px 260px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+}
+
+.contents-wrap .product-registration {
+  width: 900px;
+  padding: 40px 60px 80px 60px;
+  border-radius: var(--border-1);
+  background-color: var(--white);
+  box-shadow: var(--shadow-2);
+  box-sizing: border-box;
+}
+
+.contents-wrap .product-registration h1 {
+  color: var(--black);
+  margin: 0 0 20px 4px;
+}
+
+.input__item {
+  display: flex;
+  margin-bottom: 10px;
+  border: 1px solid var(--color-grey-4);
+  border-radius: var(--border-1);
+  overflow: hidden;
+}
+
+.input__title {
+  flex: 0 0 110px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+  border-right: 1px solid var(--color-grey-4);
+}
+
+#startDateInput, 
+#seat,
+#name {
+  border-right: 1px solid var(--color-grey-4);
+}
+
+.ticket-input,
+.price-input {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid var(--color-grey-4);
+  outline: none;
+}
+
+.input__item.split {
+  display: flex;
+  align-items: stretch; /* 입력란 높이 맞추기 설정 */
+}
+
+/* input 동적 추가 버튼 */
+.btn.price-more,
+.btn.price-remove,
+.btn.reserve-more,
+.btn.reserve-remove {
+  padding: 10px 15px; /* 버튼 내부 여백을 제거 */
+  height: auto; /* 버튼의 높이를 자동으로 설정 */
+  align-self: stretch; /* 버튼이 입력 필드와 같은 높이로 맞추기 */
+  display: flex; /* 버튼의 아이콘을 중앙에 위치시키기 위한 설정 */
+  justify-content: center; /* 수평 정렬 */
+  align-items: center; /* 수직 정렬 */
+  border-left: 1px solid var(--color-grey-4); /* 버튼의 테두리 설정 */
+  background-color: var(--white); /* 버튼 배경 색상 */
+  transition: all .3s ease; /* 버튼 전환 효과 */
+  cursor: pointer;
+}
+
+.btn.price-more i {
+  font-size: 16px;
+  color: var(--black);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: none;
+  outline: none;
+}
+
+input[type=text]:focus {
+  background-color: var(--color-grey-1);
+}
+
+input[type=file] {
+  display: none;
+}
+
+
+.imgUpload {
+  display: inline-block;
+  padding: 10px 15px;
+  color: var(--color-grey-6);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* 업로드된 이미지 미리보기 */
+#image-preview {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--border-1);
+  transition: border .3s ease;
+}
+
+#image-preview.with-border {
+  border: 1px solid var(--color-grey-4);
+}
+
+.image-preview-item {
+  width: 100px;
+  height: 100px;
+  border: 1px solid var(--color-grey-4);
+  border-radius: var(--border-1);
+  overflow: hidden;
+  position: relative;
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-preview-item .remove-image {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 2px 5px;
+  font-size: 12px;
+}
+
+#contsEditor {
+  margin: 0 auto 10px auto; 
+}
+
+.toastui-editor-defaultUI {
+  /* padding: 10px; */
+  background: var(--white);
+  /* border: 1px solid var(--color-grey-4); */
+  border: 1px solid var(--color-grey-4);
+  border-radius: var(--border-1);
+}
+
+.toastui-editor-defaultUI-toolbar {
+  border-top-left-radius: var(--border-1);
+  border-top-right-radius: var(--border-1);
+  /* background: var(--color-grey-1); 툴바 배경색 */
+  background: var(--white);
+  border-radius: var(--border-1);
+}
+
+.toastui-editor-contents {
+  padding: 10px;
+}
+
+.toastui-editor-contents p {
+  font-size: 15px;
+}
+
+.toastui-editor-contents .placeholder {
+  color: var(--color-grey-6);
+}
+
+/* 버튼 스타일 */
+.btn-bottom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 12px 32px;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-1);
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.btn.submit {
+  background-color: var(--color-point-4);
+  border: 1px solid var(--color-point-4);
+  color: var(--white);
+}
+
+.btn.submit:hover {
+  border: 1px solid var(--color-point-4);
+  background-color: var(--white);
+  color: var(--black);
+  box-shadow: var(--shadow-2);
+}
+
+.btn.cancel {
+  background-color: var(--color-grey-5);
+  border: 1px solid var(--color-grey-5);
+  color: var(--black);
+}
+
+.btn.cancel:hover {
+  background-color: var(--white);
+  border: 1px solid var(--color-point-4);
+  color: var(--black);
+  box-shadow: var(--shadow-2);
+}
+
+
+.date-input {
+  text-align: left;
+}
+
+/* Date Range Picker 스타일 오버라이드 */
+.daterangepicker td.in-range {
+  /* background-color: #ebf4f8; */
+  background-color: var(--color-grey-2);
+}
+
+.daterangepicker td.active, .daterangepicker td.active:hover {
+  background-color: var(--color-point-4);
+  color: var(--white);
+}
+
+.daterangepicker .calendar-table th, 
+.daterangepicker .calendar-table td {
+  text-align: center;
+}

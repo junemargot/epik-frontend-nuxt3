@@ -1,0 +1,239 @@
+/* ****** header ******  */
+.header-box {
+  width: 960px;
+  margin: 0 auto;
+  background-color: #F2F2F2;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: center;
+  background-color: var(--accent-1);
+  padding: 5px 0;
+  color: var(--white);
+  font-size: 12px;
+}
+
+.top-bar__column:first-child {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  margin-left: 210px;
+  /* font-family: 'dahlia-bold'; */
+  font-family: 'Dahlia-Regular';
+}
+
+.top-bar__column:nth-child(2) {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  font-family: 'pretendard-reqular';
+  margin-left: 80px;
+}
+
+.top-bar__column:nth-child(2) a {
+  margin-right: 12px;
+  cursor: pointer; /* 왜 적용이 안되지?? */
+  color: var(--white);
+}
+
+.top-bar__column:nth-child(2) a:hover {
+  color: var(--black);
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* 상하 좌우 */
+  padding: 10px 30px;
+  /* padding-bottom: 17px; */
+  border-bottom: 1px solid #222222;
+}
+
+.main-header__title h1 {
+  font-size: 32px;
+  font-family: 'dahlia-bold';
+  margin: 0;
+  line-height: 1;
+
+  /* text-align: center;
+  align-items: center; */
+}
+
+/* .main-header__title h1 a {
+  text-align: center;
+  align-items: center;
+} */
+
+
+/* 아이콘 수정 */
+.main-header__icon i {
+  margin-top: 3px;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+
+/* ****** dropdown-menu ******  */
+
+.dropdown-menu {
+  width: 960px;
+  height: 710px;
+  position: fixed;
+  top: -710px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  z-index: 1000;
+  display: none;
+  transition: transform .3s ease-in-out;
+}
+
+.move-sidebar {
+  display: block;
+  background-color: #F2F2F2;
+  width: 960px;
+  height: 750px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all .3s;
+}
+
+.dropdown-menu__inner {
+  padding: 32px 30px;
+}
+
+.dropdown-menu__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dropdown-menu__title {
+  font-size: 32px;
+  font-family: 'Dahlia-Bold';
+  cursor: pointer;
+}
+
+.dropdown-menu__cancle {
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.dropdown-menu__link {
+  padding: 19px 0px;
+  border-bottom: 1px solid #858585;
+  letter-spacing: 1.5px;
+}
+
+.dropdown-menu__link:not(:last-child) {
+  border-bottom: 1px solid #CFCFCF;
+}
+
+.dropdown-menu__link:first-child>ul {
+  margin-top: 10px;
+  line-height: 24px;
+  font-size: 16px;
+  font-family: pretendard-bold;
+}
+
+.dropdown-menu__link>a {
+  font-family: pretendard-bold;
+  font-size: 24px;
+}
+
+.dropdown-menu__link>span {
+  display: block;
+  margin-top: 5px;
+  color: #C1C1C1;
+  font-family: pretendard-bold;
+}
+
+.dropdown-menu__auth {
+  display: flex;
+  justify-content: flex-end;
+  padding: 25px 10px;
+}
+
+.dropdown-menu__auth>a {
+  margin-left: 22px;
+  font-family: pretendard-bold;
+}
+
+/* ****** search-bar ******  */
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: #BDBDBD;
+}
+
+.search-bar-icon {
+  padding-top: 3px;
+}
+
+.search-bar__submintbutton {
+  position: absolute;
+  top: 11px;
+  left: 10px;
+  border: none;
+  background-color: #ffffff;
+}
+
+.search-bar__submintbutton i {
+  font-size: 18px;
+  color: #BDBDBD;
+}
+
+.search-bar__input-wrap {
+  width: 870px;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #CFCFCF;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.search-bar__input-wrap>input {
+  border: none;
+  width: 800px;
+  margin-left: 35px;
+  font-size: 15px;
+}
+
+.search-bar__input-wrap>input::placeholder {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+
+.search-bar__clear {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 10px;
+  right: 20px;
+  border: none;
+  background-color: #ffffff;
+  display: none;
+}
+
+.search-bar__clear .search-bar-remove-icon {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 25px;
+  color: #BDBDBD;
+}
+
+/* input:placeholder-shown */
+.search-bar__input-wrap input:not(:placeholder-shown)+.search-bar__clear {
+  display: block;
+}
+
+input:focus::placeholder {
+  color: transparent;
+}

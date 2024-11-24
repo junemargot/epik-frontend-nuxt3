@@ -1,0 +1,142 @@
+/* @font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('/public/fonts/Pretendard-Regular.woff') format('woff');
+} */
+
+/* @font-face {
+  font-family: 'Pretendard-SemiBold';
+  src: url('/public/fonts/Pretendard-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url('/public/fonts/Pretendard-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard-ExtraBold';
+  src: url('/public/fonts/Pretendard-ExtraBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Dahlia-Regular';
+  src: url('/public/fonts/dahlia-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Dahlia-Bold';
+  src: url('/public/fonts/dahlia-bold.woff') format('woff');
+} */
+
+:root{
+  --background-1: #F2F2F2;
+  --background-2: #E8E8E8;
+  --accent-1: #EA3921;
+  --black: #222222;
+  --white: #ffffff;
+
+  /* input background, 흰색 버튼 배경 */
+  --color-grey-1: #F6F6F6;
+  
+  /* 진행중 badge background */
+  --color-grey-2: #EFEFEF;
+
+  /* mypage unblock btn background */
+  --color-grey-3: #D9D9D9;
+
+  /* input border */
+  --color-grey-4: #CFCFCF;
+
+  /* pagination default background */
+  --color-grey-5: #C1C1C1;
+
+  /* input placeholder text */
+  --color-grey-6: #BDBDBD;
+
+  /* main grey font color */
+  --color-grey-7: #858585;
+
+  /* pagination hover background */
+  --color-grey-8: #626262;
+
+  /* dark-grey btn background */
+  --color-grey-9: #666666;
+  
+  /* point colors */
+  --color-point-1: #189024;
+  --color-point-2: #2436DE;
+  --color-point-3: #939185;
+  --color-point-4: #454545;
+  --color-point-5: #0C5FCD;
+
+  /* border-radius */
+  --border-1: 6px;
+  --border-2: 8px;
+  --border-3: 10px;
+  --border-4: 12px;
+  --border-5: 15px;
+
+  /* shadow */
+  --shadow-1: 4px 4px 16px rgba(0, 0, 0, .05);
+  --shadow-2: 4px 4px 16px rgba(0, 0, 0, .1);
+
+  /* font-size */
+	--font--size-1: 4px;
+	--font--size-2: 6px;
+	--font--size-3: 8px;
+	--font--size-4: 10px;
+	--font--size-5: 12px;
+	--font--size-6: 14px;
+	--font--size-7: 16px;
+	--font--size-8: 18px;
+	--font--size-9: 20px;
+	--font--size-10: 22px;
+	--font--size-11: 24px;
+	--font--size-12: 26px;
+	--font--size-12: 28px;
+	--font--size-12: 30px;
+
+  /* gap */
+  --gap--1:15px;
+  --gap--2:6px;
+  --gap--3:3px;
+
+}
+
+
+/* input, textarea placeholder 색상 지정 */
+/* IE, 크롬 적용 */
+input::placeholder { color: var(--color-grey-6); }
+input::-webkit-input-placeholder { color: var(--color-grey-6); }
+input:-ms-input-placeholder { color: var(--color-grey-6); }
+
+textarea::placeholder { color: var(--color-grey-6) };
+textarea::-webkit-input-placeholder { color: var(--color-grey-6); }
+textarea:-ms-input-placeholder { color: var(--color-grey-6); }
+
+* {
+  font-family: 'Pretendard-Regular', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background-1);
+  color: var(--black);
+  height: 120vh;
+}
+
+a {
+  text-decoration: none;
+  color: var(--black);
+}
+
+li {
+  list-style: none;
+}
+
+::selection{
+  background-color: var(--color-point-4);
+  color: var(--white);
+}

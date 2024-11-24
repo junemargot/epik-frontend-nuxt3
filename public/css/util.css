@@ -1,0 +1,53 @@
+body {
+  height: 100vh;
+}
+
+.wrap {
+  margin: auto;
+  width: 960px;
+  height: auto;
+  min-height: 100%;
+  background-color: #F2F2F2;
+}
+
+
+.small-wrap {
+  width: 353px;
+  height: auto;
+
+  margin-left: 314px;
+  margin-right: 314px;
+  margin-top: 96px;
+  margin-bottom: 110px;
+}
+
+.passwordCheck-wrap,
+.content-wrap {
+  width: 353px;
+  height: auto;
+
+  margin-left: 314px;
+  margin-right: 314px;
+  margin-top: 96px;
+}
+
+/*--채팅 관련 랩--*/
+
+.chat-group-wrap {
+  width: 893px;
+  height: 754px;
+
+  margin-left: 41px;
+}
+
+.chat-group-selector-wrap {
+  width: 893px;
+  height: 754px;
+
+  display: flex;
+}
+
+.chat-list-wrap {
+  width: 370px;
+  height: 585px;
+}

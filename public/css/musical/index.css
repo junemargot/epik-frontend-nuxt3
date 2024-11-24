@@ -1,0 +1,287 @@
+main {
+  box-sizing: border-box;
+  background-color: #F2F2F2;
+  width: 960px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.picks {
+  width: 100%;
+  max-width: 920px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+}
+
+.region {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 20px;
+  margin-top: 48px;
+}
+
+.picks__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.picks__title,
+.region__title {
+  font-family: 'Pretendard-Bold', sans-serif;
+  font-size: 28px;
+  margin-bottom: 10px;
+  margin: 0;
+}
+
+.picks__more,
+.region__more {
+  font-size: 14px;
+  text-align: right;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+/* picks 섹션 스타일 */
+.picks__container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+.picks__item {
+  width: 136px;
+  height: 225px;
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.picks__image {
+  width: 136px;
+  height: 166px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* region 섹션 스타일 */
+.region__title {
+  margin-bottom: 20px;
+  font-family: 'Pretendard-Bold', sans-serif;
+}
+
+.region__filters {
+  font-family: 'Pretendard-Medium', sans-serif;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.region__filter-link {
+  text-decoration: none;
+  color: #333;
+  padding: 5px 0;
+  position: relative;
+  cursor: pointer;
+  margin: 0 15px;
+  transition: color 0.3s ease;
+}
+
+.region__filter-link:not(:last-child)::after {
+  content: '|';
+  position: absolute;
+  right: -15px;
+  color: #ccc;
+}
+
+.region__filter-link:not(:last-child) {
+  margin-right: 10px;
+}
+
+.region__filter-link.active {
+  color: #000;
+}
+
+.region__filter-link:hover {
+  color: #000;
+  font-weight: bold;
+}
+
+.region__container {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.region__item {
+  flex: 0 0 calc((100% - 80px) / 5);
+  max-width: calc((100% - 80px) / 5);
+  margin-bottom: 20px;
+}
+
+.region__image {
+  width: 100%;
+  height: 220px;
+  aspect-ratio: 136 / 166;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 공통 텍스트 스타일 */
+.picks__item-title {
+  font-size: 12px;
+  font-family: 'pretendard-bold', sans-serif;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.region__item-title {
+  font-size: 16px;
+  font-family: 'pretendard-bold', sans-serif;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.picks__item-venue,
+.picks__item-date {
+  font-size: 10px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.region__item-venue,
+.region__item-date {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.region__item.hidden {
+  display: none;
+}
+
+.region__more-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.region__more-btn.hidden {
+  display: none; /* 버튼 숨김 */
+}
+
+.region__more-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* 새로 추가된 스타일 */
+.picks__item-link,
+.region__item-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.picks__item-link:hover .picks__item-title,
+.region__item-link:hover .region__item-title {
+  text-decoration: underline;
+}
+
+.picks__item-title,
+.picks__item-venue,
+.picks__item-date,
+.region__item-title,
+.region__item-venue,
+.region__item-date {
+  font-family: 'Pretendard-Medium', sans-serif;
+  display: block;
+}
+
+/* slider css 합침 */
+.container {
+  width: 960px;
+  margin: 23px auto;  /*상하 여백은 23px, 좌우는 자동으로 중앙 정렬*/
+  padding: 0 20px;    /* 좌우에 20px의 내부 여백 추가 */
+  box-sizing: border-box;  /* padding이 width에 포함되도록 설정 */
+}
+
+/* 화살표 */
+.arrow-left, .arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-35%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.arrow-left {
+  left: 10px;
+}
+
+.arrow-right {
+  right: 10px;
+}
+
+/* Main photo slider styles */
+.photo-slider {
+  width: 960px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden; 
+}
+
+.photo-slider-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 30px; /* 화살표 버튼을 위한 공간 확보 */
+  box-sizing: border-box;
+}
+
+.photo-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-container {
+  display: flex;
+  overflow: hidden;
+  transition: transform 0.3s ease; /* 부드러운 전환 효과 추가 */
+  
+}
+
+.slider-container:active {
+  cursor: grabbing;
+}
+
+/* ==slider=============================== */
+.slider-item {
+  flex: 0 0 auto;
+  width: 240px; /* 960px / 4 */
+  height: 345px;
+  padding: 0 10px; /* 좌우 간격 추가 */
+  box-sizing: border-box;
+}
+
+.slider-item:last-child {
+  margin-right: 0; /* 마지막 슬라이드의 오른쪽 마진 제거 */
+}
+
+.slider-item img {
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: 338px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+

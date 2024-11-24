@@ -1,0 +1,295 @@
+.bookmark {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-color: #F2F2F2;
+}
+
+.bookmark__category {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.bookmark__header {
+  width: 682px;
+  padding: 30px 20px 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+
+}
+
+.bookmark__title-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bookmark__heading {
+  font-family: 'pretendard-bold';
+  font-size: 35px;
+  margin-bottom: 20px;
+}
+
+.bookmark__divider {
+  width: 682px;
+  margin-right: 10px;
+}
+
+.bookmark__nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.bookmark__nav-item {
+  font-family: 'pretendard-semibold';
+  font-size: 22px;
+  margin-right: 35px;
+  color: #C0C0C0;
+  margin-left: 10px;
+  transition: color 0.3s ease;
+}
+
+.bookmark__nav-item a {
+  text-decoration: none;
+  color: #C0C0C0;
+  /* 기본 색상은 회색 */
+  transition: color 0.3s ease;
+}
+
+.bookmark__nav-item:last-child {
+  margin-right: 0;
+}
+
+.bookmark__nav-item:hover,
+.bookmark__nav-item.active,
+.bookmark__nav-item.active a {
+  font-weight: bold;
+  color: #222222;
+}
+
+/* 전체 북마크 묶음, 전역편집 */
+.bookmark__container {
+  width: 682px;
+  margin: 20px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.bookmark__container>div[class^="bookmark__"] {
+  display: none;
+}
+
+.bookmark__container>div[class^="bookmark__"].active {
+  display: block;
+}
+
+.editing .bookmark__edit-options {
+  display: inline-block;
+}
+
+.editing .bookmark__checkbox {
+  display: inline-block;
+}
+
+/* 북마크 메인 */
+.bookmark__popup {
+  width: 682px;
+  padding: 20px 20px 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.bookmark__concert,
+.bookmark__musical,
+.bookmark__exhibition {
+  width: 682px;
+  margin: 20px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.bookmark__section h2 {
+  font-family: 'pretendard-bold';
+  font-size: 28px;
+}
+
+.bookmark__header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 20px;
+  padding: 10px;
+}
+
+.bookmark__location-date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bookmark__text-container {
+  flex-grow: 1;
+  margin-bottom: 10px;
+}
+
+.bookmark__location,
+.bookmark__date {
+  margin: 0;
+  line-height: 1;
+}
+
+.bookmark__checkbox {
+  position: absolute;
+  right: 5px;
+  top: 80%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: solid 1px #bbbbbb;
+  border-radius: 50%;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  background-color: white;
+
+  pointer-events: none;
+  /* 체크박스 자체의 클릭 이벤트를 비활성화 */
+}
+
+/* 편집 모드일 때만 체크박스 표시 */
+.bookmark__checkbox:checked {
+  background-color: #EA3921;
+  border-color: #bbbbbb;
+}
+
+.bookmark__checkbox:checked::after {
+  content: '\2714';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  font-size: 12px;
+}
+
+/* 편집 */
+.bookmark__edit-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-align: right;
+  padding: 10px;
+}
+
+.bookmark__content {
+  position: relative;
+  width: 680px;
+  margin: 0 auto;
+}
+
+.bookmark__edit,
+.bookmark__edit-options {
+  cursor: pointer;
+  font-size: 16px;
+  color: #222222;
+}
+
+.bookmark__edit:hover,
+.bookmark__edit-options span:hover {
+  text-decoration: underline;
+}
+
+.bookmark__item {
+  position: relative;
+  width: 324px;
+  height: 141px;
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.bookmark__item:hover {
+  border: solid 1px;
+  border-radius: 10px;
+  border-color: #bbbbbb;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.025);
+  transform: translateY(-1px);
+  z-index: 1;
+}
+
+.bookmark__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.bookmark__image-container {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+}
+
+.bookmark__image-container img {
+  width: 125px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.bookmark__image-container .bookmark__status {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  font-family: 'pretendard-bold';
+  font-size: 10px;
+  background-color: rgba(239, 239, 239, 0.8);
+  padding: 3px 6px;
+  border-radius: 15px;
+  border: 1px solid #F62F2F;
+  display: inline-block;
+  z-index: 1;
+}
+
+.bookmark__info {
+  padding-left: 15px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.bookmark__info h3 {
+  font-family: 'pretendard-bold';
+  font-size: 16px;
+  margin: 0 0 45px 0;
+}
+
+.bookmark__info .bookmark__location,
+.bookmark__info .bookmark__date {
+  font-family: 'pretendard-medium';
+  font-size: 14px;
+  margin: 3px 0;
+}
+
+.bookmark__info .bookmark__date {
+  color: #858585;
+}
+
+/* All 섹션을 위한 스타일 */
+.All__bookmark .bookmark__concert,
+.All__bookmark .bookmark__musical,
+.All__bookmark .bookmark__exhibition {
+  display: block;
+}
