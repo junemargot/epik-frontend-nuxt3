@@ -110,5 +110,6 @@ const passwotdCheckHandler = async () => {
 .long_btn:hover{
   background-color: var(--accent-1); 
   color: white;  
+  cursor: pointer;
 }
 </style>

@@ -232,5 +232,10 @@ const data = await response.json();
 .long_btn:hover{
   background-color: var(--accent-1); 
   color: white;  
+  cursor: pointer;
+}
+
+.log-in__icon{
+  cursor: pointer;
 }
 </style>
