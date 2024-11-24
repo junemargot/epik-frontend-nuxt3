@@ -81,7 +81,7 @@ const closeModal = () => {
 }
 
 :deep(.modal-buttons button:first-child) {
-  background-color: #808080;
+  background-color: #808180;
   color: white;
 }
 

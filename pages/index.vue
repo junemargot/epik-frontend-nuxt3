@@ -33,6 +33,7 @@
       <h2 class="popup__title">Pop-up</h2>
       <div class="popup__grid">
         <div v-for="(item, index) in popupItems" :key="index" class="popup__item">
+          <a href="http://localhost:3000/popup/170"></a>
           <img :src="item.image" :alt="`Popup ${index + 1}`">
           <div class="popup__info">
             <span class="popup__status">진행중</span>
@@ -51,12 +52,12 @@
     <!-- 배너 섹션 -->
     <div class="banner">
           <div class="banner__grid">
-            <img src="/images/광주비엔날레.png" alt="Banner 1" class="banner__item">
-            <img src="/images/금란방.png" alt="Banner 2" class="banner__item">
-            <img src="/images/노들섬배너.png" alt="Banner 3" class="banner__item">
-            <img src="/images/빨래.png" alt="Banner 4" class="banner__item">
-            <img src="/images/제인에어.png" alt="Banner 5" class="banner__item">
-            <img src="/images/킹키부츠.png" alt="Banner 6" class="banner__item">
+            <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
+            <a href="http://localhost:3000/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
+            <a href="http://localhost:3000/musical/146"><img src="/images/베너3.png" alt="Banner 3" class="banner__item"></a>
+            <img src="/images/베너4.png" alt="Banner 4" class="banner__item">
+            <img src="/images/베너5.png" alt="Banner 5" class="banner__item">
+            <img src="/images/베너6.png" alt="Banner 6" class="banner__item">
           </div>
         </div>
 
@@ -85,7 +86,8 @@
       <h2 class="popup__title">Musical</h2>
       <div class="popup__grid">
         <div v-for="(item, index) in musicalItems" :key="index" class="popup__item">
-          <img :src="item.image" :alt="`Popup ${index + 1}`">
+          <img :src="`http://localhost:8081/api/v1/uploads/images/musical/${item.fileSavedName}`"
+          :alt="`Popup ${index + 1}`">
           <div class="popup__info">
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>

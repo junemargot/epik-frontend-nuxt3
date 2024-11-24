@@ -27,7 +27,7 @@
         <div class="product__content-summary">
           <div class="product__content-poster">
             <!-- <img src="/images/exhibition.gif" alt="웨스앤더슨 포스터" /> -->
-            <img :src="`http://localhost:8080/api/v1/uploads/exhibition/${exhibition.saveImageName}`" />
+            <img :src="`http://localhost:8081/api/v1/uploads/exhibition/${exhibition.saveImageName}`" />
           </div>
           <ul class="product__content-info">
             <li class="product__content-info-item">

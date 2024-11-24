@@ -32,7 +32,7 @@
       <!-- section 2 -->
       <main>
         <div class="musical__content">
-          <img :src="`http://localhost:8080/images/concert/${concert.saveImageName}`" :alt="concert.title + ' 포스터'">
+          <img src="/public/images/24007623_p.gif" :alt="concert.title + ' 포스터'">
           <!-- <img src="/public/images/concert/yuuri.png" />  -->
           <div class="musical__info">
             <div class="musical__info-row">

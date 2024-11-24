@@ -77,7 +77,7 @@ const fetchPopupItems = async (regionId) => {
   try {
     const { data, error } = await useFetch('/api/v1/popup/category', {
       params: { categoryId: regionId }, // 선택된 region의 id를 전달
-      baseURL: 'http://localhost:8080',
+      baseURL: 'http://localhost:8081',
     });
 
     if (error.value) {
