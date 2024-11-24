@@ -46,10 +46,10 @@
     <div class="my-feed__wrap">
       <!-- 프로필 -->
       <div class="my-feed__user-profile">
-        <img class="my-feed__user-image" src="/images/동글이.jpg" alt="img">
+        <img class="my-feed__user-image" src="/images/써브웨이.png" alt="img">
         <div class="my-feed__info">
-          <span class="my-feed__user-name">jeonguii</span>
-          <p class="my-feed__description">클덕 1년차<br>베토벤과 브람스 그리고 후기낭만주의를 좋아합니다.</p>
+          <span class="my-feed__user-name">써브웨이</span>
+          <p class="my-feed__description">자유영혼<br>취미는 팝업 구경 그리고 써브웨이를 좋아합니다.</p>
         </div>
       </div>
 
@@ -74,47 +74,47 @@
       <!-- 사진 영역 -->
       <div class="my-feed__container">
         <div class="my-feed__item">
-          <a><img src="/images/item(1).jpg" alt=""></a>
+          <a><img src="/images/popup/센녹.png" alt="센녹"></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(2).jpg" alt=""></a>
+          <a><img src="/images/popup/포플리.jpeg" alt="다이노탱"></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(3).jpg" alt=""></a>
+          <a><img src="/images/popup/무신사팝업.jpg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(4).jpg" alt=""></a>
+          <a><img src="/images/popup/시야쥬.jpg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(1).jpg" alt=""></a>
+          <a><img src="/images/popup/준지.jpg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(2).jpg" alt=""></a>
+          <a><img src="/images/popup/루피.jpg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(3).jpg" alt=""></a>
+          <a><img src="/images/popup/어뮤즈.png" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(4).jpg" alt=""></a>
+          <a><img src="/images/popup/짱구.jpeg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(1).jpg" alt=""></a>
+          <a><img src="/images/popup/주술회전.jpeg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(2).jpg" alt=""></a>
+          <a><img src="/images/popup/춘식이팝업.jpg" alt=""></a>
         </div>
 
         <div class="my-feed__item">
-          <a><img src="/images/item(3).jpg" alt=""></a>
+          <a><img src="/images/popup/백년서점.jpg" alt=""></a>
         </div>
 
         <div class="my-feed__item">

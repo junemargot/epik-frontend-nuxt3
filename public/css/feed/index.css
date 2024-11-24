@@ -185,8 +185,11 @@
 }
 
 .feed__tags {
-  color: #093982;
-  font-family: 12px;
+  font-size:  14px;
+}
+
+.feed__tags a {
+  color: #2869ca;
 }
 
 /* 다음줄 */
