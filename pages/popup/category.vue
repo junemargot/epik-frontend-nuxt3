@@ -55,15 +55,16 @@
       <div class="popup">
         <div class="popup__grid">
           <div v-for="(item, index) in popupItems" :key="item.id" class="popup__item">
-            <img :src="item.filePath" :alt="`Popup ${index + 1}`">
+            <img :src="`http://localhost:8081/api/v1/uploads/images/popup/${item.imgSavedName}`"
+              :alt="`Popup ${index + 1}`">
             <div class="popup__infos">
-              <span class="popup__status">{{ item.status }}</span>
+              <span class="popup__status">진행중</span>
               <h3 class="popup__title">{{ item.title }}</h3>
               <p class="popup__location">{{ item.address }}</p>
               <p class="popup__dates">
                 <span>{{ formatDate(item.startDate) }}</span>
                 <span>~</span>
-                <span>{{ formatDate(item.endDate) }}</span>
+                <span>{{ formatDate(item.endDate) }}</span>e
               </p>
             </div>
           </div>
@@ -146,8 +147,8 @@ const fetchPopupItemsByLocation = async () => {
   try {
     const { data, error } = await useFetch('/api/v1/popup/category/region', {
       params: {
-        categoryId: selectedLocationId.value,
-        regionId: selectedRegionId.value,
+        categoryId: selectedRegionId.value,
+        regionId: selectedLocationId.value,
         locationName: selectedLocationName,
       },
       baseURL: 'http://localhost:8081',

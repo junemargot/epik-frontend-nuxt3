@@ -86,6 +86,11 @@
   font-family: 'pretendard-medium';
   font-size: 20px;
   margin-bottom: 25px;  
+  color: black;
+}
+
+.popup__date span {
+  color: black;
 }
 
 .popup__date i {
