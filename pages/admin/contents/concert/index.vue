@@ -151,7 +151,7 @@ const fetchConcerts = async (page = 1) => {
     key: `concerts-page-${page}`,
     onRequest({ options }) {
       console.log("REQUEST SENT: ", options.url, options.params);
-      console.log("pagenumber: ", typeof(pageNumber));
+      console.log("pagenumber: ", typeof (pageNumber));
     },
     onResponse({ response }) {
       console.log("SERVER RAW RESPONSE: ", response);
@@ -164,7 +164,7 @@ const fetchConcerts = async (page = 1) => {
     return;
   }
 
-  if(data.value) {
+  if (data.value) {
     const responseData = data.value;
 
     // 서버 응답 디버깅

@@ -319,26 +319,26 @@ const cancelHandler = () => {
 // 제출 처리 함수
 const submitHandler = async () => {
 
-  //const fileNames = ref([]); // 파일명 모아서 넘기기
-  // 에디터에 담긴 img 태그 src를 뽑아내기
-  const editorContent = editor.value.getHTML();
+  // //const fileNames = ref([]); // 파일명 모아서 넘기기
+  // // 에디터에 담긴 img 태그 src를 뽑아내기
+  // const editorContent = editor.value.getHTML();
 
-  // img 태그들을 추출하는 정규 표현식
-  const imgTags = editorContent.match(/<img[^>]*src="([^"]+)"/g);
+  // // img 태그들을 추출하는 정규 표현식
+  // const imgTags = editorContent.match(/<img[^>]*src="([^"]+)"/g);
 
-  // img 태그에서 src 속성만 추출
-  const imagePaths = imgTags.map(tag => {
-    const match = tag.match(/src="([^"]+)"/);
-    return match ? match[1] : '';
-  });
+  // // img 태그에서 src 속성만 추출
+  // const imagePaths = imgTags.map(tag => {
+  //   const match = tag.match(/src="([^"]+)"/);
+  //   return match ? match[1] : '';
+  // });
 
-  // src에서 도메인 이후의 경로만 추출
-  const pathsWithoutDomain = imagePaths.map(src => {
-    return src.replace('http://localhost:8081/api/v1/uploads/temp/popup/', '');
-  });
+  // // src에서 도메인 이후의 경로만 추출
+  // const pathsWithoutDomain = imagePaths.map(src => {
+  //   return src.replace('http://localhost:8081/api/v1/uploads/temp/popup/', '');
+  // });
 
-  fileNames.value = pathsWithoutDomain;
-  console.log(pathsWithoutDomain);
+  // fileNames.value = pathsWithoutDomain;
+  // console.log(pathsWithoutDomain);
 
   const formDatas = new FormData();
   formDatas.append('title', title.value); // 제목
@@ -361,10 +361,10 @@ const submitHandler = async () => {
   formDatas.append('content', editor.value ? editor.value.getHTML() : '');
 
   // 에디터로 업로드한 파일명 
-  fileNames.value.forEach((fileName) => {
-    // 파일 이름을 'fileNames'라는 이름으로 폼데이터에 추가
-    formDatas.append('fileNames', fileName);
-  });
+  // fileNames.value.forEach((fileName) => {
+  //   // 파일 이름을 'fileNames'라는 이름으로 폼데이터에 추가
+  //   formDatas.append('fileNames', fileName);
+  // });
 
   // 파일첨부한 파일 객체
   fileList.value.forEach((file) => {
