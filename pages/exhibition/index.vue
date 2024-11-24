@@ -3,7 +3,7 @@
     <!-- 슬라이더 섹션 -->
     <div class="photo-slider">
       <div class="slider-container" ref="slider">
-        <div class="slider-item" v-for="(image, index) in sliderImages" :key="index">
+        <div class="slider-item" v-for="(image, index) in sliderImages" :key="index" >
           <img :src="image.src" :alt="image.alt">
         </div>
       </div>
@@ -29,7 +29,7 @@
     </section>
 
     <!-- 지역별 보기 섹션 -->
-    <section class="region">
+    <section class="region exhibitionrRegion">
       <h2 class="region__title">지역별 보기</h2>
 
       <div class="region__filters">
@@ -158,4 +158,20 @@ function showMoreItems() {
 
 <style scoped>
 @import url('/public/css/exhibition/index.css');
+
+.slider-item img {
+  cursor: pointer;
+}
+
+.picks {
+  margin-left: 5px; /* 원하는 만큼 왼쪽으로 이동 */
+}
+
+.exhibitionrRegion {
+  margin-left: -20px; /* 원하는 만큼 왼쪽으로 이동 */
+}
+
+.region__title {
+  margin-left: 15px; /* 원하는 만큼 오른쪽으로 이동 */
+}
 </style>

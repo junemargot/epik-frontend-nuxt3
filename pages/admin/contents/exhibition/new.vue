@@ -101,6 +101,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useFetch, useRuntimeConfig } from '#imports';
 
+
 // 고정된 경로 가져와서 사용하기 위해
 const router = useRouter();
 const config = useRuntimeConfig(); // 추가
