@@ -9,27 +9,17 @@ const popupId = route.params.id;
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
 
-// 북마크와 알림 상태 관리
+// 북마크 상태 관리
 const isBookmark = ref(false);
-const isNotification = ref(false);
-function toggleBookmark() {
+function clickBookmark() {
   isBookmark.value = !isBookmark.value;
 }
-function toggleNotification() {
+
+// 알림 상태 관리
+const isNotification = ref(false);
+function clickNotification() {
   isNotification.value = !isNotification.value;
 }
-
-// // 북마크 상태 관리
-// const isBookmark = ref(false);
-// function clickBookmark() {
-//   isBookmark.value = !isBookmark.value;
-// }
-
-// // 알림 상태 관리
-// const isNotification = ref(false);
-// function clickNotification() {
-//   isNotification.value = !isNotification.value;
-// }
 
 // 슬라이더 상태 관리
 const currentIdx = ref(0);

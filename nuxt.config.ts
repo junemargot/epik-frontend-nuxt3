@@ -44,6 +44,7 @@ export default defineNuxtConfig({
         { src: 'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js', defer: true },
         { src: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js', defer: true },
         { src: 'https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js', defer: true },
+        {src: 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder',async: true, defer: true,}
       ],
     }
   }

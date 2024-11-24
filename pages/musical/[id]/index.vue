@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap" v-if="musical">
+<div class="wrap" v-if="musical">
     <!-- section 1 -->
     <div class="musical">
       <div class="musical__header">
@@ -7,33 +7,34 @@
         <div class="musical__icons">
           <div class="musical__icon">
             <a href="#">
-              <i class='bx bx-bell'></i>
+              <i class="bx bx-bell"></i>
             </a>
             <span>알림받기</span>
           </div>
           <div class="musical__icon">
             <a href="#">
-              <i class='bx bx-bookmark'></i>
+              <i class="bx bx-bookmark"></i>
             </a>
             <span>북마크</span>
           </div>
         </div>
       </div>
 
-      <hr><!-- 회색선  -->
+      <hr><!-- 회색선 -->
 
       <!-- 맨 위로 버튼 -->
       <button id="go-top" class="hidden">
-        <i class='bx bx-chevron-up'></i> TOP
+        <i class="bx bx-chevron-up"></i> TOP
       </button>
 
       <!-- section 2 -->
       <main>
         <div class="musical__content">
-
-          <img v-if="musical.saveImageName" :src="`http://localhost:8081/api/v1/uploads/images/musical/${musical.saveImageName}`"
-
-            alt="포스터이미지" />
+          <img
+            v-if="musical.saveImageName"
+            :src="`http://localhost:8081/api/v1/uploads/images/musical/${musical.saveImageName}`"
+            alt="포스터이미지"
+          />
           <div class="musical__info">
             <div class="musical__info-row">
               <p class="musical__info-label">장소</p>
@@ -65,8 +66,7 @@
             <div class="musical__info-row">
               <p class="musical__info-label">예매처</p>
               <div class="musical__booking-links">
-                <a :href="office.link" target="_blank" name="link" v-for="office in musical.ticketOffices"
-                  :key="office.id">
+                <a :href="office.link" target="_blank" name="link" v-for="office in musical.ticketOffices" :key="office.id">
                   {{ office.name }}
                 </a>
               </div>
@@ -74,22 +74,52 @@
           </div>
         </div>
 
-        <hr><!-- 회색선  -->
+        <hr><!-- 회색선 -->
 
         <!-- section 3 -->
         <section class="musical__intro">
+          <div class="musical__video">
+            <iframe
+              id="youtube-video"
+              :src="embedYoutubeUrl"
+              frameborder="0"
+              allowfullscreen
+              sandbox="allow-forms allow-scripts allow-same-origin allow-presentation"
+            ></iframe>
+          </div>
           <h2>뮤지컬 소개</h2>
           <div v-html="musical.content"></div>
-          <div class="musical__video">
-            <iframe id="youtube-video" :src="youtubeUrl" frameborder="0" allowfullscreen></iframe>
-          </div>
+
           <div class="musical__schedule">
             <p v-for="schedule in schedules" :key="schedule">{{ schedule }}</p>
           </div>
-          <div id="map" style="width:100%;height:400px;"></div>
           <div class="musical__images">
-            <img v-for="(image, index) in images" :key="index" :src="image" :alt="`시카고 상세${index + 1}`"
-              class="musical__image--long">
+            <img
+              v-for="(image, index) in images"
+              :key="index"
+              :src="image"
+              :alt="`시카고 상세${index + 1}`"
+              class="musical__image--long"
+            />
+          </div>
+        </section>
+        <hr class="musical__divider"> <!-- 회색선 -->
+
+        <!-- section 4 -->
+        <section class="musical__addinfo">
+          <h1>공연장 정보</h1>
+          <div class="musical__addinfo-address">
+            <i class="bx bx-map"></i>
+            <span>{{ musical.address }}</span>
+          </div>
+          <div>
+          <!-- 지도 로드되는 영역 -->
+          <div id="map" style="width: 100%; height: 400px;"></div>
+          <!-- 위치 정보 표시 -->
+          <!-- <div v-if="locationInfo.address && locationInfo.name">
+            <p>주소: {{ locationInfo.address }}</p>
+            <p>이름: {{ locationInfo.name }}</p>
+          </div> -->
           </div>
         </section>
       </main>
@@ -98,10 +128,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 
-// 추가 
+// 라우터 및 환경 변수 설정
 const route = useRoute();
 const musicalId = route.params.id;
 
@@ -110,7 +140,6 @@ const apiBase = config.public.apiBase;
 
 // 상태 관리 위한 ref 선언
 const musical = ref(null);
-const error = ref(null);
 
 // 데이터 가져오기
 watchEffect(async () => {
@@ -135,111 +164,72 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
-
-
-const mapScript = ref(null);
-let map = ref(null);
-let marker = ref(null);
-
-const locationInfo = ref({
-  address: "서울 구로구 경인로 662 7층",
-  name: "디큐브 링크아트센터"
-});
-
-const youtubeUrl = ref('https://www.youtube.com/embed/OjeglNu9eVo');
-
-
+// 지도 관련 변수 및 함수
+let map;
+let marker;
+let infowindow;
 
 function initMap() {
-  return new Promise((resolve) => {
-    if (window.naver && window.naver.maps) {
-      const mapElement = document.getElementById('map');
-      const mapOptions = {
-        zoom: 15,
-        minZoom: 8,
-        zoomControl: true,
-        zoomControlOptions: {
-          position: window.naver.maps.Position.TOP_RIGHT
-        }
-      };
+  const mapOptions = {
+    center: new naver.maps.LatLng(37.4802401, 127.014215239186), // 초기 중심 좌표 (서울시청)
+    zoom: 15
+  };
+  
+  map = new naver.maps.Map('map', mapOptions);
 
-      map.value = new window.naver.maps.Map(mapElement, mapOptions);
-      resolve();
-    }
+  marker = new naver.maps.Marker({
+    position: mapOptions.center,
+    map: map
   });
+
+  infowindow = new naver.maps.InfoWindow();
+
+  // 페이지 로드 시 올바른 주소로 지도 업데이트
+  updateMapWithAddress("서울 구로구 경인로 662 7층", "디큐브 링크아트센터");
 }
 
 function updateMapWithAddress(address, name) {
-  return new Promise((resolve) => {
-    window.naver.maps.Service.geocode({
-      query: address
-    }, function (status, response) {
-      if (status === window.naver.maps.Service.Status.ERROR) {
-        alert('주소 검색 중 오류가 발생했습니다.');
-        return resolve();
-      }
+  naver.maps.Service.geocode({
+    query: address
+  }, function(status, response) {
+    if (status === naver.maps.Service.Status.ERROR) {
+      return alert('주소 검색 중 오류가 발생했습니다.');
+    }
 
-      if (response.v2.meta.totalCount === 0) {
-        alert('검색 결과가 없습니다.');
-        return resolve();
-      }
+    if (response.v2.meta.totalCount === 0) {
+      return alert('검색 결과가 없습니다.');
+    }
 
-      var item = response.v2.addresses[0];
-      var point = new window.naver.maps.LatLng(item.y, item.x);
+    const item = response.v2.addresses[0];
+    const point = new naver.maps.LatLng(item.y, item.x);
 
-      map.value.setCenter(point);
+    map.setCenter(point);
+    marker.setPosition(point);
 
-      if (marker.value) {
-        marker.value.setMap(null);
-      }
+    const contentString = `
+      <div class="iw_inner">
+        <h3>${name}</h3>
+        <p>${address}<br />
+        위도: ${item.y}<br />
+        경도: ${item.x}</p>
+      </div>
+    `;
 
-      marker.value = new window.naver.maps.Marker({
-        position: point,
-        map: map.value
-      });
-
-      var infoWindow = new window.naver.maps.InfoWindow({
-        content: `<div style="padding:10px;"><strong>${name}</strong><br>${address}</div>`
-      });
-      infoWindow.open(map.value, marker.value);
-
-      // 위치 저장
-      localStorage.setItem('mapCenter', JSON.stringify({ lat: item.y, lng: item.x }));
-
-      resolve();
-    });
+    infowindow.setContent(contentString);
+    infowindow.open(map, marker);
   });
 }
 
-async function loadMap() {
-  await initMap();
-  const savedLocation = JSON.parse(localStorage.getItem('mapCenter'));
-  if (savedLocation) {
-    const point = new window.naver.maps.LatLng(savedLocation.lat, savedLocation.lng);
-    map.value.setCenter(point);
-    marker.value = new window.naver.maps.Marker({
-      position: point,
-      map: map.value
-    });
-  } else {
-    await updateMapWithAddress(locationInfo.value.address, locationInfo.value.name);
-  }
-}
-
+// 클라이언트에서만 실행되도록 지도를 초기화
 onMounted(() => {
-  mapScript.value = document.createElement('script');
-  mapScript.value.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder`;
-  mapScript.value.async = true;
-  mapScript.value.onload = loadMap;
-  document.head.appendChild(mapScript.value);
-});
-
-onUnmounted(() => {
-  if (mapScript.value) {
-    document.head.removeChild(mapScript.value);
-  }
+  const mapScript = document.createElement('script');
+  mapScript.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder`;
+  mapScript.async = true;
+  mapScript.onload = initMap;
+  document.head.appendChild(mapScript);
 });
 </script>
+
 
 <style lang="css" scoped>
 @import url('/public/css/musical/[id]/index.css');
