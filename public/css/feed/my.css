@@ -49,12 +49,17 @@
 
 .my-feed__profile-edit {
   width: 90%;
-  height: 26px;
+  height: 32px;
+  font-size: 15px;
   border-radius: 8px;
   text-align: center;
   font-family: 'pretendard-regular';
   align-content: center;
   background-color: #e6e6e6;
+}
+
+.my-feed__profile-edit:hover {
+  cursor: pointer;
 }
 
 /* 드롭다운 메뉴 */
@@ -75,11 +80,12 @@
 .myfeed-dropdown-list {
   width: 110px;
   top: 35px;
-  left: -30px;
+  /* left: -30px; */
 }
 
 .myfeed-dropdown-list>li {
   padding: 6px 0;
+  cursor: pointer;
 }
 
 .myfeed-dropdown-list>li>a {
@@ -88,11 +94,12 @@
 
 
 .my-feed__options {
-  width: 50px;
-  height: 26px;
+  width: 36px;
+  height: 32px;
   border-radius: 8px;
   border: none;
   background-color: #e6e6e6;
+  cursor: pointer;
 }
 
 /* 피드 사진들 */
@@ -140,4 +147,43 @@
 .my-feed__empty span {
   font-family: 'pretendard-semibold';
   font-size: 26px;
+}
+
+.feed__menu {
+  font-family: 'pretendard-semibold';
+  color: #C1C1C1;
+  font-size: 22px;
+  margin-top: 18px;
+  cursor: pointer;
+}
+
+.feed__menu-column a {
+  text-decoration: none;
+  color: #C1C1C1;
+  font-weight: 500;
+}
+
+.feed__menu-column a.is-active {
+  color: var(--black); /* 선택된 경우 검정색 */
+  font-weight: bold;
+}
+
+.feed__menu-column a.is-inactive {
+  color: #C1C1C1; /* 비활성화된 경우 회색 */
+  font-weight: normal;
+}
+
+.feed__menu-column span {
+  color: #C1C1C1;
+}
+
+/* feed__menu-column 내의 span에 대한 스타일 */
+.feed__menu-column span.is-active {
+  color: var(--black); /* 선택된 경우 검정색 */
+  font-weight: bold;
+}
+
+.feed__menu-column span.is-inactive {
+  color: #C1C1C1; /* 비활성화된 경우 회색 */
+  font-weight: normal;
 }
