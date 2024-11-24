@@ -155,6 +155,9 @@ const getMemberInfo = () => {
     userInfo.role.map(role => { console.log(role, role.authority) });
 
     console.log("새로운 토큰 사용했당")
+    localStorage.removeItem("access_token");
+    alert('비밀번호 변경이 완료되었습니다!');
+    location.href="http://localhost:3000/login"; 
   }
     catch{
       console.log("옲ㅍ")
@@ -166,4 +169,9 @@ const getMemberInfo = () => {
 
 <style>
 @import url(/public/css/mypage/passwordUpdate.css);
+
+.long_btn:hover{
+  background-color: var(--accent-1); 
+  color: white;  
+}
 </style>

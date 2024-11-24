@@ -83,11 +83,12 @@ watch([pwModel, pwReModel], () => {
 import { useRoute } from 'vue-router';
 const route = useRoute();
 
+
 const passwordUpHandler = async()=>{
 
    //id값만 담기
-   const usernameValue = route.query.username;
-   console.log("전달받은 username-"+ route.query.username)
+   const usernameValue = localStorage.getItem('username');
+   console.log("전달받은 username-" + usernameValue);
 
   const usernameCheckDto = {
     username: usernameValue,
@@ -102,7 +103,7 @@ const passwordUpHandler = async()=>{
     body: JSON.stringify(usernameCheckDto),
   });
 
-  const data = await response.json();
+  const data = await response.text();
    console.log(data);
 
 }

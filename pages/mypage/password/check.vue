@@ -12,7 +12,7 @@
           <label>
             <div class="star_top">아이디</div>
             <div class="gap-mt_1">
-              <input disabled class="form non_change" type="text" placeholder="abc1234">
+              <input disabled class="form non_change" type="text" :placeholder="storedUserInfo">
             </div>
           </label>
         </fieldset>
@@ -47,6 +47,13 @@ const passwordModel = ref('');
 const userDetails = useUserDetails();
 const passwordCheck = ref(null);
 import { jwtDecode } from 'jwt-decode';
+
+//usrname 띄우기
+const storedUserInfo = ref('');
+
+onMounted(()=>{
+  storedUserInfo.value = localStorage.getItem("username");
+})
 
 
 const passwotdCheckHandler = async () => {
@@ -99,4 +106,9 @@ const passwotdCheckHandler = async () => {
 
 <style>
 @import url('/public/css/mypage/passwordUpdate.css');
+
+.long_btn:hover{
+  background-color: var(--accent-1); 
+  color: white;  
+}
 </style>

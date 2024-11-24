@@ -25,10 +25,8 @@
 import { ref } from 'vue';
 
 const members = ref([
-  { img: '/images/mypage/profile-baek.png', nickname: '가나다', buttonText: '차단해제' },
-  { img: '/images/mypage/profile-baek.png', nickname: '라마사', buttonText: '차단해제' },
-  { img: '/images/mypage/profile-baek.png', nickname: '아자차', buttonText: '차단해제' },
-  { img: '/images/mypage/profile-baek.png', nickname: '파타아', buttonText: '차단해제' },
+  { img: '/images/mypage/subway.png', nickname: '서브웨이', buttonText: '차단해제' },
+  { img: '/images/mypage/pinkpong.png', nickname: '핑트퐁', buttonText: '차단해제' },
   // 필요한 만큼 멤버 추가
 ]);
 
@@ -42,6 +40,11 @@ const unblock = (index) => {
     members.value[index].buttonText = '차단해제';
   }
 };
+
+//td
+
+
+
 
 
 </script>
