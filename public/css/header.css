@@ -203,8 +203,8 @@
 
 .search-bar__submintbutton {
   position: absolute;
-  top: 11px;
-  left: 10px;
+  top: 15px;
+  left: 30px;
   border: none;
   background-color: #ffffff;
 }
