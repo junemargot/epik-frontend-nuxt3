@@ -164,6 +164,19 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
+// YouTube URL 관리
+const youtubeUrl = ref("https://www.youtube.com/watch?v=yWMbEEO7TcU");
+const embedYoutubeUrl = ref("");
+
+function convertToEmbedUrl(url) {
+  const videoIdMatch = url.match(/(?:\?v=|\/embed\/|\/v\/|youtu\.be\/)([^&?/\n]+)/);
+  return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
+}
+
+onMounted(() => {
+  embedYoutubeUrl.value = convertToEmbedUrl(youtubeUrl.value);
+});
+
 // 지도 관련 변수 및 함수
 let map;
 let marker;
