@@ -111,71 +111,95 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const feeds = ref([
-  {
-    no: 15,
-    title: "게시물 1",
-    writer: "카피바라",
-    regDate: "2024-08-25",
-    viewCnt: 40,
-    cmtCount: 2,
-    like: 3,
-    profileImage: "/images/profile1.jpg",
-    images: [
-      "/images/feed_img_1.jpg",
-      "/images/feed_img_2.JPG",
-      "/images/feed_img_3.JPG",
-      "/images/feed_img_4.JPG"
-    ],
-    text: `무소륵스키의 전람회의 그림!
-          실연은 처음인데 너무 좋았잖앙,, 행복한 밤이었다!!
-          내년에 또 와주길~!
-    `,
-    tags: ["#무소륵스키", "#전람회의 그림", "라벨편곡ver", "투간소키예프", "프바협"],
-  },
-  {
-    no: 14,
-    title: "게시물 1",
-    writer: "카피바라",
-    regDate: "2024-08-25",
-    viewCnt: 40,
-    cmtCount: 2,
-    like: 3,
-    profileImage: "/images/profile1.jpg",
-    images: [
-      "/images/feed_img_1.jpg",
-      "/images/feed_img_2.JPG",
-      "/images/feed_img_3.JPG",
-      "/images/feed_img_4.JPG"
-    ],
-    text: `무소륵스키의 전람회의 그림!
-          실연은 처음인데 너무 좋았잖앙,, 행복한 밤이었다!!
-          내년에 또 와주길~!
-    `,
-    tags: ["#무소륵스키", "#전람회의 그림", "라벨편곡ver", "투간소키예프", "프바협"],
-  },
-  {
-    no: 13,
-    title: "게시물 1",
-    writer: "카피바라",
-    regDate: "2024-08-25",
-    viewCnt: 40,
-    cmtCount: 2,
-    like: 3,
-    profileImage: "/images/profile1.jpg",
-    images: [
-      "/images/feed_img_1.jpg",
-      "/images/feed_img_2.JPG",
-      "/images/feed_img_3.JPG",
-      "/images/feed_img_4.JPG"
-    ],
-    text: `무소륵스키의 전람회의 그림!
-          실연은 처음인데 너무 좋았잖앙,, 행복한 밤이었다!!
-          내년에 또 와주길~!
-    `,
-    tags: ["#무소륵스키", "#전람회의 그림", "라벨편곡ver", "투간소키예프", "프바협"],
-  },
+  // {
+  //   no: 15,
+  //   title: "게시물 1",
+  //   writer: "카피바라",
+  //   regDate: "2024-08-25",
+  //   viewCnt: 40,
+  //   cmtCount: 2,
+  //   like: 3,
+  //   profileImage: "/images/profile1.jpg",
+  //   images: [
+  //     "/images/feed_img_1.jpg",
+  //     "/images/feed_img_2.JPG",
+  //     "/images/feed_img_3.JPG",
+  //     "/images/feed_img_4.JPG"
+  //   ],
+  //   text: `무소륵스키의 전람회의 그림!
+  //         실연은 처음인데 너무 좋았잖앙,, 행복한 밤이었다!!
+  //         내년에 또 와주길~!
+  //   `,
+  //   tags: ["#무소륵스키", "#전람회의 그림", "라벨편곡ver", "투간소키예프", "프바협"],
+  // },
+  // {
+  //   no: 14,
+  //   title: "게시물 1",
+  //   writer: "카피바라",
+  //   regDate: "2024-08-25",
+  //   viewCnt: 40,
+  //   cmtCount: 2,
+  //   like: 3,
+  //   profileImage: "/images/profile1.jpg",
+  //   images: [
+  //     "/images/feed_img_1.jpg",
+  //     "/images/feed_img_2.JPG",
+  //     "/images/feed_img_3.JPG",
+  //     "/images/feed_img_4.JPG"
+  //   ],
+  //   text: `무소륵스키의 전람회의 그림!
+  //         실연은 처음인데 너무 좋았잖앙,, 행복한 밤이었다!!
+  //         내년에 또 와주길~!
+  //   `,
+  //   tags: ["#무소륵스키", "#전람회의 그림", "라벨편곡ver", "투간소키예프", "프바협"],
+  // },
+  // {
+  //   no: 13,
+  //   title: "게시물 1",
+  //   writer: "카피바라",
+  //   regDate: "2024-08-25",
+  //   viewCnt: 40,
+  //   cmtCount: 2,
+  //   like: 3,
+  //   profileImage: "/images/profile1.jpg",
+  //   images: [
+  //     "/images/feed_img_1.jpg",
+  //     "/images/feed_img_2.JPG",
+  //     "/images/feed_img_3.JPG",
+  //     "/images/feed_img_4.JPG"
+  //   ],
+  //   text: `무소륵스키의 전람회의 그림!
+  //         실연은 처음인데 너무 좋았잖앙,, 행복한 밤이었다!!
+  //         내년에 또 와주길~!
+  //   `,
+  //   tags: ["#무소륵스키", "#전람회의 그림", "라벨편곡ver", "투간소키예프", "프바협"],
+  // },
 ]);
 
+// const feeds = ref([]);
+const isLoading = ref(true);
+const errorMessage = ref('');
+
+// 데이터를 가져오는 함수
+const fetchFeeds = async () => {
+  try {
+    const { data, error } = await useFetch('/feed'); // 실제 API URL로 교체
+    if (error.value) {
+      errorMessage.value = '피드를 불러오는 데 실패했습니다.';
+    } else {
+      feeds.value = data.value;
+    }
+  } catch (error) {
+    errorMessage.value = '피드를 불러오는 중 오류가 발생했습니다.';
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+onMounted(() => {
+  // fetchFeeds();
+
+});
 // const visibleDetailsIndex = ref(null);
 
 // // 아코디언 세부 정보 토글 함수

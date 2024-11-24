@@ -132,7 +132,7 @@ const closeSidebarOnNav = () => {
             <nav>
               <ul>
                 <li class="dropdown-menu__link">
-                  <a>Pop-Up</a>
+                  <NuxtLink to="/popup/region">Pop-Up</NuxtLink>
                   <ul>
                     <li><NuxtLink to="/popup/region" @click="closeSidebarOnNav">지역별</NuxtLink></li>
                     <li><NuxtLink to="/popup/category">카테고리별</NuxtLink></li>
@@ -153,10 +153,10 @@ const closeSidebarOnNav = () => {
                   <NuxtLink to="/feed">Feed</NuxtLink>
                   <span>당신의 시간을 공유해주세요!</span>
                 </li>
-                <li class="dropdown-menu__link">
+                <!-- <li class="dropdown-menu__link">
                   <NuxtLink to="chat">Chat</NuxtLink>
                   <span>다른 유저들과 이야기를 나눠보세요!</span>
-                </li>
+                </li> -->
               </ul>
             </nav>
 

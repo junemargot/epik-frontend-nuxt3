@@ -30,7 +30,9 @@
       <!-- section 2 -->
       <main>
         <div class="musical__content">
+
           <img v-if="musical.saveImageName" :src="`http://localhost:8081/api/v1/uploads/images/musical/${musical.saveImageName}`"
+
             alt="포스터이미지" />
           <div class="musical__info">
             <div class="musical__info-row">

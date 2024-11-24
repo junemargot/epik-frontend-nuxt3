@@ -42,7 +42,7 @@ const closeModal = () => {
 }
 
 .close-button {
-  display: none; 
+  display: none;
 }
 
 :deep(.delete-confirmation) {
@@ -66,9 +66,10 @@ const closeModal = () => {
 
 :deep(.modal-buttons) {
   display: flex;
-  justify-content: space-between; /* 버튼들을 양끝으로 배치 */
+  justify-content: space-between;
+  /* 버튼들을 양끝으로 배치 */
   gap: 40px;
-  padding: 0 20px; 
+  padding: 0 20px;
 }
 
 :deep(.modal-buttons button) {
@@ -77,7 +78,8 @@ const closeModal = () => {
   border: none;
   font-size: 16px;
   cursor: pointer;
-  flex: 1; /* 버튼이 동일한 너비를 가지도록 설정 */
+  flex: 1;
+  /* 버튼이 동일한 너비를 가지도록 설정 */
 }
 
 :deep(.modal-buttons button:first-child) {

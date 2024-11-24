@@ -98,9 +98,9 @@ onMounted(() => {
 
 // EPIK'S PICK 데이터
 const picks = ref([
-  { id: 1, image: '/images/어쩌면 해피엔딩.jpg', title: '어쩌면 해피엔딩', venue: '예스24 스테이지 1관', date: '24.08.07 - 08.09' },
-  { id: 2, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29' },
-  { id: 3, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01' },
+  { id: 1, image: 'images/exhibition/[ 대림미술관 ] 2024 블라인드티켓.png', title: '［대림미술관］2024 블라인드 티켓', venue: '대림미술관', date: '24.12.14 - 25.01.31' },
+  { id: 2, image: 'images/exhibition/[ 슈퍼얼리버드 ] 퓰리처상 사진전.png', title: '[ 슈퍼얼리버드 ] 퓰리처상 사진전', venue: '예술의전당 한가람디자인미술관', date: '24.12.21 - 25.01.31' },
+  { id: 3, image: 'images/exhibition/[슈퍼 얼리버드 ] 안나 & 다니엘 사진전.png', title: '안나 & 다니엘 사진전.png', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01' },
   { id: 4, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13' },
   { id: 5, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20' },
   { id: 6, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18' }
@@ -114,25 +114,25 @@ const items = ref([
   { id: 1, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29', hidden: false },
   { id: 2, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29', hidden: false },
   { id: 3, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01', hidden: false },
-  { id: 4, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13', hidden: false  },
-  { id: 5, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20' , hidden: false },
-  { id: 6, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18', hidden: true  },
-  { id: 7, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29' , hidden: true },
+  { id: 4, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13', hidden: false },
+  { id: 5, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20', hidden: false },
+  { id: 6, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18', hidden: true },
+  { id: 7, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29', hidden: true },
   { id: 8, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01', hidden: true },
   { id: 9, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13', hidden: true },
   { id: 10, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20', hidden: true },
   { id: 11, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18', hidden: true },
-  { id: 12, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01' , hidden: true},
-  { id: 13, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13' , hidden: true},
-  { id: 14, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20' , hidden: true},
+  { id: 12, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01', hidden: true },
+  { id: 13, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13', hidden: true },
+  { id: 14, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20', hidden: true },
   { id: 15, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18', hidden: true },
-  { id: 16, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29' , hidden: true},
-  { id: 17, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01' , hidden: true},
-  { id: 18, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13' , hidden: true},
-  { id: 19, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20' , hidden: true},
+  { id: 16, image: '/images/빨래 뮤지컬.gif', title: '빨래', venue: '인터파크 유니플렉스 2관', date: '24.06.07 - 12.29', hidden: true },
+  { id: 17, image: '/images/리지.gif', title: '뮤지컬 리지', venue: '두산아트센터 연강홀', date: '24.09.14 - 12.01', hidden: true },
+  { id: 18, image: '/images/베르사유장미.jpg', title: '베르사유장미', venue: '충무아트센터 대극장', date: '24.07.16 - 10.13', hidden: true },
+  { id: 19, image: '/images/젠틀맨스가이드.jpg', title: '젠틀맨스 가이드', venue: '광림아트센터 BBCH홀', date: '24.07.06 - 10.20', hidden: true },
   { id: 20, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18', hidden: true },
   { id: 20, image: '/images/지킬앤하이드.gif', title: '지킬앤하이드', venue: '블루스퀘어 신한카드홀', date: '24.11.29 - 05.18', hidden: true }
-  
+
   // ... 추가 아이템
 ]);
 
@@ -144,7 +144,7 @@ const hasHiddenItems = computed(() => items.value.some(item => item.hidden));
 // 더 많은 아이템을 표시하는 함수
 function showMoreItems() {
   let itemsShown = 0;
-  
+
   for (let item of items.value) {
     if (itemsShown >= itemsPerPage) break;
     if (item.hidden) {

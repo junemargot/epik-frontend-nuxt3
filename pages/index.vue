@@ -51,6 +51,7 @@
 
     <!-- 배너 섹션 -->
     <div class="banner">
+
           <div class="banner__grid">
             <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
             <a href="http://localhost:3000/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
@@ -60,6 +61,7 @@
             <img src="/images/베너6.png" alt="Banner 6" class="banner__item">
           </div>
         </div>
+
 
     <!-- 콘서트 -->
     <div class="popup">
@@ -88,6 +90,7 @@
         <div v-for="(item, index) in musicalItems" :key="index" class="popup__item">
           <img :src="`http://localhost:8081/api/v1/uploads/images/musical/${item.fileSavedName}`"
           :alt="`Popup ${index + 1}`">
+
           <div class="popup__info">
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
@@ -170,6 +173,9 @@ if (popupError.value) {
   console.error('API 호출 에러:', popupError.value)
 } else if (popupData.value) {
   popupItems.value = (Array.isArray(popupData.value) ? popupData.value : [popupData.value]).slice(0, 4)
+  popupItems.value.forEach((item, index) => {
+    console.log(`Item ${index}:`, item);  // 각 항목을 출력
+  });
   console.log('Fetched popup items:', popupItems.value)
 }
 
@@ -194,6 +200,9 @@ if (error.value) {
   console.error('API 호출 에러:', error.value)
 } else if (data.value) {
   musicalItems.value = (Array.isArray(data.value) ? data.value : [data.value]).slice(0, 4)
+  musicalItems.value.forEach((item, index) => {
+    console.log(`Item ${index}:`, item);  // 각 항목을 출력
+  });
   console.log('Fetched musical items:', musicalItems.value)
 }
 
