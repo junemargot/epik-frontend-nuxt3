@@ -140,7 +140,7 @@ const fetchConcerts = async (page = 1) => {
   const pageNumber = page; // 0-based index
 
   const { data, error } = await useFetch('/admin/concert', {
-    baseURL: apiBase || 'http://localhost:8080/api/v1',
+    baseURL: apiBase || 'http://localhost:8081/api/v1',
     // params: { page: pageNumber }, // 서버로 요청할 페이지
     params: {
       p: pageNumber,
@@ -151,7 +151,7 @@ const fetchConcerts = async (page = 1) => {
     key: `concerts-page-${page}`,
     onRequest({ options }) {
       console.log("REQUEST SENT: ", options.url, options.params);
-      console.log("pagenumber: ", typeof(pageNumber));
+      console.log("pagenumber: ", typeof (pageNumber));
     },
     onResponse({ response }) {
       console.log("SERVER RAW RESPONSE: ", response);
@@ -164,7 +164,7 @@ const fetchConcerts = async (page = 1) => {
     return;
   }
 
-  if(data.value) {
+  if (data.value) {
     const responseData = data.value;
 
     // 서버 응답 디버깅

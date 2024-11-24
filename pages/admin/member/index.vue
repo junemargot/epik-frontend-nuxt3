@@ -39,8 +39,7 @@
                 <button class="delBtn" @click.stop="deleteAccount(member.id)">계정 삭제</button>
               </div>
               <!-- 아코디언으로 펼쳐질 내용 -->
-              <div class="board__user-details" 
-                  :style="{ display: isDetailsVisible(index) ? 'flex' : 'none' }">
+              <div class="board__user-details" :style="{ display: isDetailsVisible(index) ? 'flex' : 'none' }">
                 <div class="board__user-detail-section-left">
                   <!-- <div class="board__user-number">
                     <p><strong>회원 번호:</strong> {{ member.id }}</p>
@@ -193,9 +192,9 @@ const formatDate = (dateString) => {
 
 const fetchMembers = async (page = 1) => {
   const pageNumber = page;
-  
+
   const { data, error } = await useFetch('/admin/member', {
-    baseURL: apiBase || 'http://localhost:8080/api/v1',
+    baseURL: apiBase || 'http://localhost:8081/api/v1',
     params: {
       p: pageNumber,
       k: searchQuery.value,
@@ -209,14 +208,14 @@ const fetchMembers = async (page = 1) => {
     }
   });
 
-  if(error.value) {
+  if (error.value) {
     console.error("페치 에러: ", error.value);
   }
 
-  if(data.value) {
+  if (data.value) {
     const responseData = data.value;
     console.log('API 응답: ', data.value);
-    
+
     members.value = responseData.memberList || [];
     totalCount.value = responseData.totalCount || 0;
     totalPages.value = responseData.totalPages || 0;
@@ -248,7 +247,7 @@ const deleteAccount = async (id) => {
       const response = await useDataFetch(`admin/member/${id}`, {
         method: 'DELETE'
       });
-      
+
       if (response && response._data !== undefined) {
         alert("계정이 성공적으로 삭제되었습니다.");
         // 목록에서 삭제된 회원 제거
@@ -308,11 +307,11 @@ const selectCategory = (category) => {
 };
 
 const updatePlaceholder = (category) => {
-  if(category === '통합검색') {
+  if (category === '통합검색') {
     inputPlaceholder.value = '검색어를 입력해주세요';
-  } else if(category === '아이디') {
+  } else if (category === '아이디') {
     inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
-  } else if(category === '닉네임'){
+  } else if (category === '닉네임') {
     inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
   } else {
     inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
@@ -323,10 +322,10 @@ const performSearch = async () => {
   currentPage.value = 1;
 
   await fetchMembers();
-  router.push({ 
-    query: { 
-      k: searchQuery.value, 
-      s: categoryMapping[selectedCategory.value] 
+  router.push({
+    query: {
+      k: searchQuery.value,
+      s: categoryMapping[selectedCategory.value]
     }
   });
 }

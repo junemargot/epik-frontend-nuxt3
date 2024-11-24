@@ -39,7 +39,7 @@
       <!-- PAGINATION / REGISTRATION -->
       <div class="pagination-wrapper">
         <div class="pagination">
-          <button type="button" class="page-btn start-page" :disabled="currentPage === 1" 
+          <button type="button" class="page-btn start-page" :disabled="currentPage === 1"
             @click.prevent.stop="changePage(1)">
             <i class='bx bx-chevrons-left'></i>
           </button>
@@ -143,7 +143,7 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 
 // 공지사항 목록 fetch
 // const { data, error } = await useFetch('/admin/notice', {
-//     baseURL: apiBase || 'http://localhost:8080/api/v1',
+//     baseURL: apiBase || 'http://localhost:8081/api/v1',
 //     params: { 
 //       p: currentPage.value,
 //       k: searchQuery.value,
@@ -151,10 +151,10 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 //     }
 //   });
 
-  
+
 //   const notices = ref(data.value?.noticeList || []);
 //   const totalCount = ref(data.value?.totalCount || 0);
-  
+
 //   // 데이터 받아오기
 // watchEffect(() => {
 //   if (data.value) {
@@ -171,7 +171,7 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 // const loadNotices = async () => { // useFetch를 사용하여 비동기적으로 데이터 가져오기
 //   // 로컬 스토리지에서 데이터 가져오기
 //   const storedNotices = localStorage.getItem('notices');
-  
+
 //   try {
 //     if(storedNotices) { 
 //       const parsedNotices = JSON.parse(storedNotices); // 로컬 스토리지에 저장된 데이터가 있으면 사용
@@ -188,7 +188,7 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 
 //   // 로컬 스토리지에 유효한 데이터가 없으면 api 호출
 //   const { data, error } = await useFetch('/admin/notice', {
-//     baseURL: apiBase || 'http://localhost:8080/api/v1', // API 기본 URL이 설정되지 않으면 로컬 URL 사용
+//     baseURL: apiBase || 'http://localhost:8081/api/v1', // API 기본 URL이 설정되지 않으면 로컬 URL 사용
 //     params: {
 //       p: currentPage.value,  // 현재 페이지 번호
 //       k: searchQuery.value,  // 검색 쿼리
@@ -209,7 +209,7 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 //     totalCount.value = data.value.totalCount || 0;  // 전체 공지사항 개수를 totalCount 변수에 저장, 없으면 0으로 초기화
 //     totalPages.value = data.value.totalPages || 0;  // 전체 페이지 수를 totalPages 변수에 저장, 없으면 0으로 초기화
 //     pages.value = data.value.pages || [];  // 페이지 정보를 pages 변수에 저장, 없으면 빈 배열로 초기화
-  
+
 //     // 데이터를 로컬 스토리지에 저장
 //     localStorage.setItem('notices', JSON.stringify(notices.value));
 
@@ -253,7 +253,7 @@ onMounted(async () => {
 // 데이터 로드 함수
 const loadNotices = async () => {
   const { data, error } = await useFetch('/admin/notice', {
-    baseURL: apiBase || 'http://localhost:8080/api/v1',
+    baseURL: apiBase || 'http://localhost:8081/api/v1',
     params: {
       p: currentPage.value,
       k: searchQuery.value,
@@ -416,7 +416,7 @@ onUnmounted(async () => {
 });
 
 // 페이지 변경 시 데이터 로드
-watch(totalPages,(newTotalPages) => {
+watch(totalPages, (newTotalPages) => {
   console.log("전체 페이지 수: ", newTotalPages);
 });
 

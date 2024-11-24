@@ -129,9 +129,9 @@ async function fetchMarkerData() {
     const response = await fetch(`${apiBase}/popup/${popupId}`);
     if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
     const data = await response.json();
-    
+
     console.log("Fetched data:", data);  // 데이터를 출력하여 구조를 확인
-    
+
     // 이제 data는 배열이 아닌 객체이므로, address만 추출해서 반환
     if (data && data.address) {
       return [data.address];  // 주소만 배열 형태로 반환
@@ -268,11 +268,13 @@ function formatDate(dateString) {
       <!-- /images-slider 파란선 -->
       <div class="popup-info__slider">
         <div class="popup-info__slides">
-          <img class="popup-info__slide" src="/images/나가노마켓1.jpg" alt="/images #1">
+          <!-- <img class="popup-info__slide" src="/images/나가노마켓1.jpg" alt="/images #1">
           <img class="popup-info__slide" src="/images/나가노마켓2.jpg" alt="/images #2">
           <img class="popup-info__slide" src="/images/나가노마켓3.jpg" alt="/images #3">
           <img class="popup-info__slide" src="/images/나가노마켓4.jpg" alt="/images #4">
-          <img class="popup-info__slide" src="/images/나가노마켓5.jpg" alt="/images #5">
+          <img class="popup-info__slide" src="/images/나가노마켓5.jpg" alt="/images #5"> -->
+          <img v-for="(imageName, index) in popup.saveImageNames" :key="index"
+            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="'포스터이미지 ' + (index + 1)" />
         </div>
         <a class="popup-info__prev" @click="prevSlide"><i class='bx bx-chevron-left'></i></a>
         <a class="popup-info__next" @click="nextSlide"><i class='bx bx-chevron-right'></i></a>
@@ -295,7 +297,7 @@ function formatDate(dateString) {
           </div>
           <div class="popup__tags">
             <span v-for="(tag, index) in popup?.tags" :key="index" class="popup__tag">
-            {{ tag }} <!-- tag 객체에서 tag 필드만 출력 -->
+              {{ tag }} <!-- tag 객체에서 tag 필드만 출력 -->
             </span>
           </div>
         </div>
@@ -345,15 +347,15 @@ function formatDate(dateString) {
       <h1>상세 정보</h1>
       <address class="popup__addinfo-address">
         <i class='bx bx-map-alt'></i>
-        <span>{{popup?.address}}</span>
+        <span>{{ popup?.address }}</span>
       </address>
       <address class="popup__addinfo-address-detail">
         <div>5</div>
-        <span>{{popup?.addressDetail}}</span>
+        <span>{{ popup?.addressDetail }}</span>
       </address>
       <div id="map" style="width:100%;height:400px;"></div>
       <div class="popup__hours">
-        <span><i class='bx bx-time-five'></i>{{popup?.operationTime}}</span>
+        <span><i class='bx bx-time-five'></i>{{ popup?.operationTime }}</span>
         <p>
           목 10:30 - 20:00<br>
           금 10:30 - 20:30<br>

@@ -34,8 +34,8 @@
 
       <div v-if="isLoading">데이터 로딩 중...</div>
       <div v-else>
-        <div class="bookmark__popup" v-for="section in (currentSection === 'All' ? sections.slice(1) : [currentSection])"
-          :key="section">
+        <div class="bookmark__popup"
+          v-for="section in (currentSection === 'All' ? sections.slice(1) : [currentSection])" :key="section">
           <div class="bookmark__section">
             <div class="bookmark__header-container">
               <h2>{{ section }}</h2>
@@ -107,7 +107,7 @@ const fetchMusicalItems = async () => {
   try {
     const url = `member/musical/${musicalId}/bookmark`;
     console.log('완성된 URL:', `http://localhost:8081${url}`);
-    
+
     const { data: musicalData, error: musicalError } = await useFetch(url, {
       baseURL: 'http://localhost:8081',
       key: `musical-${musicalId}`,
@@ -168,7 +168,7 @@ const fetchAllData = async () => {
 // Concert 데이터 가져오기
 // const fetchConcertItems = async () => {
 //   const { data: concertData, error: concertError } = await useFetch(`/api/v1/member/concert/${id}/bookmark`, {
-//     baseURL: 'http://localhost:8080',
+//     baseURL: 'http://localhost:8081',
 //   })
 
 //   if (concertError.value) {
@@ -182,7 +182,7 @@ const fetchAllData = async () => {
 // Musical 데이터 가져오기
 // const fetchMusicalItems = async () => {
 //   const { data: musicalData, error: musicalError } = await useFetch(`/api/v1/member/musical/${id}/bookmark`, {
-//     baseURL: 'http://localhost:8080',
+//     baseURL: 'http://localhost:8081',
 //   })
 
 //   if (musicalError.value) {
@@ -196,7 +196,7 @@ const fetchAllData = async () => {
 // Exhibition 데이터 가져오기
 // const fetchExhibitionItems = async () => {
 //   const { data: exhibitionData, error: exhibitionError } = await useFetch(`/api/v1/member/exhibition/${id}/bookmark`, {
-//     baseURL: 'http://localhost:8080',
+//     baseURL: 'http://localhost:8081',
 //   })
 
 //   if (exhibitionError.value) {
@@ -242,11 +242,11 @@ const getSectionItems = (section) => {
       break;
     // case 'Exhibition':
     //   items = exhibitionItems.value;
-      // break;
+    // break;
     default:
       items = [];
   }
-  
+
   console.log(`${section} 섹션 아이템:`, items);
   return items;
 }
@@ -257,7 +257,7 @@ const getSectionItems = (section) => {
 //   editMode.value = !editMode.value;
 //   document.body.classList.toggle('editing', editMode.value);
 //   if (!editMode.value) {
-    // 편집 모드 해제 시 모든 선택 해제
+// 편집 모드 해제 시 모든 선택 해제
 //     [popUpItems, concertItems, musicalItems, exhibitionItems].forEach(items => {
 //       items.value.forEach(item => item.selected = false);
 //     });

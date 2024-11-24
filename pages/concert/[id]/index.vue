@@ -13,7 +13,7 @@
           </div>
           <div class="musical__icon">
             <a href="#">
-              <i class='bx bx-bookmark' ></i>
+              <i class='bx bx-bookmark'></i>
             </a>
             <span>북마크</span>
           </div>
@@ -32,7 +32,8 @@
       <!-- section 2 -->
       <main>
         <div class="musical__content">
-          <img :src="`http://localhost:8080/images/concert/${concert.saveImageName}`" :alt="concert.title + ' 포스터'">
+          <img :src="`http://localhost:8081/uploads/images/concert/${concert.saveImageName}`"
+            :alt="concert.title + ' 포스터'">
           <!-- <img src="/public/images/concert/yuuri.png" />  -->
           <div class="musical__info">
             <div class="musical__info-row">
@@ -65,7 +66,8 @@
             <div class="musical__info-row">
               <p class="musical__info-label">예매처</p>
               <div class="musical__booking-links">
-                <a :href="office.link" target="_blank" name="link" v-for="office in concert.ticketOffices" :key="office.id">
+                <a :href="office.link" target="_blank" name="link" v-for="office in concert.ticketOffices"
+                  :key="office.id">
                   {{ office.name }}
                 </a>
               </div>
@@ -84,7 +86,8 @@
           </div>
           <div class="musical__schedule"></div>
           <div class="musical__images">
-            <img v-for="(image, index) in images" :key="index" :src="image" :alt="`콜드플레이 상세${index + 1}`" class="musical__image--long">
+            <img v-for="(image, index) in images" :key="index" :src="image" :alt="`콜드플레이 상세${index + 1}`"
+              class="musical__image--long">
           </div>
         </section>
         <hr class="musical__divider"> <!-- 회색선 -->
@@ -123,7 +126,7 @@ watchEffect(async () => {
     baseURL: apiBase,
     key: `concert-${concertId}`,
   });
-  
+
   if (data.value) {
     concert.value = data.value;
   }
@@ -166,7 +169,7 @@ function initMap() {
           position: window.naver.maps.Position.TOP_RIGHT
         }
       };
-      
+
       map.value = new window.naver.maps.Map(mapElement, mapOptions);
       resolve();
     }
@@ -178,7 +181,7 @@ function updateMapWithAddress(address, name) {
   return new Promise((resolve) => {
     window.naver.maps.Service.geocode({
       query: address
-    }, function(status, response) {
+    }, function (status, response) {
       if (status === window.naver.maps.Service.Status.ERROR) {
         console.error('주소 검색 중 오류가 발생했습니다.');
         return resolve();
@@ -193,11 +196,11 @@ function updateMapWithAddress(address, name) {
       var point = new window.naver.maps.LatLng(item.y, item.x);
 
       map.value.setCenter(point);
-      
+
       if (marker.value) {
         marker.value.setMap(null);
       }
-      
+
       marker.value = new window.naver.maps.Marker({
         position: point,
         map: map.value
@@ -208,8 +211,8 @@ function updateMapWithAddress(address, name) {
       });
       infoWindow.open(map.value, marker.value);
 
-            // 위치 저장
-            localStorage.setItem('mapCenter', JSON.stringify({ lat: item.y, lng: item.x, address, name }));
+      // 위치 저장
+      localStorage.setItem('mapCenter', JSON.stringify({ lat: item.y, lng: item.x, address, name }));
 
       console.log('Map updated successfully');
       resolve();
@@ -221,10 +224,10 @@ async function loadMap() {
   console.log('Loading map...');
   await initMap();
   console.log('Map initialized');
-  
+
   // 항상 locationInfo의 주소를 사용하도록 수정
   await updateMapWithAddress(locationInfo.value.address, locationInfo.value.name);
-  
+
   console.log('Map loading complete');
 }
 

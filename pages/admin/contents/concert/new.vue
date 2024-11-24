@@ -147,7 +147,7 @@ onMounted(() => {
           console.log(fileName)
 
           // 에디터에 이미지 추가 요청
-          callback(`http://localhost:8080/api/v1/uploads/temp/concert/${fileName}`);
+          callback(`http://localhost:8081/api/v1/uploads/temp/concert/${fileName}`);
         } catch (error) {
           console.log("업로드 실패 : ", error);
         }
@@ -321,7 +321,7 @@ const submitHandler = async () => {
 
   // src에서 도메인 이후의 경로만 추출
   const pathsWithoutDomain = imagePaths.map(src => {
-    return src.replace('http://localhost:8080/api/v1/uploads/temp/concert/', '');
+    return src.replace('http://localhost:8081/api/v1/uploads/temp/concert/', '');
   });
 
   fileNames.value = pathsWithoutDomain;

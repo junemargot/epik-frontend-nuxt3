@@ -25,7 +25,7 @@
       <div class="product__content">
         <div class="product__content-summary">
           <div class="product__content-poster">
-            <img :src="`http://localhost:8080/api/v1/uploads/images/concert/${concert.saveImageName}`" />
+            <img :src="`http://localhost:8081/api/v1/uploads/images/concert/${concert.saveImageName}`" />
           </div>
           <ul class="product__content-info">
             <li class="product__content-info-item">
