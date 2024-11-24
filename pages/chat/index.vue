@@ -145,10 +145,10 @@
               <!--채팅이름및정보-->
               <div class="chat-group__in-chat-info-wrap">
                 <div class="chat-group__in-chat-info">
-                  <div class="chat-group__in-chat-info-name">[16세 작가 전이수 X 월드비전] 기부 특별 전시회 푸른고백아아</div>
-                  <div class="chat-group__in-chat-info-count">30명 참여 중</div>
+                  <div class="chat-group__in-chat-info-name">망그러진 곰과 비밀의 다락방</div>
+                  <div class="chat-group__in-chat-info-count">50명 참여 중</div>
                   <div>
-                    <span class="chat-group__in-chat-info-date">개설일 2028-8-10 |</span>
+                    <span class="chat-group__in-chat-info-date">개설일 2024-11-24 |</span>
                     <span class="chat-group__in-chat-info-like">좋아요 9</span>
                   </div>
                 </div>
@@ -215,9 +215,7 @@
                 <li class="chat-group__notice-add">
                   <span class="chat-group__notice-add-content">해당 방에서 광고, 욕설, 음란 발언의 경우,<br> 신고 및 강제 퇴장이 가능합니다.</span>
                 </li>
-                <li class="chat-group__notice-add">
-                  <span class="chat-group__notice-add-content">해당 방에서 광고, 욕설, 음란 발언의 경우,<br> 신고 및 강제 퇴장이 가능합니다.</span>
-                </li>
+                
               </ul>
             </div>
           </div>
@@ -236,7 +234,7 @@
                   <div class="chat-group__recieve-message-content recieve-message-form">망그러진 곰 팝업 가신 분
                     지금 굿즈 수량 얼마나 남았을까요?</div>
                   <div class="chat-group__recieve-check-wrap">
-                    <span class="chat-group__readcheck">1</span>
+                    <span class="chat-group__readcheck">32</span>
                     <span class="chat-group__recieve-time">오후 12시 20분</span>
                   </div>
                 </div>
@@ -250,8 +248,7 @@
               </div>
 
               <div class="chat-group__send-content-wrap"><!--보낸 메세지 내용 랩-->
-                <div class="chat-group__send-message-content send-message-form">망그러진 곰 팝업 가신 분 지금 굿즈
-                  수량 얼마나 남았을까요?</div>
+                <div class="chat-group__send-message-content send-message-form">저 방금 다녀왔는데, 별로 많지 않아요 ㅠㅠ 서둘러서 가세요 !</div>
               </div>
 
             </div>
@@ -430,20 +427,13 @@ const chatlist = ref([
     lastchat: '망그러진 곰과팝업 가신 분 지금 굿즈 수량 얼마나남았을까요???',
     lastchattime: '오전 8시 30분'
   },
-  {
-    img: '/images/chat/우연히.png',
-    name: '망그러진 곰과 비밀의 다락방',
-    currentmembernum: '50',
-    lastchat: '망그러진 곰과팝업 가신 분 지금 굿즈 수량 얼마나남았을까요???',
-    lastchattime: '오전 8시 30분'
-  },
-  {
-    img: '/images/chat/우연히.png',
-    name: '망그러진 곰과 비밀의 다락방',
-    currentmembernum: '50',
-    lastchat: '망그러진 곰과팝업 가신 분 지금 굿즈 수량 얼마나남았을까요???',
-    lastchattime: '오전 8시 30분'
-  },
+  // {
+  //   img: '/images/chat/우연히.png',
+  //   name: '망그러진 곰과 비밀의 다락방',
+  //   currentmembernum: '50',
+  //   lastchat: '망그러진 곰과팝업 가신 분 지금 굿즈 수량 얼마나남았을까요???',
+  //   lastchattime: '오전 8시 30분'
+  // },
 ])
 
 
@@ -461,4 +451,45 @@ const members = ref([
 
 <style scoped>
 @import url('/public/css/chat/chat.css');
+
+
+.chat-group__item{
+  margin-top: 10px;
+}
+
+.hat-group__input-img-icon{
+  margin-left: 16px;
+  font-size: 25px;
+}
+
+.chat-group__notice-icon{
+  margin-left: 10px;
+  font-size: 17px;
+}
+
+.chat-group__recieve-wrap{
+  position: absolute;
+
+  top:370px;
+}
+
+.chat-group__send-wrap{
+  position: absolute;
+
+  top:480px;
+  left: 120px;
+}
+
+.chat-group__recieve-message-content{
+  font-size: 13px;
+  padding-bottom: 8px
+
+}
+
+.chat-group__send-message-content{
+  font-size: 13px;
+  padding-bottom: 8px
+}
+
+
 </style>

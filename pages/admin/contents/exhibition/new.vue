@@ -101,6 +101,10 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useFetch, useRuntimeConfig } from '#imports';
 
+// 고정된 경로 가져와서 사용하기 위해
+const config = useRuntimeConfig(); // 추가
+const apiBase = config.public.apiBase;
+
 const router = useRouter();
 const config = useRuntimeConfig(); // 추가
 const apiBase = config.public.apiBase; // 추가
@@ -378,6 +382,7 @@ const submitHandler = async () => {
     formDatas.append(`ticketOffices[${index}].name`, link.name); // 판매처 이름
     formDatas.append(`ticketOffices[${index}].link`, link.link);   // 판매처 URL
   });
+
 
 
   // 에디터로 업로드한 파일명 
