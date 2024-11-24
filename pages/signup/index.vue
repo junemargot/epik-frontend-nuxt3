@@ -17,7 +17,8 @@
             <div class="gap-mt_1">
               <input class="form short_form" v-model="usernameModel" id="username" type="text"
                 placeholder="6자리에서 15자리를 입력해주세요">
-              <button class="btn" type="button" @click="usernameHandler">확인</button>
+              <button class="btn" type="button" @click="usernameHandler">
+              확인</button>
             </div>
           </label>
           <div class="message-container">
@@ -30,7 +31,7 @@
 
         <fieldset class="sign-in__nickname gap-mb_6 small_text">
           <label>
-            <div>닉네임</div>
+            <div class="star_top">닉네임</div>
             <div class="gap-mt_1">
               <input class="nickname form short_form" v-model="nicknameModel" id="nickname" type="text"
                 placeholder="20자리 이하를 입력해주세요">
@@ -81,8 +82,8 @@
               <button class="btn" type="button" @click="emailHandler">인증</button>
             </div>
             <div class="message-container">
-          <div v-if="emailModel===true" class="small_text_green">인증번호가 일치합니다.</div>
-          <div v-if="emailModel===false" class="small_text_red">인증번호를 다시 확인해주세요.</div>
+              <div v-if="emailValid" class="small_text_green">인증번호가 발송되었습니다.</div>
+              <div v-if="emailValid===false" class="small_text_red">이메일을 다시 확인해주세요.</div>
         </div>
           </label>
 
@@ -100,12 +101,12 @@
 
         <fieldset class="sign-in__introduce gap-mb_6 small_text">
           소개글
-          <input class="introduce form middle_form gap-mt_1" type="text" placeholder="소개글을 입력해주세요.">
+          <input class="introduce form middle_form gap-mt_1" type="text" placeholder="소개글을 입력해주세요." style="padding-top: 2px; padding-bottom: 2px;" >
         </fieldset>
 
 
 
-        <div class="sign-in__terms">
+        <!-- <div class="sign-in__terms">
           <div>
             <h2 class="small_text star_top gap-mt_2">이용약관동의</h2>
             <ul class="gap-mt_2">
@@ -119,7 +120,33 @@
                 </spna>
               </li>
             </ul>
+          </div> -->
+
+
+          <div class="sign-in__terms">
+          <div>
+            <h2 class="small_text star_top gap-mt_2">이용약관동의</h2>
+            <ul class="gap-mt_2">
+              <!-- 전체 동의 체크박스 -->
+              <li class="agree_text_bold">
+                <input type="checkbox" v-model="agreeAll" @change="toggleAgreeAll" />
+                전체동의합니다.
+                <span class="small_text">
+                  <br />선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.
+                </span>
+              </li>
+              <!-- 개별 동의 항목들 -->
+              <li class="agree_text gap-mt_1">
+                <input type="checkbox" v-model="agreeTerms" /> 이용약관 동의
+                <span class="small_text">(필수)</span>
+              </li>
+              <li class="agree_text gap-mt_1">
+                <input type="checkbox" v-model="agreePrivacy" /> 개인정보 수집 및 이용동의
+                <span class="small_text">(필수)</span>
+              </li>
+            </ul>
           </div>
+
 
           <div>
             <button class="long_btn gap-mt_3" type="submit">가입하기</button>
@@ -134,6 +161,12 @@
 <script setup>
 import { ref, watch } from 'vue';
 const inputFocused = ref(false);
+
+//버튼 클릭 수 색 변경
+const usernameButtonClicked = ref(false);
+const nicknameButtonClicked = ref(false);
+const emailButtonClicked = ref(false);
+
 
 
 //아이디 유효성 검사
@@ -230,9 +263,16 @@ const emailModel = ref('');
 const emailCodeModel = ref('');
 const emailCodeCheck = ref('');
 const serverVerificationCode = ref('');
+const emailValid = ref(''); // 이메일 형식 유효성 확인 변수
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
 
 
 const emailHandler = async () => {
+   // 이메일 형식이 유효한지 확인
+   emailValid.value = emailRegex.test(emailModel.value);
+
+if (emailValid.value) {
   const emailCheckDto = {
     email: emailModel.value
   };
@@ -257,6 +297,10 @@ const emailHandler = async () => {
   } else if (result.message === "error") {
     console.log("중복 이메일");
   }
+}else {
+    emailValid = false;
+    console.log("이메일 형식 이상")
+  }
 
 };
 
@@ -272,6 +316,18 @@ const emailCodeHandler = async () => {
 }
 
 
+// 체크박스 상태들
+const agreeAll = ref(false); // 전체 동의 체크 상태
+const agreeTerms = ref(false); // 이용약관 동의 체크 상태
+const agreePrivacy = ref(false); // 개인정보 동의 체크 상태
+
+// 전체 동의 시, 나머지 체크박스들을 자동으로 동기화
+const toggleAgreeAll = () => {
+  agreeTerms.value = agreeAll.value;
+  agreePrivacy.value = agreeAll.value;
+};
+
+
 //회원가입 폼 제출 
 const submitForm = async () => {
   const signupRequestDto = {
@@ -283,25 +339,27 @@ const submitForm = async () => {
     // profileText: memberProfileText.value,
   };
 
+    if(usernameCheck.value&&nicknameModel.value&&pwReModel.value&&emailModel.value&&emailCodeCheck.value&&agreeAll.value){
 
-  // 백엔드 API로 회원가입 정보 전송
-  const response = await fetch('http://localhost:8081/api/v1/signup', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(signupRequestDto),
-  });
+        // 백엔드 API로 회원가입 정보 전송
+        const response = await fetch('http://localhost:8081/api/v1/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(signupRequestDto),
+        });
 
+        // 응답 처리
+        if (response.status === 200) {
+          console.log('회원가입 성공', response.data);
+          alert('회원가입이 완료되었습니다!');
 
-
-  // 응답 처리
-  if (response.status === 200) {
-    console.log('회원가입 성공', response.data);
-    alert('회원가입이 완료되었습니다!');
-  } else
-    alert('모든 항목을 입력해주세요');
-
+          location.href="http://localhost:3000/login"; 
+        } 
+      } else {
+        alert('모든 항목을 입력해주세요');
+      }
 };
 
 
@@ -327,9 +385,27 @@ const submitForm = async () => {
   width: 353px;
   height: auto;
 
-  margin-left: 314px;
+  margin-left: 270px;
   margin-right: 314px;
   margin-top: 96px;
   margin-bottom: 110px;
 }
+
+fieldset{
+  border: none
+}
+
+.long_btn:hover
+{
+  background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
+  color: white;  /* 텍스트 색상 흰색으로 변경 */
+}
+
+.btn:hover 
+{
+  background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
+  color: white;  /* 텍스트 색상 흰색으로 변경 */
+}
+
+
 </style>

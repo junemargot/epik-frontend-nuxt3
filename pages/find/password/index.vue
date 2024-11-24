@@ -68,11 +68,14 @@ const router = useRouter();
 const usernameCheckModel = ref('');
 const usernameCheck = ref('');
 
+const usernameTest = ref('');
+
 const checkUsernameHandler = async () => {
   const usernameCheckDto = {
     username: usernameCheckModel.value,
   };
   console.log(usernameCheckModel.value);
+  usernameTest.value = usernameCheckModel.value;
 
   const response = await fetch('http://localhost:8081/api/v1/find/password/checkUsername', {
     method: 'POST',
@@ -152,9 +155,9 @@ const emailCodeHandler = async () => {
 //결과에 따라서 연결하는 핸들러
 const FindResultHandler = async() => {
 
-    if(usernameCheck&&emailCodeCheck){
+    if(usernameCheck.value&&emailCodeCheck.value){
     location.href='http://localhost:3000/find/password/change' 
-    router.push({ path: '/find/password/change', query: { username: usernameCheckModel.value } });
+    localStorage.setItem('username', usernameCheckModel.value);
     }
 
     }

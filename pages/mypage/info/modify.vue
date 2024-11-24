@@ -28,7 +28,7 @@
           <label>
             <div class="star_top">아이디</div>
             <div class="gap-mt_1">
-              <input disabled class="form non_change" type="text" placeholder={{userDetails.email}}>
+              <input disabled class="form non_change" type="text" :placeholder="storedUserInfo">
             </div>
           </label>
         </fieldset>
@@ -88,7 +88,11 @@ const userDetails = useUserDetails();
 
 //-----------------------------
 
-
+//usrname 띄우기
+const storedUserInfo = ref('');
+onMounted(()=>{
+  storedUserInfo.value = localStorage.getItem("username");
+})
 
 //닉네임 조건
 const nicknameModel = ref('');
@@ -169,12 +173,13 @@ const emailCodeHandler=async () => {
 
 
 //수정 확인 폼 제출
+const usernameFix = ref('');
+
 const submitForm = async () => {
 
   //로컬호스트 유지
   let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
 
-  
     // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
     const userInfo = jwtDecode(token); // JWT 토큰 디코딩
     userDetails.setAuthentication({
@@ -185,6 +190,7 @@ const submitForm = async () => {
       role: userInfo.role.map(role => role.authority),
       token: token
     });
+
 
 const idtest = userInfo.id;
 
@@ -242,14 +248,34 @@ const getMemberInfo = () => {
     userInfo.role.map(role => { console.log(role, role.authority) });
 
     console.log("새로운 토큰 사용했당")
+    location.href="http://localhost:3000/mypage"; 
+
   }
     catch{
-      console.log("옲ㅍ")
+      console.log("토큰분해 오류")
     }
 }
+
+
 
 </script>
 
 <style>
 @import url('/public/css/mypage/memberInfoUpdate.css');
+
+fieldset{
+  border: none
+}
+
+.btn:hover 
+{
+  background-color: var(--accent-1); 
+  color: white;  
+}
+
+.long_btn:hover
+{
+  background-color: var(--accent-1); 
+  color: white;  
+}
 </style>

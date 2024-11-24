@@ -57,4 +57,9 @@ console.log(contentLength);
 
 <style>
 @import url(/public/css/mypage/inqury.css);
+
+button:hover{
+  background-color: var(--accent-1); 
+  color: white;  
+}
 </style>

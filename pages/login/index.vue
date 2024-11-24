@@ -19,11 +19,11 @@
 
       <nav class="log-in__social">
         <h2 hidden>쇼셜 로그인폼</h2>
+        <!-- <button class="long_btn"><a @click.prevent="googleLoginHandler" class="log-in__google"> 구글 로그인 </a></button> -->
         <ul class="log-in__icons">
-          <li class="log-in__icon"><a href="#" class="log-in__kakao">카카오<br>로그인</a></li>
-          <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li>
+          <!-- <li class="log-in__icon"><a href="#" class="log-in__kakao">카카오<br>로그인</a></li>
+          <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li> -->
           <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
-          <!-- <GoogleLogin :callback="callback" data-type="icon"/> -->
         </ul>
       </nav>
 
@@ -119,17 +119,21 @@ const localLoginHandler = async () => {
       role: userInfo.role.map((role) => role.authority),
       token: token
     });
-    userInfo.role.map(role => { console.log(role.authority) });
+    userInfo.role.map(role => {console.log(role.authority) });
+
+    const memberRole = userInfo.role.map((role) => role.authority);
+    console.log(memberRole);
 
     console.log("새로운 토큰 사용했당")
+    memberCheck.value = null;
 
-  if(userInfo.role.value === ROLE_MEMBER){
+  if(memberRole.includes("ROLE_MEMBER")){
     const redirectUrl = sessionStorage.getItem('redirectUrl') || '/'; // 기본 페이지는 '/'로 설정
     sessionStorage.removeItem('redirectUrl'); // 리디렉션 후 URL 삭제
     console.log("돌아갈곳 확인-"+redirectUrl )
-    location.href=redirectUrl; // 해당 URL로 리디렉션
+    location.href=redirectUrl;
     }
-    else if (userInfo.role.value === ROLE_ADMIN) 
+    else if(memberRole.includes("ROLE_ADMIN")) 
     {
 location.href='http://localhost:3000/admin'
     }
@@ -223,5 +227,10 @@ const data = await response.json();
   /* 메시지 공간의 최소 높이를 설정 */
   transition: height 0.2s ease;
   /* 부드러운 전환 효과 */
+}
+
+.long_btn:hover{
+  background-color: var(--accent-1); 
+  color: white;  
 }
 </style>
