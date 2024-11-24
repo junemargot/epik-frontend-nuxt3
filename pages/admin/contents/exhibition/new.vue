@@ -99,6 +99,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+// useFetch : 서버와 통신하기위해 import 추가
+// useRuntimeConfig 추가 : 고정된 경로 가져오기위해 import 추가
+import { useRouter, useFetch, useRuntimeConfig } from '#imports';
+
+// 고정된 경로 가져와서 사용하기 위해
+const config = useRuntimeConfig(); // 추가
+const apiBase = config.public.apiBase;
 
 const router = useRouter();
 
@@ -155,7 +162,7 @@ onMounted(() => {
           console.log(fileName)
 
           // 에디터에 이미지 추가 요청
-          callback(`http://localhost:8081/uploads/temp/exhibition/${fileName}`);
+          callback(`http://localhost:8081/api/v1/uploads/temp/exhibition/${fileName}`);
         } catch (error) {
           console.log("업로드 실패 : ", error);
         }
@@ -342,7 +349,7 @@ const submitHandler = async () => {
 
   // src에서 도메인 이후의 경로만 추출
   const pathsWithoutDomain = imagePaths.map(src => {
-    return src.replace('http://localhost:8081/uploads/temp/exhibition/', '');
+    return src.replace('http://localhost:8081/api/v1/uploads/temp/exhibition/', '');
   });
 
   fileNames.value = pathsWithoutDomain;
@@ -375,6 +382,7 @@ const submitHandler = async () => {
     formDatas.append(`ticketOffices[${index}].name`, link.name); // 판매처 이름
     formDatas.append(`ticketOffices[${index}].link`, link.link);   // 판매처 URL
   });
+
 
 
   // 에디터로 업로드한 파일명 
