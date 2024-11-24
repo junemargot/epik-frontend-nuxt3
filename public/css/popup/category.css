@@ -480,3 +480,94 @@ hr {
 .popup__dates {
   bottom: 30px;
 }
+
+.search-bar {
+  margin-top: 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-grey-6)
+}
+
+.search-bar-icon {
+  padding-top: 3px;
+}
+
+.search-bar__submintbutton {
+  position: absolute;
+  top: 11px;
+  left: 65px;
+  border: none;
+  background-color: #ffffff;
+}
+
+.search-bar__submintbutton i {
+  font-size: 18px;
+  color: #BDBDBD;
+}
+
+.search-bar__input-wrap {
+  width: 870px;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #CFCFCF;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.search-bar__input-wrap>input {
+  border: none;
+  width: 800px;
+  margin-left: 35px;
+  font-size: 15px;
+}
+
+.search-bar__input-wrap > input:focus {
+  background-color: var(--white);
+}
+
+.search-bar__input-wrap>input::placeholder {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+
+.search-bar__clear {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 8px;
+  right: 37px;
+  border: none;
+  background-color: #ffffff;
+  display: none;
+}
+
+.search-bar__clear .search-bar-remove-icon {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 25px;
+  color: #BDBDBD;
+}
+
+.search-bar__clear .search-bar-remove-icon:hover {
+  cursor: pointer;
+}
+
+/* input:placeholder-shown */
+.search-bar__input-wrap input:not(:placeholder-shown)+.search-bar__clear {
+  display: block;
+}
+
+input:focus::placeholder {
+  color: transparent;
+}
+
+input[type="text"] {
+  box-sizing: border-box;
+  padding: 0;
+  font-size: 15px;
+  border: none;
+  outline: none;
+}

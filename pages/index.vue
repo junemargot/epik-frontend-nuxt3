@@ -4,7 +4,10 @@
     <div class="photo-slider">
       <div class="photo-slider__container" ref="sliderRef" :style="sliderStyle">
         <div v-for="(slide, index) in slides" :key="index" class="photo-slider__item">
-          <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`">
+          <!-- <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`"> -->
+          <img class="photo-slider__image"
+            :src="`http://localhost:8081/api/v1/uploads/images/popup/${slide.imgSavedName}`"
+            :alt="`Image ${index + 1}`">
           <div class="photo-slider__overlay">
             <div class="photo-slider__tags">
               <span v-for="(tag, tagIndex) in slide.tags" :key="tagIndex" class="photo-slider__tag">{{ tag }}</span>
@@ -34,7 +37,8 @@
       <div class="popup__grid">
         <div v-for="(item, index) in popupItems" :key="index" class="popup__item">
           <a href="http://localhost:3000/popup/170"></a>
-          <img :src="item.image" :alt="`Popup ${index + 1}`">
+          <img :src="`http://localhost:8081/api/v1/uploads/images/popup/${item.imgSavedName}`"
+            :alt="`Popup ${index + 1}`">
           <div class="popup__info">
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
@@ -52,15 +56,15 @@
     <!-- 배너 섹션 -->
     <div class="banner">
 
-          <div class="banner__grid">
-            <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
-            <a href="http://localhost:3000/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
-            <a href="http://localhost:3000/musical/146"><img src="/images/베너3.png" alt="Banner 3" class="banner__item"></a>
-            <img src="/images/베너4.png" alt="Banner 4" class="banner__item">
-            <img src="/images/베너5.png" alt="Banner 5" class="banner__item">
-            <img src="/images/베너6.png" alt="Banner 6" class="banner__item">
-          </div>
-        </div>
+      <div class="banner__grid">
+        <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
+        <a href="http://localhost:3000/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
+        <a href="http://localhost:3000/musical/146"><img src="/images/베너3.png" alt="Banner 3" class="banner__item"></a>
+        <img src="/images/베너4.png" alt="Banner 4" class="banner__item">
+        <img src="/images/베너5.png" alt="Banner 5" class="banner__item">
+        <img src="/images/베너6.png" alt="Banner 6" class="banner__item">
+      </div>
+    </div>
 
 
     <!-- 콘서트 -->
@@ -68,7 +72,8 @@
       <h2 class="popup__title">Concert</h2>
       <div class="popup__grid">
         <div v-for="(item, index) in concertItems" :key="index" class="popup__item">
-          <img :src="item.image" :alt="`Popup ${index + 1}`">
+          <img :src="`http://localhost:8081/api/v1/uploads/images/concert/${item.fileSavedName}`"
+            :alt="`Image ${index + 1}`">
           <div class="popup__info">
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
@@ -89,8 +94,7 @@
       <div class="popup__grid">
         <div v-for="(item, index) in musicalItems" :key="index" class="popup__item">
           <img :src="`http://localhost:8081/api/v1/uploads/images/musical/${item.fileSavedName}`"
-          :alt="`Popup ${index + 1}`">
-
+            :alt="`Popup ${index + 1}`">
           <div class="popup__info">
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
@@ -119,11 +123,13 @@
     </div>
 
     <!-- EXHIBITION -->
-    <div class="popup">
+    <!-- <div class="popup">
       <h2 class="popup__title">Exhibition</h2>
       <div class="popup__grid">
         <div v-for="(item, index) in exhibitionItems" :key="index" class="popup__item">
-          <img :src="item.image" :alt="`Popup ${index + 1}`">
+          <img class="photo-slider__image"
+            :src="`http://localhost:8081/api/v1/uploads/images/exhibition/${item.fileSavedName}`"
+            :alt="`Image ${index + 1}`">
           <div class="popup__info">
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
@@ -136,7 +142,55 @@
           </div>
         </div>
       </div>
+    </div> -->
+    <div class="container">
+      <div class="popup">
+        <h2 class="popup__title">Exhibition</h2>
+        <div class="popup__grid">
+          <div class="popup__item">
+            <img src="/images/툴루즈 로트렉.gif" alt="exhibition 1">
+            <div class="popup__info">
+              <span class="popup__status">진행중</span>
+              <h3>툴루즈 로트렉</h3>
+              <p class="popup__location">서울특별시 강남구</p>
+              <p class="popup__date">24.09.14-03.03</p>
+            </div>
+          </div>
+
+          <div class="popup__item">
+            <img src="/images/르네그뤼오.gif" alt="exhibition 2">
+            <div class="popup__info">
+              <span class="popup__status">진행중</span>
+              <h3>르네 그뤼오 : 르 엘레강스</h3>
+              <p class="popup__location">서울 마포구</p>
+              <p class="popup__date">24.11.11-25.01.19</p>
+            </div>
+          </div>
+
+          <div class="popup__item">
+            <img src="/images/퓰리처상.gif" alt="exhibition 3">
+            <div class="popup__info">
+              <span class="popup__status">진행중</span>
+              <h3>퓰리처상 사진전</h3>
+              <p class="popup__location">서울특별시 서초구</p>
+              <p class="popup__date">24.12.21-25.01.31</p>
+            </div>
+          </div>
+
+          <div class="popup__item">
+            <img src="/images/어반아트.gif" alt="exhibition 4">
+            <div class="popup__info">
+              <span class="popup__status">진행중</span>
+              <h3>나가노마켓 팝업스토어</h3>
+              <p class="popup__location">서울특별시 중구</p>
+              <p class="popup__date">24.10.02-25.02.02</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+
   </div>
 </template>
 

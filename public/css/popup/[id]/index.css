@@ -59,7 +59,7 @@
 
 /* ****** section 1 ****** */
 
-.popup__info {
+.popup__infomation {
   padding-bottom: 30px;
   border-bottom: 1px solid var(--color-grey-6);
 }
@@ -73,19 +73,19 @@
 .popup__title {
   font-family: 'pretendard-bold';
   font-size: 32px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .popup__address {
   font-family: 'pretendard-medium';
   font-size: 20px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .popup__date {
   font-family: 'pretendard-medium';
   font-size: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;  
 }
 
 .popup__date i {
@@ -135,6 +135,7 @@
 /* ****** section 2 ****** */
 
 .popup__description {
+  margin-top: 20px;
   border-bottom: 1px rgb(211, 210, 210) solid;
   padding-bottom: 30px;
 }
