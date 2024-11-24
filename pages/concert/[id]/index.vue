@@ -33,7 +33,7 @@
       <main>
         <div class="musical__content">
 
-          <img :src="`http://localhost:8081/uploads/images/concert/${concert.saveImageName}`"
+          <img :src="`http://localhost:8081/api/v1/uploads/images/concert/${concert.saveImageName}`"
             :alt="concert.title + ' 포스터'">
 
           <!-- <img src="/public/images/concert/yuuri.png" />  -->

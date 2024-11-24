@@ -90,7 +90,7 @@
         <!-- 취소와 저장 버튼 -->
         <div class="btn-bottom">
           <button type="button" class="btn cancel" @click="cancelHandler">취소</button>
-          <button type="submit" class="btn submit" @click="submitHandler">등록</button>
+          <button type="submit" class="btn submit" @click.prevent="submitHandler">등록</button>
         </div>
       </section>
     </div>
@@ -99,8 +99,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-// useFetch : 서버와 통신하기위해 import 추가
-// useRuntimeConfig 추가 : 고정된 경로 가져오기위해 import 추가
 import { useRouter, useFetch, useRuntimeConfig } from '#imports';
 
 // 고정된 경로 가져와서 사용하기 위해
@@ -108,6 +106,8 @@ const config = useRuntimeConfig(); // 추가
 const apiBase = config.public.apiBase;
 
 const router = useRouter();
+const config = useRuntimeConfig(); // 추가
+const apiBase = config.public.apiBase; // 추가
 
 const title = ref('');
 const titleInput = ref(null);

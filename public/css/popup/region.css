@@ -354,7 +354,7 @@ hr {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: calc(100% - 140px);
+  /* width: calc(100% - 140px); */
   position: relative;
 }
 
@@ -396,9 +396,9 @@ hr {
 .popup__date {
   margin-bottom: 20px;
   font-size: 14px;
-  line-height: 1.2;
+  /* line-height: 1.2;
   position: absolute;
-  left: 10px;
+  left: 10px; */
 }
 
 .popup__location {
