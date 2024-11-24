@@ -399,12 +399,14 @@ fieldset{
 {
   background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
   color: white;  /* 텍스트 색상 흰색으로 변경 */
+  cursor: pointer;
 }
 
 .btn:hover 
 {
   background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
   color: white;  /* 텍스트 색상 흰색으로 변경 */
+  cursor: pointer;
 }
 
 
