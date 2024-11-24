@@ -145,112 +145,71 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
-onMounted(async () => {
-  // await fetchConcertDetail();
-});
-
-const mapScript = ref(null);
-let map = ref(null);
-let marker = ref(null);
-
-// const locationInfo = ref({
-//   address: "경기도 고양시 일산서구 중앙로 1601",
-//   name: "고양종합운동장"
-// });
-
-// const youtubeUrl = ref('https://www.youtube.com/embed/OjeglNu9eVo');
+// 지도 관련 변수 및 함수
+let map;
+let marker;
+let infowindow;
 
 function initMap() {
-  return new Promise((resolve) => {
-    if (window.naver && window.naver.maps) {
-      const mapElement = document.getElementById('map');
-      const mapOptions = {
-        zoom: 15,
-        zoomControl: true,
-        zoomControlOptions: {
-          position: window.naver.maps.Position.TOP_RIGHT
-        }
-      };
+  const mapOptions = {
+    center: new naver.maps.LatLng(37.5297, 126.9647), // 초기 중심 좌표 (서울시청)
+    zoom: 15
+  };
+  
+  map = new naver.maps.Map('map', mapOptions);
 
-      map.value = new window.naver.maps.Map(mapElement, mapOptions);
-      resolve();
-    }
+  marker = new naver.maps.Marker({
+    position: mapOptions.center,
+    map: map
   });
+
+  infowindow = new naver.maps.InfoWindow();
+
+  // 페이지 로드 시 올바른 주소로 지도 업데이트
+  updateMapWithAddress("서울 구로구 경인로 662 7층", "디큐브 링크아트센터");
 }
 
 function updateMapWithAddress(address, name) {
-  console.log('Updating map with address:', address);
-  return new Promise((resolve) => {
-    window.naver.maps.Service.geocode({
-      query: address
-    }, function (status, response) {
-      if (status === window.naver.maps.Service.Status.ERROR) {
-        console.error('주소 검색 중 오류가 발생했습니다.');
-        return resolve();
-      }
+  naver.maps.Service.geocode({
+    query: address
+  }, function(status, response) {
+    if (status === naver.maps.Service.Status.ERROR) {
+      return alert('주소 검색 중 오류가 발생했습니다.');
+    }
 
-      if (response.v2.meta.totalCount === 0) {
-        console.warn('검색 결과가 없습니다.');
-        return resolve();
-      }
+    if (response.v2.meta.totalCount === 0) {
+      return alert('검색 결과가 없습니다.');
+    }
 
-      var item = response.v2.addresses[0];
-      var point = new window.naver.maps.LatLng(item.y, item.x);
+    const item = response.v2.addresses[0];
+    const point = new naver.maps.LatLng(item.y, item.x);
 
-      map.value.setCenter(point);
+    map.setCenter(point);
+    marker.setPosition(point);
 
-      if (marker.value) {
-        marker.value.setMap(null);
-      }
+    const contentString = `
+      <div class="iw_inner">
+        <h3>${name}</h3>
+        <p>${address}<br />
+        위도: ${item.y}<br />
+        경도: ${item.x}</p>
+      </div>
+    `;
 
-      marker.value = new window.naver.maps.Marker({
-        position: point,
-        map: map.value
-      });
-
-      var infoWindow = new window.naver.maps.InfoWindow({
-        content: `<div style="padding:10px;"><strong>${name}</strong><br>${address}</div>`
-      });
-      infoWindow.open(map.value, marker.value);
-
-      // 위치 저장
-      localStorage.setItem('mapCenter', JSON.stringify({ lat: item.y, lng: item.x, address, name }));
-
-      console.log('Map updated successfully');
-      resolve();
-    });
+    infowindow.setContent(contentString);
+    infowindow.open(map, marker);
   });
 }
 
-async function loadMap() {
-  console.log('Loading map...');
-  await initMap();
-  console.log('Map initialized');
-
-  // 항상 locationInfo의 주소를 사용하도록 수정
-  await updateMapWithAddress(locationInfo.value.address, locationInfo.value.name);
-
-  console.log('Map loading complete');
-}
-
+// 클라이언트에서만 실행되도록 지도를 초기화
 onMounted(() => {
-  console.log('Mounting component...');
-  mapScript.value = document.createElement('script');
-  mapScript.value.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder`;
-  mapScript.value.async = true;
-  mapScript.value.onload = () => {
-    console.log('Naver Maps script loaded');
-    loadMap();
-  };
-  document.head.appendChild(mapScript.value);
+  const mapScript = document.createElement('script');
+  mapScript.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder`;
+  mapScript.async = true;
+  mapScript.onload = initMap;
+  document.head.appendChild(mapScript);
 });
 
-
-onUnmounted(() => {
-  if (mapScript.value) {
-    document.head.removeChild(mapScript.value);
-  }
-});
 </script>
 
 <style scoped>
