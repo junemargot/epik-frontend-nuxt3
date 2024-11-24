@@ -5,11 +5,11 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       // api: $fetch.create({
-      //   baseURL: config.public.apiBase || 'http://localhost:8080/api/v1'
+      //   baseURL: config.public.apiBase || 'http://localhost:8081/api/v1'
       // })
       api: (url, options = {}) => {
         return useFetch(url, {
-          baseUrl: config.public.apiBase || 'http://localhost:8080/api/v1',
+          baseUrl: config.public.apiBase || 'http://localhost:8081/api/v1',
           ...options // 추가 옵션을 전달
         })
       }
@@ -17,4 +17,4 @@ export default defineNuxtPlugin(() => {
   }
 })
 
-// 'http://localhost:8080/api/v1/
+// 'http://localhost:8081/api/v1/

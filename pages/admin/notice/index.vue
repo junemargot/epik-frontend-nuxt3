@@ -143,7 +143,7 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 
 // 공지사항 목록 fetch
 // const { data, error } = await useFetch('/admin/notice', {
-//     baseURL: apiBase || 'http://localhost:8080/api/v1',
+//     baseURL: apiBase || 'http://localhost:8081/api/v1',
 //     params: { 
 //       p: currentPage.value,
 //       k: searchQuery.value,
@@ -188,7 +188,7 @@ const apiBase = config.public.apiBase;    // 공용 API 기본 URL 가져오기
 
 //   // 로컬 스토리지에 유효한 데이터가 없으면 api 호출
 //   const { data, error } = await useFetch('/admin/notice', {
-//     baseURL: apiBase || 'http://localhost:8080/api/v1', // API 기본 URL이 설정되지 않으면 로컬 URL 사용
+//     baseURL: apiBase || 'http://localhost:8081/api/v1', // API 기본 URL이 설정되지 않으면 로컬 URL 사용
 //     params: {
 //       p: currentPage.value,  // 현재 페이지 번호
 //       k: searchQuery.value,  // 검색 쿼리
@@ -253,7 +253,7 @@ onMounted(async () => {
 // 데이터 로드 함수
 const loadNotices = async () => {
   const { data, error } = await useFetch('/admin/notice', {
-    baseURL: apiBase || 'http://localhost:8080/api/v1',
+    baseURL: apiBase || 'http://localhost:8081/api/v1',
     params: {
       p: currentPage.value,
       k: searchQuery.value,

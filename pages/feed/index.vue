@@ -16,8 +16,24 @@
 
     <div class="feed__menu"> <!--메뉴버튼 줄-->
       <div class="feed__menu-column">
-        <span>all</span>
-        <span>my</span>
+      <!-- 'feed' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
+      <!-- 'feed' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
+      <RouterLink
+        to="/feed"
+        exact
+        :class="{'is-inactive': currentRoute !== '/feed'}"
+      >
+        <span :class="{'is-active': currentRoute === '/feed'}">all</span>
+      </RouterLink>
+      
+      <!-- 'my' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
+      <RouterLink
+        to="/feed/my"
+        exact
+        :class="{'is-inactive': currentRoute !== '/feed/my'}"
+      >
+        <span :class="{'is-active': currentRoute === '/feed/my'}">my</span>
+      </RouterLink>
       </div>
 
       <div class="feed__menu-column">
@@ -32,7 +48,139 @@
       <!-- ######### 피드 item(1) #########  -->
       <div class="feed__info-wrap">
         <div class="feed__info-inner"><!--inner-->
+          <div class="feed__user">
+            <div class="feed__user-profile"> <!--사진 아이디-->
+              <img src="/images/동글이.jpg">
+              <span>seungeun</span>
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+            <div class="dropdown">
+              <button @click="toggleDropdown">
+                <i class='bx bx-dots-horizontal-rounded'></i>
+              </button>
+              <ul v-if="isDropdownOpen" class="dropdown-list">
+                <li><button>수정</button></li>
+                <li><button @click.prevent="feedRemove">삭제</button></li>
+              </ul>
+              <!-- ######### 삭제 모달 추가 #########  -->
+              <div v-if="isDeleteFeedModalVisible" class="feed-modal" @click.self="closeModalOnOutsideClick">
+                <div class="feed-modal__contents">
+                  <h2 class="feed-modal__text">피드를 삭제하시겠습니까?</h2>
+                  <div class="feed-modal__buttons">
+                    <button @click.prevent="closeDeleteModal" class="feed-modal__cancel">취소</button>
+                    <button @click.prevent="deleteFeed" class="feed-modal__delete">삭제</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ######### 삭제 모달 추가 #########  -->
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+          </div> <!-- feed__user end -->
 
+          <div class="feed__image">
+            <img src="/images/feed.jpg">
+          </div>
+
+          <div class="feed__icons">
+            <!-- 좋아요 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__like-icon" @click="toggleLike">
+                <i :class="['icon', isLiked ? 'bx bxs-heart' : 'bx bx-heart', { likeCheck: isLiked }]" />
+              </button>
+              <span>23</span>
+            </div>
+            <!-- 댓글 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__comment-icon" @click="toggleComment">
+                <i class='bx bx-comment base-icon-style'></i>
+              </button>
+              <span>23</span>
+            </div>
+          </div>
+
+          <div class="feed__content"> <!-- 피드 내용  -->
+            <div class="feed__text">
+              SPO & Tugan Sokhiev<br />
+              무소륵스키 전람회의 그림 최고였다..!<br />
+              <br />
+              <br />
+            </div>
+            <div class="feed__tags">
+              <a>#공연</a>
+              <a>#태그</a>
+              <a>#태그</a>
+              <a>#태그</a>
+            </div>
+          </div>
+
+          <div class="feed__footer"> <!-- 마지막 버튼 -->
+            <button class="feed__comment-icon" @click.stop="toggleComment">댓글 모두 보기</button>
+            <a><span>3 min ago</span></a>
+          </div>
+
+          <div v-if="isCommentVisible" class="comment">
+            <div class="comment__divider"></div>
+
+            <div class="comment__count-wrap">
+              <span class="comment__label">댓글</span>
+              <span class="comment__count">23</span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comment__list">
+              <div class="comment__item">
+                <div class="comment__content-wrap">
+                  <div class="comment__profile">
+                    <img src="/images/동글이.jpg">
+                  </div>
+                  <div class="comment__details">
+                    <div class="comment__info">
+                      <span class="comment__username">두브로브니크</span>
+                      <span class="comment__time">1시간전</span>
+                    </div>
+                    <div class="comment__text">
+                      <span>넘넘 재밌다</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 댓글 내부 드롭다운 영역 계속 보이고 있으니깐 꺼주자 -->
+                <div class="dropdown">
+                  <button @click.stop="toggleCommentDropdown">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                  </button>
+                  <ul v-if="isCommentDropdownOpen" class="dropdown-list">
+                    <li>
+                      <button class="dropdown-reply" @click="openReplyForm">답글</button>
+                    </li>
+                    <li>
+                      <button class="dropdown__report" @click.stop="openReportModal">신고</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 대댓글 입력 영역 -->
+              <div class="comment__reply" v-if="isReplyFormOpen">
+                <span class="comment__reply-id">seungeun</span>
+                <form>
+                  <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
+                  <div class="comment__reply-buttons">
+                    <button type="button" class="comment__reply-cancle" @click.stop="closeReplyForm">취소</button>
+                    <button type="submit" @click.prevent="submitReply">등록</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- 댓글 작성 영역 -->
+            <div class="comment__form-wrap">
+              <form class="comment__form">
+                <input type="text" placeholder="댓글 달기..." class="comment__input" />
+                <button class="comment__submit">게시</button>
+              </form>
+            </div>
+          </div> <!-- comment -->
+        </div><!-- one content -->
+        <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
               <img src="/images/동글이.jpg">
@@ -165,6 +313,672 @@
             </div>
           </div> <!-- comment -->
         </div>
+        <div class="feed__info-inner"><!--inner-->
+          <div class="feed__user">
+            <div class="feed__user-profile"> <!--사진 아이디-->
+              <img src="/images/동글이.jpg">
+              <span>seungeun</span>
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+            <div class="dropdown">
+              <button @click="toggleDropdown">
+                <i class='bx bx-dots-horizontal-rounded'></i>
+              </button>
+              <ul v-if="isDropdownOpen" class="dropdown-list">
+                <li><button>수정</button></li>
+                <li><button @click.prevent="feedRemove">삭제</button></li>
+              </ul>
+              <!-- ######### 삭제 모달 추가 #########  -->
+              <div v-if="isDeleteFeedModalVisible" class="feed-modal" @click.self="closeModalOnOutsideClick">
+                <div class="feed-modal__contents">
+                  <h2 class="feed-modal__text">피드를 삭제하시겠습니까?</h2>
+                  <div class="feed-modal__buttons">
+                    <button @click.prevent="closeDeleteModal" class="feed-modal__cancel">취소</button>
+                    <button @click.prevent="deleteFeed" class="feed-modal__delete">삭제</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ######### 삭제 모달 추가 #########  -->
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+          </div> <!-- feed__user end -->
+
+          <div class="feed__image">
+            <img src="/images/feed.jpg">
+          </div>
+
+          <div class="feed__icons">
+            <!-- 좋아요 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__like-icon" @click="toggleLike">
+                <i :class="['icon', isLiked ? 'bx bxs-heart' : 'bx bx-heart', { likeCheck: isLiked }]" />
+              </button>
+              <span>23</span>
+            </div>
+            <!-- 댓글 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__comment-icon" @click="toggleComment">
+                <i class='bx bx-comment base-icon-style'></i>
+              </button>
+              <span>23</span>
+            </div>
+          </div>
+
+          <div class="feed__content"> <!-- 피드 내용  -->
+            <div class="feed__text">
+              SPO & Tugan Sokhiev<br />
+              무소륵스키 전람회의 그림 최고였다..!<br />
+              <br />
+              <br />
+            </div>
+            <div class="feed__tags">
+              <a>#공연</a>
+              <a>#태그</a>
+              <a>#태그</a>
+              <a>#태그</a>
+            </div>
+          </div>
+
+          <div class="feed__footer"> <!-- 마지막 버튼 -->
+            <button class="feed__comment-icon" @click.stop="toggleComment">댓글 모두 보기</button>
+            <a><span>3 min ago</span></a>
+          </div>
+
+          <div v-if="isCommentVisible" class="comment">
+            <div class="comment__divider"></div>
+
+            <div class="comment__count-wrap">
+              <span class="comment__label">댓글</span>
+              <span class="comment__count">23</span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comment__list">
+              <div class="comment__item">
+                <div class="comment__content-wrap">
+                  <div class="comment__profile">
+                    <img src="/images/동글이.jpg">
+                  </div>
+                  <div class="comment__details">
+                    <div class="comment__info">
+                      <span class="comment__username">두브로브니크</span>
+                      <span class="comment__time">1시간전</span>
+                    </div>
+                    <div class="comment__text">
+                      <span>넘넘 재밌다</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 댓글 내부 드롭다운 영역 계속 보이고 있으니깐 꺼주자 -->
+                <div class="dropdown">
+                  <button @click.stop="toggleCommentDropdown">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                  </button>
+                  <ul v-if="isCommentDropdownOpen" class="dropdown-list">
+                    <li>
+                      <button class="dropdown-reply" @click="openReplyForm">답글</button>
+                    </li>
+                    <li>
+                      <button class="dropdown__report" @click.stop="openReportModal">신고</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 대댓글 입력 영역 -->
+              <div class="comment__reply" v-if="isReplyFormOpen">
+                <span class="comment__reply-id">seungeun</span>
+                <form>
+                  <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
+                  <div class="comment__reply-buttons">
+                    <button type="button" class="comment__reply-cancle" @click.stop="closeReplyForm">취소</button>
+                    <button type="submit" @click.prevent="submitReply">등록</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- 댓글 작성 영역 -->
+            <div class="comment__form-wrap">
+              <form class="comment__form">
+                <input type="text" placeholder="댓글 달기..." class="comment__input" />
+                <button class="comment__submit">게시</button>
+              </form>
+            </div>
+          </div> <!-- comment -->
+        </div>
+        <div class="feed__info-inner"><!--inner-->
+          <div class="feed__user">
+            <div class="feed__user-profile"> <!--사진 아이디-->
+              <img src="/images/동글이.jpg">
+              <span>seungeun</span>
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+            <div class="dropdown">
+              <button @click="toggleDropdown">
+                <i class='bx bx-dots-horizontal-rounded'></i>
+              </button>
+              <ul v-if="isDropdownOpen" class="dropdown-list">
+                <li><button>수정</button></li>
+                <li><button @click.prevent="feedRemove">삭제</button></li>
+              </ul>
+              <!-- ######### 삭제 모달 추가 #########  -->
+              <div v-if="isDeleteFeedModalVisible" class="feed-modal" @click.self="closeModalOnOutsideClick">
+                <div class="feed-modal__contents">
+                  <h2 class="feed-modal__text">피드를 삭제하시겠습니까?</h2>
+                  <div class="feed-modal__buttons">
+                    <button @click.prevent="closeDeleteModal" class="feed-modal__cancel">취소</button>
+                    <button @click.prevent="deleteFeed" class="feed-modal__delete">삭제</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ######### 삭제 모달 추가 #########  -->
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+          </div> <!-- feed__user end -->
+
+          <div class="feed__image">
+            <img src="/images/feed.jpg">
+          </div>
+
+          <div class="feed__icons">
+            <!-- 좋아요 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__like-icon" @click="toggleLike">
+                <i :class="['icon', isLiked ? 'bx bxs-heart' : 'bx bx-heart', { likeCheck: isLiked }]" />
+              </button>
+              <span>23</span>
+            </div>
+            <!-- 댓글 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__comment-icon" @click="toggleComment">
+                <i class='bx bx-comment base-icon-style'></i>
+              </button>
+              <span>23</span>
+            </div>
+          </div>
+
+          <div class="feed__content"> <!-- 피드 내용  -->
+            <div class="feed__text">
+              SPO & Tugan Sokhiev<br />
+              무소륵스키 전람회의 그림 최고였다..!<br />
+              <br />
+              <br />
+            </div>
+            <div class="feed__tags">
+              <a>#공연</a>
+              <a>#태그</a>
+              <a>#태그</a>
+              <a>#태그</a>
+            </div>
+          </div>
+
+          <div class="feed__footer"> <!-- 마지막 버튼 -->
+            <button class="feed__comment-icon" @click.stop="toggleComment">댓글 모두 보기</button>
+            <a><span>3 min ago</span></a>
+          </div>
+
+          <div v-if="isCommentVisible" class="comment">
+            <div class="comment__divider"></div>
+
+            <div class="comment__count-wrap">
+              <span class="comment__label">댓글</span>
+              <span class="comment__count">23</span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comment__list">
+              <div class="comment__item">
+                <div class="comment__content-wrap">
+                  <div class="comment__profile">
+                    <img src="/images/동글이.jpg">
+                  </div>
+                  <div class="comment__details">
+                    <div class="comment__info">
+                      <span class="comment__username">두브로브니크</span>
+                      <span class="comment__time">1시간전</span>
+                    </div>
+                    <div class="comment__text">
+                      <span>넘넘 재밌다</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 댓글 내부 드롭다운 영역 계속 보이고 있으니깐 꺼주자 -->
+                <div class="dropdown">
+                  <button @click.stop="toggleCommentDropdown">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                  </button>
+                  <ul v-if="isCommentDropdownOpen" class="dropdown-list">
+                    <li>
+                      <button class="dropdown-reply" @click="openReplyForm">답글</button>
+                    </li>
+                    <li>
+                      <button class="dropdown__report" @click.stop="openReportModal">신고</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 대댓글 입력 영역 -->
+              <div class="comment__reply" v-if="isReplyFormOpen">
+                <span class="comment__reply-id">seungeun</span>
+                <form>
+                  <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
+                  <div class="comment__reply-buttons">
+                    <button type="button" class="comment__reply-cancle" @click.stop="closeReplyForm">취소</button>
+                    <button type="submit" @click.prevent="submitReply">등록</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- 댓글 작성 영역 -->
+            <div class="comment__form-wrap">
+              <form class="comment__form">
+                <input type="text" placeholder="댓글 달기..." class="comment__input" />
+                <button class="comment__submit">게시</button>
+              </form>
+            </div>
+          </div> <!-- comment -->
+        </div>
+        <div class="feed__info-inner"><!--inner-->
+          <div class="feed__user">
+            <div class="feed__user-profile"> <!--사진 아이디-->
+              <img src="/images/동글이.jpg">
+              <span>seungeun</span>
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+            <div class="dropdown">
+              <button @click="toggleDropdown">
+                <i class='bx bx-dots-horizontal-rounded'></i>
+              </button>
+              <ul v-if="isDropdownOpen" class="dropdown-list">
+                <li><button>수정</button></li>
+                <li><button @click.prevent="feedRemove">삭제</button></li>
+              </ul>
+              <!-- ######### 삭제 모달 추가 #########  -->
+              <div v-if="isDeleteFeedModalVisible" class="feed-modal" @click.self="closeModalOnOutsideClick">
+                <div class="feed-modal__contents">
+                  <h2 class="feed-modal__text">피드를 삭제하시겠습니까?</h2>
+                  <div class="feed-modal__buttons">
+                    <button @click.prevent="closeDeleteModal" class="feed-modal__cancel">취소</button>
+                    <button @click.prevent="deleteFeed" class="feed-modal__delete">삭제</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ######### 삭제 모달 추가 #########  -->
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+          </div> <!-- feed__user end -->
+
+          <div class="feed__image">
+            <img src="/images/feed.jpg">
+          </div>
+
+          <div class="feed__icons">
+            <!-- 좋아요 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__like-icon" @click="toggleLike">
+                <i :class="['icon', isLiked ? 'bx bxs-heart' : 'bx bx-heart', { likeCheck: isLiked }]" />
+              </button>
+              <span>23</span>
+            </div>
+            <!-- 댓글 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__comment-icon" @click="toggleComment">
+                <i class='bx bx-comment base-icon-style'></i>
+              </button>
+              <span>23</span>
+            </div>
+          </div>
+
+          <div class="feed__content"> <!-- 피드 내용  -->
+            <div class="feed__text">
+              SPO & Tugan Sokhiev<br />
+              무소륵스키 전람회의 그림 최고였다..!<br />
+              <br />
+              <br />
+            </div>
+            <div class="feed__tags">
+              <a>#공연</a>
+              <a>#태그</a>
+              <a>#태그</a>
+              <a>#태그</a>
+            </div>
+          </div>
+
+          <div class="feed__footer"> <!-- 마지막 버튼 -->
+            <button class="feed__comment-icon" @click.stop="toggleComment">댓글 모두 보기</button>
+            <a><span>3 min ago</span></a>
+          </div>
+
+          <div v-if="isCommentVisible" class="comment">
+            <div class="comment__divider"></div>
+
+            <div class="comment__count-wrap">
+              <span class="comment__label">댓글</span>
+              <span class="comment__count">23</span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comment__list">
+              <div class="comment__item">
+                <div class="comment__content-wrap">
+                  <div class="comment__profile">
+                    <img src="/images/동글이.jpg">
+                  </div>
+                  <div class="comment__details">
+                    <div class="comment__info">
+                      <span class="comment__username">두브로브니크</span>
+                      <span class="comment__time">1시간전</span>
+                    </div>
+                    <div class="comment__text">
+                      <span>넘넘 재밌다</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 댓글 내부 드롭다운 영역 계속 보이고 있으니깐 꺼주자 -->
+                <div class="dropdown">
+                  <button @click.stop="toggleCommentDropdown">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                  </button>
+                  <ul v-if="isCommentDropdownOpen" class="dropdown-list">
+                    <li>
+                      <button class="dropdown-reply" @click="openReplyForm">답글</button>
+                    </li>
+                    <li>
+                      <button class="dropdown__report" @click.stop="openReportModal">신고</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 대댓글 입력 영역 -->
+              <div class="comment__reply" v-if="isReplyFormOpen">
+                <span class="comment__reply-id">seungeun</span>
+                <form>
+                  <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
+                  <div class="comment__reply-buttons">
+                    <button type="button" class="comment__reply-cancle" @click.stop="closeReplyForm">취소</button>
+                    <button type="submit" @click.prevent="submitReply">등록</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- 댓글 작성 영역 -->
+            <div class="comment__form-wrap">
+              <form class="comment__form">
+                <input type="text" placeholder="댓글 달기..." class="comment__input" />
+                <button class="comment__submit">게시</button>
+              </form>
+            </div>
+          </div> <!-- comment -->
+        </div>
+        <div class="feed__info-inner"><!--inner-->
+          <div class="feed__user">
+            <div class="feed__user-profile"> <!--사진 아이디-->
+              <img src="/images/동글이.jpg">
+              <span>seungeun</span>
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+            <div class="dropdown">
+              <button @click="toggleDropdown">
+                <i class='bx bx-dots-horizontal-rounded'></i>
+              </button>
+              <ul v-if="isDropdownOpen" class="dropdown-list">
+                <li><button>수정</button></li>
+                <li><button @click.prevent="feedRemove">삭제</button></li>
+              </ul>
+              <!-- ######### 삭제 모달 추가 #########  -->
+              <div v-if="isDeleteFeedModalVisible" class="feed-modal" @click.self="closeModalOnOutsideClick">
+                <div class="feed-modal__contents">
+                  <h2 class="feed-modal__text">피드를 삭제하시겠습니까?</h2>
+                  <div class="feed-modal__buttons">
+                    <button @click.prevent="closeDeleteModal" class="feed-modal__cancel">취소</button>
+                    <button @click.prevent="deleteFeed" class="feed-modal__delete">삭제</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ######### 삭제 모달 추가 #########  -->
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+          </div> <!-- feed__user end -->
+
+          <div class="feed__image">
+            <img src="/images/feed.jpg">
+          </div>
+
+          <div class="feed__icons">
+            <!-- 좋아요 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__like-icon" @click="toggleLike">
+                <i :class="['icon', isLiked ? 'bx bxs-heart' : 'bx bx-heart', { likeCheck: isLiked }]" />
+              </button>
+              <span>23</span>
+            </div>
+            <!-- 댓글 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__comment-icon" @click="toggleComment">
+                <i class='bx bx-comment base-icon-style'></i>
+              </button>
+              <span>23</span>
+            </div>
+          </div>
+
+          <div class="feed__content"> <!-- 피드 내용  -->
+            <div class="feed__text">
+              SPO & Tugan Sokhiev<br />
+              무소륵스키 전람회의 그림 최고였다..!<br />
+              <br />
+              <br />
+            </div>
+            <div class="feed__tags">
+              <a>#공연</a>
+              <a>#태그</a>
+              <a>#태그</a>
+              <a>#태그</a>
+            </div>
+          </div>
+
+          <div class="feed__footer"> <!-- 마지막 버튼 -->
+            <button class="feed__comment-icon" @click.stop="toggleComment">댓글 모두 보기</button>
+            <a><span>3 min ago</span></a>
+          </div>
+
+          <div v-if="isCommentVisible" class="comment">
+            <div class="comment__divider"></div>
+
+            <div class="comment__count-wrap">
+              <span class="comment__label">댓글</span>
+              <span class="comment__count">23</span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comment__list">
+              <div class="comment__item">
+                <div class="comment__content-wrap">
+                  <div class="comment__profile">
+                    <img src="/images/동글이.jpg">
+                  </div>
+                  <div class="comment__details">
+                    <div class="comment__info">
+                      <span class="comment__username">두브로브니크</span>
+                      <span class="comment__time">1시간전</span>
+                    </div>
+                    <div class="comment__text">
+                      <span>넘넘 재밌다</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 댓글 내부 드롭다운 영역 계속 보이고 있으니깐 꺼주자 -->
+                <div class="dropdown">
+                  <button @click.stop="toggleCommentDropdown">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                  </button>
+                  <ul v-if="isCommentDropdownOpen" class="dropdown-list">
+                    <li>
+                      <button class="dropdown-reply" @click="openReplyForm">답글</button>
+                    </li>
+                    <li>
+                      <button class="dropdown__report" @click.stop="openReportModal">신고</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 대댓글 입력 영역 -->
+              <div class="comment__reply" v-if="isReplyFormOpen">
+                <span class="comment__reply-id">seungeun</span>
+                <form>
+                  <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
+                  <div class="comment__reply-buttons">
+                    <button type="button" class="comment__reply-cancle" @click.stop="closeReplyForm">취소</button>
+                    <button type="submit" @click.prevent="submitReply">등록</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- 댓글 작성 영역 -->
+            <div class="comment__form-wrap">
+              <form class="comment__form">
+                <input type="text" placeholder="댓글 달기..." class="comment__input" />
+                <button class="comment__submit">게시</button>
+              </form>
+            </div>
+          </div> <!-- comment -->
+        </div>
+        <div class="feed__info-inner"><!--inner-->
+          <div class="feed__user">
+            <div class="feed__user-profile"> <!--사진 아이디-->
+              <img src="/images/동글이.jpg">
+              <span>seungeun</span>
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+            <div class="dropdown">
+              <button @click="toggleDropdown">
+                <i class='bx bx-dots-horizontal-rounded'></i>
+              </button>
+              <ul v-if="isDropdownOpen" class="dropdown-list">
+                <li><button>수정</button></li>
+                <li><button @click.prevent="feedRemove">삭제</button></li>
+              </ul>
+              <!-- ######### 삭제 모달 추가 #########  -->
+              <div v-if="isDeleteFeedModalVisible" class="feed-modal" @click.self="closeModalOnOutsideClick">
+                <div class="feed-modal__contents">
+                  <h2 class="feed-modal__text">피드를 삭제하시겠습니까?</h2>
+                  <div class="feed-modal__buttons">
+                    <button @click.prevent="closeDeleteModal" class="feed-modal__cancel">취소</button>
+                    <button @click.prevent="deleteFeed" class="feed-modal__delete">삭제</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ######### 삭제 모달 추가 #########  -->
+            </div>
+            <!-- ######### click 이벤트 처리 #########  -->
+          </div> <!-- feed__user end -->
+
+          <div class="feed__image">
+            <img src="/images/feed.jpg">
+          </div>
+
+          <div class="feed__icons">
+            <!-- 좋아요 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__like-icon" @click="toggleLike">
+                <i :class="['icon', isLiked ? 'bx bxs-heart' : 'bx bx-heart', { likeCheck: isLiked }]" />
+              </button>
+              <span>23</span>
+            </div>
+            <!-- 댓글 아이콘 -->
+            <div class="feed__icons-column">
+              <button class="feed__comment-icon" @click="toggleComment">
+                <i class='bx bx-comment base-icon-style'></i>
+              </button>
+              <span>23</span>
+            </div>
+          </div>
+
+          <div class="feed__content"> <!-- 피드 내용  -->
+            <div class="feed__text">
+              SPO & Tugan Sokhiev<br />
+              무소륵스키 전람회의 그림 최고였다..!<br />
+              <br />
+              <br />
+            </div>
+            <div class="feed__tags">
+              <a>#공연</a>
+              <a>#태그</a>
+              <a>#태그</a>
+              <a>#태그</a>
+            </div>
+          </div>
+
+          <div class="feed__footer"> <!-- 마지막 버튼 -->
+            <button class="feed__comment-icon" @click.stop="toggleComment">댓글 모두 보기</button>
+            <a><span>3 min ago</span></a>
+          </div>
+
+          <div v-if="isCommentVisible" class="comment">
+            <div class="comment__divider"></div>
+
+            <div class="comment__count-wrap">
+              <span class="comment__label">댓글</span>
+              <span class="comment__count">23</span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comment__list">
+              <div class="comment__item">
+                <div class="comment__content-wrap">
+                  <div class="comment__profile">
+                    <img src="/images/동글이.jpg">
+                  </div>
+                  <div class="comment__details">
+                    <div class="comment__info">
+                      <span class="comment__username">두브로브니크</span>
+                      <span class="comment__time">1시간전</span>
+                    </div>
+                    <div class="comment__text">
+                      <span>넘넘 재밌다</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 댓글 내부 드롭다운 영역 계속 보이고 있으니깐 꺼주자 -->
+                <div class="dropdown">
+                  <button @click.stop="toggleCommentDropdown">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                  </button>
+                  <ul v-if="isCommentDropdownOpen" class="dropdown-list">
+                    <li>
+                      <button class="dropdown-reply" @click="openReplyForm">답글</button>
+                    </li>
+                    <li>
+                      <button class="dropdown__report" @click.stop="openReportModal">신고</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 대댓글 입력 영역 -->
+              <div class="comment__reply" v-if="isReplyFormOpen">
+                <span class="comment__reply-id">seungeun</span>
+                <form>
+                  <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
+                  <div class="comment__reply-buttons">
+                    <button type="button" class="comment__reply-cancle" @click.stop="closeReplyForm">취소</button>
+                    <button type="submit" @click.prevent="submitReply">등록</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- 댓글 작성 영역 -->
+            <div class="comment__form-wrap">
+              <form class="comment__form">
+                <input type="text" placeholder="댓글 달기..." class="comment__input" />
+                <button class="comment__submit">게시</button>
+              </form>
+            </div>
+          </div> <!-- comment -->
+        </div>
+
       </div> <!-- feed__info-wrap -->
     </div>
 
@@ -238,6 +1052,13 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+// 현재 경로를 추적
+const currentRoute = computed(() => route.path);
+
 
 // ######### user dorpdown click 이벤트 처리 #########
 const isDropdownOpen = ref(false);

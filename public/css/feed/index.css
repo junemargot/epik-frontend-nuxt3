@@ -35,6 +35,26 @@
   cursor: pointer;
 }
 
+.feed__menu-column a {
+  text-decoration: none;
+  color: #C1C1C1;
+  font-weight: 500;
+}
+
+.feed__menu-column a.is-active {
+  color: var(--black); /* 선택된 경우 검정색 */
+  font-weight: bold;
+}
+
+.feed__menu-column a.is-inactive {
+  color: #C1C1C1; /* 비활성화된 경우 회색 */
+  font-weight: normal;
+}
+
+.feed__menu-column span {
+  color: #C1C1C1;
+}
+
 .feed__menu-column span:hover {
   color: #222222;
 }
@@ -45,6 +65,7 @@
 
 .feed__menu-column:first-child span {
   text-transform: uppercase;
+  /* color: var(--black); */
 }
 
 .feed__menu-column:nth-child(2) {
@@ -62,7 +83,7 @@
 }
 
 .feed__info-inner {
-  padding: 0 10px
+  padding: 0 10px 30px 10px;
 }
 
 /* 다음 줄 */
@@ -70,8 +91,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 29px;
+  margin-top: 20px;
   margin-bottom: 6px;
+  font-size: 17px;
   /* padding: 3px 7px; */
 }
 
@@ -79,6 +101,7 @@
   display: flex;
   align-items: center;
   gap: 11px;
+  margin-bottom: 8px;
 }
 
 .feed__user-profile span {
@@ -92,8 +115,10 @@
 }
 
 .feed__user i {
-  font-size: 15px;
+  font-size: 18px;
+  margin-right: 10px;
   margin-left: 20px;
+  cursor: pointer;
 }
 
 
@@ -112,7 +137,8 @@
 }
 
 .feed__icons-column button i {
-  font-size: 18px;
+  font-size: 20px;
+  margin-right: 6px;
 }
 
 .likeCheck {
@@ -128,14 +154,22 @@
 
 .feed__icons {
   display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
   margin: 10px 0px;
-  margin-left: -5px;
+  gap: 5px;
+  /* margin-left: -5px; */
+  cursor: pointer;
+}
+
+.feed__icons-column i {
+  cursor: pointer;
 }
 
 .feed__icons-column span {
   font-family: 'pretendard-medium';
-  margin-right: 5px;
-  margin-left: -3px;
+  margin-right: 8px;
+  /* margin-left: -3px; */
   font-size: 18px;
 }
 
@@ -163,18 +197,18 @@
 .feed__footer button {
   display: block;
   border: none;
-  margin-left: -6px;
   color: #858585;
-  font-size: 13px;
-  margin-bottom: 8px;
+  font-size: 16px;
+  margin-bottom: 4px;
   font-family: 'pretendard-regular';
+  cursor: pointer;
 }
 
 .feed__footer a {
   display: block;
   margin-bottom: 8px;
   color: #858585;
-  font-size: 13px;
+  font-size: 14px;
   font-family: 'pretendard-regular';
 }
 
@@ -521,6 +555,15 @@ magin : 상하, 좌우
   text-align: center;
 }
 
+.dropdown-list li > button {
+  background-color: var(--white);
+  cursor: pointer;
+}
+
+.dropdown-list li > button:hover {
+  color: var(--accent-1);
+}
+
 /* .feed__dropdown-list li:first-child {
   border-bottom: 1px solid black;
 } */
@@ -553,4 +596,15 @@ magin : 상하, 좌우
 .dropdown button {
   border: none;
   /* background-color: transparent; */
+}
+
+/* feed__menu-column 내의 span에 대한 스타일 */
+.feed__menu-column span.is-active {
+  color: var(--black); /* 선택된 경우 검정색 */
+  font-weight: bold;
+}
+
+.feed__menu-column span.is-inactive {
+  color: #C1C1C1; /* 비활성화된 경우 회색 */
+  font-weight: normal;
 }

@@ -39,7 +39,7 @@
       <div class="product__content">
         <div class="product__content-images">
           <!-- 이미지 -->
-          <!-- <img src="http://localhost:8080/api/v1/uploads/images/popup/1aafb5399df54c078d1025d30e3eac7c.jpg" alt="센녹1" />
+          <!-- <img src="http://localhost:8081/api/v1/uploads/images/popup/1aafb5399df54c078d1025d30e3eac7c.jpg" alt="센녹1" />
           <img src="/images/sen_2.jpeg" alt="센녹2" />
           <img src="/images/sen_3.jpeg" alt="센녹3" />
           <img src="/images/sen_4.jpeg" alt="센녹4" /> -->

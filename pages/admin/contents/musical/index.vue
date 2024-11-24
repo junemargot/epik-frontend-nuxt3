@@ -116,7 +116,7 @@ const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
 
 // const { data, error } = await useFetch('/admin/musical', {
-//   baseURL: apiBase || 'http://localhost:8080/api/v1',
+//   baseURL: apiBase || 'http://localhost:8081/api/v1',
 //   params: {
 //     page: 1
 //   }, // 기본 페이지
@@ -126,7 +126,7 @@ const fetchMusicals = async (page = 1) => {
   const pageNumber = page;
 
   const { data, error } = await useFetch('/admin/musical', {
-    baseURL: apiBase || 'http://localhost:8080/api/v1',
+    baseURL: apiBase || 'http://localhost:8081/api/v1',
     params: {
       p: pageNumber,
       k: searchQuery.value,

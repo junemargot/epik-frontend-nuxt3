@@ -155,7 +155,7 @@ onMounted(() => {
           console.log(fileName)
 
           // 에디터에 이미지 추가 요청
-          callback(`http://localhost:8080/uploads/temp/exhibition/${fileName}`);
+          callback(`http://localhost:8081/uploads/temp/exhibition/${fileName}`);
         } catch (error) {
           console.log("업로드 실패 : ", error);
         }
@@ -342,7 +342,7 @@ const submitHandler = async () => {
 
   // src에서 도메인 이후의 경로만 추출
   const pathsWithoutDomain = imagePaths.map(src => {
-    return src.replace('http://localhost:8080/uploads/temp/exhibition/', '');
+    return src.replace('http://localhost:8081/uploads/temp/exhibition/', '');
   });
 
   fileNames.value = pathsWithoutDomain;
