@@ -431,7 +431,7 @@
               </div>
               <!-- 대댓글 입력 영역 -->
               <div class="comment__reply" v-if="isReplyFormOpen">
-                <span class="comment__reply-id">seungeun</span>
+                <span class="comment__reply-id">ben</span>
                 <form>
                   <textarea class="comment__reply-input" placeholder="댓글을 남겨보세요."></textarea>
                   <div class="comment__reply-buttons">
