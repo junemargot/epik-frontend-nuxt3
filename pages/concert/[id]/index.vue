@@ -32,6 +32,7 @@
       <!-- section 2 -->
       <main>
         <div class="musical__content">
+
           <img :src="`http://localhost:8081/uploads/images/concert/${concert.saveImageName}`"
             :alt="concert.title + ' 포스터'">
 

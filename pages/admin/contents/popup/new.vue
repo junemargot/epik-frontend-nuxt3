@@ -332,10 +332,13 @@ const submitHandler = async () => {
   //   return match ? match[1] : '';
   // });
 
+
+
   // // src에서 도메인 이후의 경로만 추출
   // const pathsWithoutDomain = imagePaths.map(src => {
   //   return src.replace('http://localhost:8081/api/v1/uploads/temp/popup/', '');
   // });
+
 
   // fileNames.value = pathsWithoutDomain;
   // console.log(pathsWithoutDomain);

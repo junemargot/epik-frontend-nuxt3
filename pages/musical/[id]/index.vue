@@ -30,7 +30,9 @@
       <!-- section 2 -->
       <main>
         <div class="musical__content">
-          <img v-if="musical.saveImageName" :src="`http://localhost:8081/uploads/musical/${musical.saveIamgeName}`"
+
+          <img v-if="musical.saveImageName" :src="`http://localhost:8081/api/v1/uploads/images/musical/${musical.saveImageName}`"
+
             alt="포스터이미지" />
           <div class="musical__info">
             <div class="musical__info-row">
@@ -84,6 +86,7 @@
           <div class="musical__schedule">
             <p v-for="schedule in schedules" :key="schedule">{{ schedule }}</p>
           </div>
+          <div id="map" style="width:100%;height:400px;"></div>
           <div class="musical__images">
             <img v-for="(image, index) in images" :key="index" :src="image" :alt="`시카고 상세${index + 1}`"
               class="musical__image--long">
@@ -143,41 +146,9 @@ const locationInfo = ref({
   name: "디큐브 링크아트센터"
 });
 
-const seats = ref([
-  { type: 'VIP석', price: '160,000원' },
-  { type: 'OP석', price: '150,000원' },
-  { type: 'R석', price: '140,000원' },
-  { type: 'S석', price: '110,000원' },
-  { type: 'A석', price: '80,000원' }
-]);
-
-
 const youtubeUrl = ref('https://www.youtube.com/embed/OjeglNu9eVo');
 
-const schedules = ref([
-  '아티스트 선예매 코드 인증: 2024년 9월 23일 (월) 12:00PM ~ 2024년 9월 24일 (화) 4:59PM',
-  '아티스트 선예매: 2024년 9월 24일 (화) 12:00PM ~ 4:59PM',
-  '라이브네이션 선예매: 2024년 9월 25일 (수) 12:00PM ~ 4:59PM',
-  '일반 예매: 2024년 9월 27일 (금) 12:00PM'
-]);
 
-const images = ref(['/images/시카고 상세1.jpg', '/images/시카고 상세2.jpg']);
-
-const openingHours = ref(`
-  목 10:30 - 20:00<br>
-  금 10:30 - 20:30<br>
-  토 10:30 - 20:30<br>
-  일 10:30 - 20:00<br>
-  월 10:30 - 20:00<br>
-  화 10:30 - 20:00<br>
-  수 10:30 - 20:00<br>
-  - 6F 식당가 영업시간 : 10:30 - 22:00
-`);
-
-const snsLinks = ref([
-  { name: 'SNS 바로가기', url: '#', icon: 'fa-brands fa-instagram' },
-  { name: '브랜드 홈페이지 바로가기', url: '#', icon: 'fa-solid fa-earth-americas' }
-]);
 
 function initMap() {
   return new Promise((resolve) => {
