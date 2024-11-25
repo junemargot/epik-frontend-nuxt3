@@ -64,7 +64,7 @@
               <p class="popup__dates">
                 <span>{{ formatDate(item.startDate) }}</span>
                 <span>~</span>
-                <span>{{ formatDate(item.endDate) }}</span>e
+                <span>{{ formatDate(item.endDate) }}</span>
               </p>
             </div>
           </div>

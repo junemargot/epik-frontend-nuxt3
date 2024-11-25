@@ -3,7 +3,7 @@
 /*작은 사이즈 보더 빨강 버튼*/
 .btn {
   height: 45px;
-  width: 80px;
+  width: 100px;
 
   border-radius: var(--border-5);
   margin-left: 4px;

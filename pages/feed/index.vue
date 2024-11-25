@@ -16,24 +16,16 @@
 
     <div class="feed__menu"> <!--메뉴버튼 줄-->
       <div class="feed__menu-column">
-      <!-- 'feed' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
-      <!-- 'feed' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
-      <RouterLink
-        to="/feed"
-        exact
-        :class="{'is-inactive': currentRoute !== '/feed'}"
-      >
-        <span :class="{'is-active': currentRoute === '/feed'}">all</span>
-      </RouterLink>
-      
-      <!-- 'my' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
-      <RouterLink
-        to="/feed/my"
-        exact
-        :class="{'is-inactive': currentRoute !== '/feed/my'}"
-      >
-        <span :class="{'is-active': currentRoute === '/feed/my'}">my</span>
-      </RouterLink>
+        <!-- 'feed' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
+        <!-- 'feed' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
+        <RouterLink to="/feed" exact :class="{ 'is-inactive': currentRoute !== '/feed' }">
+          <span :class="{ 'is-active': currentRoute === '/feed' }">all</span>
+        </RouterLink>
+
+        <!-- 'my' 페이지에서 'is-active'가 자동으로 적용되며, 'is-inactive'는 'currentRoute'가 일치하지 않으면 적용됨 -->
+        <RouterLink to="/feed/my" exact :class="{ 'is-inactive': currentRoute !== '/feed/my' }">
+          <span :class="{ 'is-active': currentRoute === '/feed/my' }">my</span>
+        </RouterLink>
       </div>
 
       <div class="feed__menu-column">
@@ -370,7 +362,7 @@
               우연하게도 접한 클래식. 클래식은 고리타분하고 지루하다는 편견.<br>
               간접적으로라도 듣기를 꺼려했는데 지금은 모든 플레이리스트가 클래식으로 도배되는 기묘한 세월을 맞이하였다.<br>
               자주 드나든 익숙한 공연장이지만 그로 인해 참 특별한 공간이었음을 경험했다.<br>
-              좀처럼 친숙하게 들려오지 않았던 시마노프스키의 곡을 들을 때는 급기야 눈물이 흐르고야 말았다.<br> 
+              좀처럼 친숙하게 들려오지 않았던 시마노프스키의 곡을 들을 때는 급기야 눈물이 흐르고야 말았다.<br>
               눈물을 닦는 것 조차도 소리가 나서 연주에 방해가 될까 볼을 타고 내리는 눈물방울이 저절로 마르기를 내버려 두었다.<br>
               이렇게나 처절하고 아름다울 수 있다니.
               <br />
@@ -380,7 +372,7 @@
               <a>#공연</a>
               <a>#클래식</a>
               <a>#시마노프스키</a>
-              
+
             </div>
           </div>
 
@@ -505,7 +497,7 @@
           <div class="feed__content"> <!-- 피드 내용  -->
             <div class="feed__text">
               9년 만에 열린 비 콘서트 ㅠㅠㅠ <br>
-              너무 신나고 행복했다. 
+              너무 신나고 행복했다.
               <br />
               <br />
             </div>
@@ -924,7 +916,7 @@
 
             <div class="comment__count-wrap">
               <span class="comment__label">댓글</span>
-              <span class="comment__count">34</span>
+              <span class="comment__count">1</span>
             </div>
 
             <!-- 댓글 목록 -->

@@ -323,6 +323,7 @@ border :bbbbbb
 
 .comment__count {
   color: #a1a1a1;
+  margin-left: 5px;
 }
 
 /* ** 댓글 영역 ** */

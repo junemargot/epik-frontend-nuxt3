@@ -43,7 +43,7 @@
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
             <p class="popup__location">{{ item.address }}</p>
-            <p class="popup__date">
+            <p class="popup__date-main">
               <span>{{ formatDate(item.startDate) }}</span>
               <span>~</span>
               <span>{{ formatDate(item.endDate) }}</span>
@@ -78,7 +78,7 @@
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
             <p class="popup__location">{{ item.venue }}</p>
-            <p class="popup__date">
+            <p class="popup__date-main">
               <span>{{ formatDate(item.startDate) }}</span>
               <span>~</span>
               <span>{{ formatDate(item.endDate) }}</span>
@@ -99,7 +99,7 @@
             <span class="popup__status">진행중</span>
             <h3>{{ item.title }}</h3>
             <p class="popup__location">{{ item.venue }}</p>
-            <p class="popup__date">
+            <p class="popup__date-main">
               <span>{{ formatDate(item.startDate) }}</span>
               <span>~</span>
               <span>{{ formatDate(item.endDate) }}</span>
@@ -143,52 +143,52 @@
         </div>
       </div>
     </div> -->
-    <div class="container">
-      <div class="popup">
-        <h2 class="popup__title">Exhibition</h2>
-        <div class="popup__grid">
-          <div class="popup__item">
-            <img src="/images/툴루즈 로트렉.gif" alt="exhibition 1">
-            <div class="popup__info">
-              <span class="popup__status">진행중</span>
-              <h3>툴루즈 로트렉</h3>
-              <p class="popup__location">서울특별시 강남구</p>
-              <p class="popup__date">24.09.14-03.03</p>
-            </div>
+    <!-- <div class="container"> -->
+    <div class="popup">
+      <h2 class="popup__title">Exhibition</h2>
+      <div class="popup__grid">
+        <div class="popup__item">
+          <img src="/images/툴루즈 로트렉.gif" alt="exhibition 1">
+          <div class="popup__info">
+            <span class="popup__status">진행중</span>
+            <h3>툴루즈 로트렉</h3>
+            <p class="popup__location">서울특별시 강남구</p>
+            <p class="popup__date-main">24.09.14-03.03</p>
           </div>
+        </div>
 
-          <div class="popup__item">
-            <img src="/images/르네그뤼오.gif" alt="exhibition 2">
-            <div class="popup__info">
-              <span class="popup__status">진행중</span>
-              <h3>르네 그뤼오 : 르 엘레강스</h3>
-              <p class="popup__location">서울 마포구</p>
-              <p class="popup__date">24.11.11-25.01.19</p>
-            </div>
+        <div class="popup__item">
+          <img src="/images/르네그뤼오.gif" alt="exhibition 2">
+          <div class="popup__info">
+            <span class="popup__status">진행중</span>
+            <h3>르네 그뤼오 : 르 엘레강스</h3>
+            <p class="popup__location">서울 마포구</p>
+            <p class="popup__date-main">24.11.11-25.01.19</p>
           </div>
+        </div>
 
-          <div class="popup__item">
-            <img src="/images/퓰리처상.gif" alt="exhibition 3">
-            <div class="popup__info">
-              <span class="popup__status">진행중</span>
-              <h3>퓰리처상 사진전</h3>
-              <p class="popup__location">서울특별시 서초구</p>
-              <p class="popup__date">24.12.21-25.01.31</p>
-            </div>
+        <div class="popup__item">
+          <img src="/images/퓰리처상.gif" alt="exhibition 3">
+          <div class="popup__info">
+            <span class="popup__status">진행중</span>
+            <h3>퓰리처상 사진전</h3>
+            <p class="popup__location">서울특별시 서초구</p>
+            <p class="popup__date-main">24.12.21-25.01.31</p>
           </div>
+        </div>
 
-          <div class="popup__item">
-            <img src="/images/어반아트.gif" alt="exhibition 4">
-            <div class="popup__info">
-              <span class="popup__status">진행중</span>
-              <h3>나가노마켓 팝업스토어</h3>
-              <p class="popup__location">서울특별시 중구</p>
-              <p class="popup__date">24.10.02-25.02.02</p>
-            </div>
+        <div class="popup__item">
+          <img src="/images/어반아트.gif" alt="exhibition 4">
+          <div class="popup__info">
+            <span class="popup__status">진행중</span>
+            <h3>나가노마켓 팝업스토어</h3>
+            <p class="popup__location">서울특별시 중구</p>
+            <p class="popup__date-main">24.10.02-25.02.02</p>
           </div>
         </div>
       </div>
     </div>
+    <!-- </div> -->
 
 
   </div>
