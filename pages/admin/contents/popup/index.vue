@@ -1,95 +1,96 @@
 <template>
   <div class="wrap">
-  <!-- MAIN -->
-  <div class="main-wrap">
-    <section class="board">
-      <div class="board__header">
-        <h1>팝업 Pop-up</h1>
-        <p>총 게시물수 152건</p>
-      </div>
-      <div class="board__container">
-        <div class="board__list">
-          <div class="board__head">
-            <div class="board__no">번호</div>
-            <div class="board__title">제목</div>
-            <div class="board__writer">작성자</div>
-            <div class="board__regDate">작성일</div>
-            <div class="board__viewCnt">조회수</div>
-            <div class="board__management">게시물관리</div>
-          </div>
-          <div class="board__body">
-            <div class="board__content" v-for="popup in popups" :key="popup.id">
-              <div class="board__no">{{ popup.no }}</div>
-              <div class="board__title">
-                <RouterLink :to="`/admin/contents/popup/${popup.id}`">
-                  {{ popup.title }}
-                </RouterLink>
-              </div>
-              <div class="board__writer">{{ popup.writer }}</div>
-              <div class="board__regDate">{{ popup.regDate }}</div>
-              <div class="board__viewCnt">{{ popup.viewCnt }}</div>
-              <div class="board__management">
-                <button class="hiddenBtn" @click="hiddenHandler(concert.id)">비공개</button>
-                <button class="modifyBtn" @click="goToEditPage(popup.id)">수정</button>
-                <button class="deleteBtn">삭제</button>
-              </div>
+    <!-- MAIN -->
+    <div class="main-wrap">
+      <section class="board">
+        <div class="board__header">
+          <h1>팝업 Pop-up</h1>
+          <p>총 게시물수 152건</p>
+        </div>
+        <div class="board__container">
+          <div class="board__list">
+            <div class="board__head">
+              <div class="board__no">번호</div>
+              <div class="board__title">제목</div>
+              <div class="board__writer">작성자</div>
+              <div class="board__regDate">작성일</div>
+              <div class="board__viewCnt">조회수</div>
+              <div class="board__management">게시물관리</div>
             </div>
-          </div> <!-- END BOARD BODY -->
-        </div> <!-- END BOARD LIST-->
-      </div>
-      <!-- END BOARD CONTAINER -->
-      
-      <!-- PAGINATION / REGISTRATION -->
-      <div class=pagination-wrapper>
-        <div class="pagination">
-          <button type="button" class="page-btn start-page">
-            <i class='bx bx-chevrons-left'></i>
-          </button>
-          <button type="button" class="page-btn prev-page">
-            <i class='bx bx-chevron-left'></i>
-          </button>
-          <button type="button" class="page-btn active">1</button>
-          <button type="button" class="page-btn">2</button>
-          <button type="button" class="page-btn">3</button>
-          <button type="button" class="page-btn">4</button>
-          <button type="button" class="page-btn">5</button>
-          <button type="button" class="page-btn next-page">
-            <i class='bx bx-chevron-right'></i>
-          </button>
-          <button type="button" class="page-btn end-page">
-            <i class='bx bx-chevrons-right'></i>
-          </button>
+            <div class="board__body">
+              <div class="board__content" v-for="popup in popups" :key="popup.id">
+                <div class="board__no">{{ popup.no }}</div>
+                <div class="board__title">
+                  <RouterLink :to="`/admin/contents/popup/159`">
+                    {{ popup.title }}
+                  </RouterLink>
+                </div>
+                <div class="board__writer">{{ popup.writer }}</div>
+                <div class="board__regDate">{{ popup.regDate }}</div>
+                <div class="board__viewCnt">{{ popup.viewCnt }}</div>
+                <div class="board__management">
+                  <button class="hiddenBtn" @click="hiddenHandler(concert.id)">비공개</button>
+                  <button class="modifyBtn" @click="goToEditPage(popup.id)">수정</button>
+                  <button class="deleteBtn">삭제</button>
+                </div>
+              </div>
+            </div> <!-- END BOARD BODY -->
+          </div> <!-- END BOARD LIST-->
         </div>
-        <div class="registration">
-          <RouterLink to="/admin/contents/popup/new">
-            <button type="button" class="registration__button">등록</button>
-          </RouterLink>
-        </div>
-      </div>
-      <!-- END PAGINATION -->
-    </section>
-  </div> <!-- END MAIN WRAP -->
+        <!-- END BOARD CONTAINER -->
 
-  <!-- SEARCH BAR -->
-  <section class="search">
-    <div class="search__bar">
-      <div class="search__dropdown">
-        <div id="drop-text" class="search__text" @click="toggleDropdown">
-          <span id="span">{{ selectedCategory }}</span>
-          <i id="icon" class='bx bx-chevron-down' :style="{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }"></i>
+        <!-- PAGINATION / REGISTRATION -->
+        <div class=pagination-wrapper>
+          <div class="pagination">
+            <button type="button" class="page-btn start-page">
+              <i class='bx bx-chevrons-left'></i>
+            </button>
+            <button type="button" class="page-btn prev-page">
+              <i class='bx bx-chevron-left'></i>
+            </button>
+            <button type="button" class="page-btn active">1</button>
+            <button type="button" class="page-btn">2</button>
+            <button type="button" class="page-btn">3</button>
+            <button type="button" class="page-btn">4</button>
+            <button type="button" class="page-btn">5</button>
+            <button type="button" class="page-btn next-page">
+              <i class='bx bx-chevron-right'></i>
+            </button>
+            <button type="button" class="page-btn end-page">
+              <i class='bx bx-chevrons-right'></i>
+            </button>
+          </div>
+          <div class="registration">
+            <RouterLink to="/admin/contents/popup/new">
+              <button type="button" class="registration__button">등록</button>
+            </RouterLink>
+          </div>
         </div>
-        <ul id="drop-list" class="search__list" :class="{ show: isOpen }">
-          <li class="search__item" v-for="item in categories" :key="item" @click="selectCategory(item)">
-            {{ item }}
-          </li>
-        </ul>
+        <!-- END PAGINATION -->
+      </section>
+    </div> <!-- END MAIN WRAP -->
+
+    <!-- SEARCH BAR -->
+    <section class="search">
+      <div class="search__bar">
+        <div class="search__dropdown">
+          <div id="drop-text" class="search__text" @click="toggleDropdown">
+            <span id="span">{{ selectedCategory }}</span>
+            <i id="icon" class='bx bx-chevron-down'
+              :style="{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }"></i>
+          </div>
+          <ul id="drop-list" class="search__list" :class="{ show: isOpen }">
+            <li class="search__item" v-for="item in categories" :key="item" @click="selectCategory(item)">
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+        <div class="search__box">
+          <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery" />
+          <i class='bx bx-search'></i>
+        </div>
       </div>
-      <div class="search__box">
-        <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery" />
-        <i class='bx bx-search'></i>
-      </div>
-    </div>
-  </section>
+    </section>
   </div>
 </template>
 
@@ -98,7 +99,7 @@ const popups = ref([
   {
     id: 15,
     no: 15,
-    title: "SENNOK BATH HOUSE POPUP STORE",
+    title: "주술회전 0 전시회 팝업스토어",
     writer: "관리자2",
     regDate: "2024-08-25",
     viewCnt: 15,
@@ -243,9 +244,9 @@ const selectCategory = (category) => {
 };
 
 const updatePlaceholder = (category) => {
-  if(category === '통합검색') {
+  if (category === '통합검색') {
     inputPlaceholder.value = '검색어를 입력해주세요';
-  } else if(category === '작성자') {
+  } else if (category === '작성자') {
     inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
   } else {
     inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
@@ -254,7 +255,7 @@ const updatePlaceholder = (category) => {
 
 // 클릭 외부 영역 처리
 const handleClickOutside = (e) => {
-  if(!e.target.closest('.search')) {
+  if (!e.target.closest('.search')) {
     isOpen.value = false;
   }
 };

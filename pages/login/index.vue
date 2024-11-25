@@ -10,10 +10,10 @@
       <div class="log-in__form">
         <h2 hidden>로그인 입력폼</h2>
         <div class="message-container">
-          <div v-if="memberCheck===false" class="small_text_red">아이디와 비밀번호를 확인해주세요</div>
+          <div v-if="memberCheck === false" class="small_text_red">아이디와 비밀번호를 확인해주세요</div>
         </div>
         <input class="log-in__id form" v-model="usernameModel" placeholder="아이디를 입력해주세요">
-        <input class="log-in__password form" v-model="passwordModel" placeholder="비밀번호를 입력해주세요">
+        <input type="password" class="log-in__password form" v-model="passwordModel" placeholder="비밀번호를 입력해주세요">
         <button class="long_btn" type="button" @click="localLoginHandler">로그인</button>
       </div>
 
@@ -70,12 +70,15 @@ onMounted(() => {
       username: userInfo.username,
       email: userInfo.email,
       role: userInfo.role.map(role => role.authority),
-      nickname : userInfo.nickname,
+      nickname: userInfo.nickname,
       token: token
     });
 
     console.log("로컬에 있던 토큰 사용했당")
     console.log(userDetails.nickname)
+
+
+    localStorage.setItem("username", userInfo.username)
 
   }
 })
@@ -101,16 +104,15 @@ const localLoginHandler = async () => {
 
     //토큰에서 정보 받고 로컬에 저장
     localStorage.setItem("access_token", response.token)
-    console.log("토큰 확인-"+response.token )
+    console.log("토큰 확인-" + response.token)
 
     
 
 
- 
     // await getMemberInfo();
 
     console.log("토큰 분해 중 ")
-  
+
     let token = localStorage.getItem("access_token")
     let userInfo = jwtDecode(token);
     console.log("User Info from token:", userInfo);
@@ -123,35 +125,35 @@ const localLoginHandler = async () => {
       role: userInfo.role.map((role) => role.authority),
       token: token
     });
-    userInfo.role.map(role => {console.log(role.authority) });
+    userInfo.role.map(role => { console.log(role.authority) });
 
     const memberRole = userInfo.role.map((role) => role.authority);
     console.log(memberRole);
 
+
     localStorage.setItem("username",userInfo.username)
 
-  
+
     console.log("새로운 토큰 사용했당")
     memberCheck.value = null;
 
-  if(memberRole.includes("ROLE_MEMBER")){
-    const redirectUrl = sessionStorage.getItem('redirectUrl') || '/'; // 기본 페이지는 '/'로 설정
-    sessionStorage.removeItem('redirectUrl'); // 리디렉션 후 URL 삭제
-    console.log("돌아갈곳 확인-"+redirectUrl )
-    location.href=redirectUrl;
+    if (memberRole.includes("ROLE_MEMBER")) {
+      const redirectUrl = sessionStorage.getItem('redirectUrl') || '/'; // 기본 페이지는 '/'로 설정
+      sessionStorage.removeItem('redirectUrl'); // 리디렉션 후 URL 삭제
+      console.log("돌아갈곳 확인-" + redirectUrl)
+      location.href = redirectUrl;
     }
-    else if(memberRole.includes("ROLE_ADMIN")) 
-    {
-location.href='http://localhost:3000/admin'
+    else if (memberRole.includes("ROLE_ADMIN")) {
+      location.href = 'http://localhost:3000/admin'
     }
   } catch {
     memberCheck.value = false;
   }
 }
 
-const getMemberInfo = async() => {
+const getMemberInfo = async () => {
   console.log("토큰 분해 중 ")
-  try{
+  try {
     let token = localStorage.getItem("access_token")
     let userInfo = jwtDecode(token);
     console.log("User Info from token:", userInfo);
@@ -168,19 +170,19 @@ const getMemberInfo = async() => {
 
     console.log("새로운 토큰 사용했당")
   }
-    catch{
-      console.log("옲ㅍ")
-    }
+  catch {
+    console.log("옲ㅍ")
+  }
 }
 
 const googleLoginHandler = async () => {
   let token;
   let userInfo
 
-  const googleClientId ="";
+  const googleClientId = "795859274806-2738p5inaufnquiq0so9centtlsekvks.apps.googleusercontent.com";
   {
     let response = await googleTokenLogin(
-      {clientId: googleClientId,}
+      { clientId: googleClientId, }
     );
     console.log(response);
     token = response.access_token;
@@ -195,21 +197,21 @@ const googleLoginHandler = async () => {
   }
   console.log(userInfo.email, userInfo.sub, userInfo.name);
   {
-    const response = await fetch("http://localhost:8081/api/v1/auth/google-login", 
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: userInfo.email,
-        id: userInfo.sub,
-        name: userInfo.name,
-      }),
-      credentials: 'include'
-    });
-const data = await response.json();
-   console.log(data);
+    const response = await fetch("http://localhost:8081/api/v1/auth/google-login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: userInfo.email,
+          id: userInfo.sub,
+          name: userInfo.name,
+        }),
+        credentials: 'include'
+      });
+    const data = await response.json();
+    console.log(data);
 
     console.log("리스판스 콘솔 확인-" + data.token)
 
@@ -219,7 +221,7 @@ const data = await response.json();
     //원래있던 url로 이동
     const redirectUrl = sessionStorage.getItem('redirectUrl') || '/'; // 기본 페이지는 '/'로 설정
     sessionStorage.removeItem('redirectUrl'); // 리디렉션 후 URL 삭제
-    location.href=redirectUrl; // 해당 URL로 리디렉션
+    location.href = redirectUrl; // 해당 URL로 리디렉션
   }
 }
 
@@ -236,13 +238,13 @@ const data = await response.json();
   /* 부드러운 전환 효과 */
 }
 
-.long_btn:hover{
-  background-color: var(--accent-1); 
-  color: white;  
+.long_btn:hover {
+  background-color: var(--accent-1);
+  color: white;
   cursor: pointer;
 }
 
-.log-in__icon{
+.log-in__icon {
   cursor: pointer;
 }
 </style>

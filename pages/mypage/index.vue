@@ -40,7 +40,7 @@
 
             <div class="mypage__username">
               <!-- <img class="mypage__username-img" src="/public/images/mypage/member.png"> -->
-               {{ userDetails.email }} 
+              {{ userDetails.email }}
             </div>
           </div>
 
@@ -58,7 +58,7 @@
                 <a href="./notification.vue"><i class='mypage__bell-icon bx bx-bell'></i>알림</a>
               </li>
               <li class="bookmark">
-                <a href="../mypage/bookmark"> <i class='mypage__bookmark-icon bx bx-bookmark'></i>북마크</a>
+                <a href="../mypage/1/bookmark"> <i class='mypage__bookmark-icon bx bx-bookmark'></i>북마크</a>
               </li>
               <li class="myfeed">
                 <a href="#"> <i class='mypage__myfeed-icon bx bx-message-alt-minus'></i>마이피드</a>
@@ -140,9 +140,9 @@ onMounted(() => {
 })
 
 //프로필사진 변경하기
-const handleFileChange = async(event)=> {
+const handleFileChange = async (event) => {
 
-  
+
   //로컬호스트 유지
   let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
 
@@ -160,7 +160,7 @@ const handleFileChange = async(event)=> {
 
   //id값만 담기
   const idtest = userInfo.id;
-  
+
   const file = event.target.files[0];  // 사용자가 선택한 파일
   if (file) {
     const formData = new FormData();
@@ -168,14 +168,14 @@ const handleFileChange = async(event)=> {
 
 
     //이미지랑 아이디 전달 패치 
-    const reponse = await fetch('유저아이디랑 이미지 전달할 컨트롤러',{
+    const reponse = await fetch('유저아이디랑 이미지 전달할 컨트롤러', {
       method: 'POST',
       headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(passwordCheckDto),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(passwordCheckDto),
     })
-}
+  }
 }
 
 
@@ -190,49 +190,56 @@ const handleFileChange = async(event)=> {
 @import url('/public/css/mypage/mypageMain.css');
 
 
-fieldset{
+fieldset {
   border: none
 }
 
 .mypage__menulist li a,
 .mypage__fuction-icons li a {
-  font-weight: normal; /* 기본 폰트 두께는 normal */
-  transition: font-weight 0.3s ease, transform 0.3s ease; /* 부드러운 전환 효과 */
+  font-weight: normal;
+  /* 기본 폰트 두께는 normal */
+  transition: font-weight 0.3s ease, transform 0.3s ease;
+  /* 부드러운 전환 효과 */
 }
 
 /* 호버 시 폰트 두께와 크기 증가 */
 .mypage__menulist li a:hover,
 .mypage__fuction-icons li a:hover {
-  font-weight: bold; /* 호버 시 폰트 두께를 bold로 변경 */
-  transform: scale(1.005); /* 호버 시 아이콘과 텍스트 크기 살짝 증가 */
+  font-weight: bold;
+  /* 호버 시 폰트 두께를 bold로 변경 */
+  transform: scale(1.005);
+  /* 호버 시 아이콘과 텍스트 크기 살짝 증가 */
   cursor: pointer;
 }
 
 /* 메뉴 내 아이콘 텍스트 */
 .mypage__menulist li a .mypage__icon-wrap,
 .mypage__fuction-icons li a .mypage__icon-wrap {
-  font-weight: normal; /* 기본 두께는 normal */
+  font-weight: normal;
+  /* 기본 두께는 normal */
   transition: font-weight 0.3s ease;
 }
 
 /* 호버 시 아이콘 텍스트 볼드 처리 */
 .mypage__menulist li a:hover .mypage__icon-wrap,
 .mypage__fuction-icons li a:hover .mypage__icon-wrap {
-  font-weight: bold; /* 호버 시 아이콘 텍스트도 볼드 처리 */
+  font-weight: bold;
+  /* 호버 시 아이콘 텍스트도 볼드 처리 */
   cursor: pointer;
 }
 
 /* 메뉴 내 아이콘 크기 조정 */
 .mypage__menulist li a .mypage__angleright-icon,
 .mypage__fuction-icons li a i {
-  transition: transform 0.3s ease; /* 부드러운 전환 효과 */
+  transition: transform 0.3s ease;
+  /* 부드러운 전환 효과 */
 }
 
 /* 호버 시 아이콘 크기 확대 */
 .mypage__menulist li a:hover .mypage__angleright-icon,
 .mypage__fuction-icons li a:hover i {
-  transform: scale(1.2); /* 호버 시 아이콘 크기 살짝 커짐 */
+  transform: scale(1.2);
+  /* 호버 시 아이콘 크기 살짝 커짐 */
   cursor: pointer;
 }
-
 </style>

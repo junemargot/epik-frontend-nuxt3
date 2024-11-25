@@ -233,7 +233,28 @@ onMounted(() => {
 
 
     <!-- section 2 -->
-    <div v-html="popup?.content" class="popup__description"></div>
+    <div class="popup__description">
+      <p>
+        📢 주술회전 0 전시회 팝업스토어 OPEN! 🎉
+        <br>
+        <br>
+        주술회전 0 전시회 오픈 기념, 전시회의 감동을 굿즈로!!!!<br>
+        주술회전 팬분들을 위한 깜짝 팝업스토어 OPEN🌟🌟🌟<br>
+        <br>
+        극장판 주술회전 0의 원화와 그림 콘티 등 전시회 한정으로 준비된<br> 다양한 굿즈, 뜨거운 인기로 조기 품절된 한정 굿즈도 다시 만나볼 수 있는 기회!<br>
+        <br>
+
+
+        전시회에서 한 번😭<br>
+        팝업스토에서 두 번😭😭<br>
+        극장판 주술회전 0의 감동을 느껴보세요!<br>
+
+        <br>
+        ◾팝업스토어 정보
+        기간 : 2024.11.23(토) ~ 12.01(일)
+        장소 : 아이파크몰 용산점 6F 더 코너
+      </p>
+    </div>
 
     <!-- section 3 -->
     <section class="popup__addinfo">

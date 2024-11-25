@@ -28,8 +28,12 @@
               <div class="menu">
                 <i class='bx bx-dots-horizontal-rounded icon' @click="toggleMenu(index)"></i>
                 <ul class="menu-link" :class="{ show: isMenuOpen[index] }">
-                  <li><RouterLink :to="section.link">더보기</RouterLink></li>
-                  <li v-if="section.title === '공지사항'"><RouterLink to="/admin/notice/new">글작성</RouterLink></li> <!-- 수정 다른 하위 메뉴에선 안보이도록 -->
+                  <li>
+                    <RouterLink :to="section.link">더보기</RouterLink>
+                  </li>
+                  <li v-if="section.title === '공지사항'">
+                    <RouterLink to="/admin/notice/new">글작성</RouterLink>
+                  </li> <!-- 수정 다른 하위 메뉴에선 안보이도록 -->
                 </ul>
               </div>
             </div>
@@ -155,7 +159,14 @@ onMounted(async () => {
     {
       title: '공지사항',
       link: '/admin/notice',
-      items: adminNotices.value,
+      // items: adminNotices.value,
+      items: [
+        { id: 75, title: '글로벌 서비스 중단 안내', writer: '관리자1', writeDate: '2024-11-25' },
+        { id: 74, title: '사칭 주의 안내', writer: '관리자1', writeDate: '2024-11-25' },
+        { id: 73, title: '피드 이용 안내', writer: '관리자1', writeDate: '2024-11-25' },
+        { id: 72, title: '채팅 서비스 일시 중단 안내', writer: '관리자1', writeDate: '2024-11-25' },
+        { id: 71, title: '개인정보 처리방침 변경 안내(11/25)', writer: '관리자1', writeDate: '2024-11-25' },
+      ]
     },
     {
       title: '1:1 문의내역',
