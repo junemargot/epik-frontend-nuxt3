@@ -111,16 +111,21 @@
 
     <!-- 영상 섹션 -->
     <div class="video">
-      <div class="video__container">
-        <button class="video__nav video__nav--left" @click="moveVideoSlider(-1)">&#8249;</button>
-        <div class="video__slider" ref="videoSliderRef" :style="videoSliderStyle">
-          <div v-for="(video, index) in videos" :key="index" class="video__item">
-            <iframe :src="video.src" frameborder="0" allowfullscreen></iframe>
-          </div>
+    <div class="video__container">
+      <button class="video__nav video__nav--left" @click="moveVideoSlider(-1)">&#8249;</button>
+      <div class="video__slider" ref="videoSliderRef" :style="videoSliderStyle">
+        <div v-for="(embedUrl, index) in embedYoutubeUrls" :key="index" class="video__item">
+          <iframe
+            :src="embedUrl"
+            frameborder="0"
+            allowfullscreen
+            title="YouTube video player"
+          ></iframe>
         </div>
-        <button class="video__nav video__nav--right" @click="moveVideoSlider(1)">&#8250;</button>
       </div>
+      <button class="video__nav video__nav--right" @click="moveVideoSlider(1)">&#8250;</button>
     </div>
+  </div>
 
     <!-- EXHIBITION -->
     <!-- <div class="popup">
@@ -278,28 +283,36 @@ if (exhibitionError.value) {
   console.log('Fetched exhibition items:', exhibitionItems.value)
 }
 
-//video
-const fetchVideos = async () => {
-  try {
-    const { data, error } = await useFetch('/api/videos');
-    if (error.value) {
-      console.error('영상 가져오기 오류:', error.value);
-    } else {
-      videos.value = data.value;
-    }
-  } catch (err) {
-    console.error('영상 가져오기 오류:', err);
-  }
-};
 
-const videos = reactive([
-  { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-])
+// YouTube URL 관리
+const youtubeUrls = ref([
+  "https://www.youtube.com/watch?v=yWMbEEO7TcU",
+  "https://www.youtube.com/watch?v=zo1cYfqT1oM",
+  "https://www.youtube.com/watch?v=IImyBu6Hh98", 
+  "https://www.youtube.com/watch?v=0bx21frXDJE",
+  "https://www.youtube.com/watch?v=HJ9tK01fSuk",
+  "https://www.youtube.com/watch?v=k8F4s2Ie5xU"
+]);
+
+const embedYoutubeUrls = reactive([]);
+
+function convertToEmbedUrl(url) {
+  const videoIdMatch = url.match(/(?:\?v=|\/embed\/|\/v\/|youtu\.be\/)([^&?/\n]+)/);
+  return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
+}
+
+onMounted(() => {
+  youtubeUrls.value.forEach(url => {
+    const embedUrl = convertToEmbedUrl(url);
+    if (embedUrl) {
+      embedYoutubeUrls.push(embedUrl);
+    }
+  });
+  // URL 변환 이후 슬라이더 크기 다시 계산
+  nextTick(() => {
+    updateDimensions();
+  });
+});
 
 const sliderRef = ref(null)
 const scrollbarThumbRef = ref(null)
@@ -350,12 +363,12 @@ const moveSlider = (direction) => {
 }
 
 const moveVideoSlider = (direction) => {
-  if (direction > 0 && videoCurrentIndex.value < videos.length - 3) {
-    videoCurrentIndex.value++
+  if (direction > 0 && videoCurrentIndex.value < embedYoutubeUrls.length - 3) {
+    videoCurrentIndex.value++;
   } else if (direction < 0 && videoCurrentIndex.value > 0) {
-    videoCurrentIndex.value--
+    videoCurrentIndex.value--;
   }
-}
+};
 
 const onScrollbarClick = (e) => {
   const thumbRect = scrollbarThumbRef.value.getBoundingClientRect()
