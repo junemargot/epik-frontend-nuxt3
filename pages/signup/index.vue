@@ -355,7 +355,7 @@ const submitForm = async () => {
           console.log('회원가입 성공', response.data);
           alert('회원가입이 완료되었습니다!');
 
-          location.href="http://localhost:3000/login"; 
+          location.href="http://localhost:3001/login"; 
         } 
       } else {
         alert('모든 항목을 입력해주세요');

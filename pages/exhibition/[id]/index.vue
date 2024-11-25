@@ -30,7 +30,7 @@
       <!-- section 2 -->
       <main>
         <div class="musical__content">
-          <img src="/image/시카고.jpg" alt="뮤지컬 시카고 포스터">
+          <img src="/images/chicago.jpg" alt="뮤지컬 시카고 포스터">
           <div class="musical__info">
             <div class="musical__info-row">
               <p class="musical__info-label">장소</p>
@@ -78,7 +78,7 @@
             <p v-for="schedule in schedules" :key="schedule">{{ schedule }}</p>
           </div>
           <div class="musical__images">
-            <img v-for="(image, index) in images" :key="index" :src="image" :alt="`시카고 상세${index + 1}`" class="musical__image--long">
+            <!-- <img v-for="(image, index) in images" :key="index" :src="image" :alt="`시카고 상세${index + 1}`" class="musical__image--long"> -->
           </div>
         </section>
         <hr class="musical__divider"> <!-- 회색선 -->
@@ -143,7 +143,7 @@ const schedules = ref([
   '일반 예매: 2024년 9월 27일 (금) 12:00PM'
 ]);
 
-const images = ref(['/image/시카고 상세1.jpg', '/image/시카고 상세2.jpg']);
+const images = ref(['/images/시카고 상세1.jpg', '/images/시카고 상세2.jpg']);
 
 const openingHours = ref(`
   목 10:30 - 20:00<br>

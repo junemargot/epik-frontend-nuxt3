@@ -127,12 +127,12 @@ const idFindResultHandler = async() => {
     const idFindResult = await response.text();
 
     if(idFindResult === "failed"){
-    location.href='http://localhost:3000/find/id/notfound' 
+    location.href='http://localhost:3001/find/id/notfound' 
     }
     else{
     console.log("찾았다")
     console.log("찾은 아이디 값--"+idFindResult);
-    // location.href='http://localhost:3000/find/id/found' 
+    // location.href='http://localhost:3001/find/id/found' 
 
       // Vue Router를 통해 쿼리 파라미터로 아이디 전달
       router.push({ path: '/find/id/found', query: { id: idFindResult } });

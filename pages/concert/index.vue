@@ -4,7 +4,7 @@
     <div class="photo-slider">
       <div class="slider-container" ref="slider">
         <div class="slider-item" v-for="(image, index) in sliderImages" :key="index">
-          <a href="http://localhost:3000/concert/43" class="picks__item-link"></a>
+          <a href="http://localhost:3001/concert/43" class="picks__item-link"></a>
           <img :src="image.src" :alt="image.alt">
         </div>
       </div>
@@ -19,7 +19,7 @@
       </div>
       <div class="picks__container">
         <div v-for="pick in picks" :key="pick.id" class="picks__item">
-          <a href="http://localhost:3000/concert/43" class="picks__item-link">
+          <a href="http://localhost:3001/concert/43" class="picks__item-link">
             <img :src="pick.image" :alt="pick.title + ' 포스터'" class="picks__image">
             <span class="picks__item-title">{{ pick.title }}</span>
             <span class="picks__item-venue">{{ pick.venue }}</span>
@@ -40,7 +40,7 @@
       <div class="region__container">
         <!-- 아이템 리스트 -->
         <div v-for="item in items" :key="item.id" :class="{ hidden: item.hidden }" class="region__item">
-          <a href="http://localhost:3000/concert/71" class="picks__item-link">
+          <a href="http://localhost:3001/concert/71" class="picks__item-link">
             <img :src="item.image" :alt="item.title + ' 포스터'" class="region__image">
             <span class="region__item-title">{{ item.title }}</span>
             <span class="region__item-venue">{{ item.venue }}</span>

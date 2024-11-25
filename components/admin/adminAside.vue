@@ -228,7 +228,7 @@ const userDetails = useUserDetails();
 const logoutHandler =()=>{
   userDetails.logout();
   localStorage.clear();
-  location.href = 'http://localhost:3000'
+  location.href = 'http://localhost:3001'
 }
 
 

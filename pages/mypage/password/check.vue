@@ -58,7 +58,7 @@ onMounted(()=>{
   
   if (!token) 
     // 토큰이 없으면 메인 페이지로 리디렉션
-    location.href=('http://localhost:3000'); 
+    location.href=('http://localhost:3001'); 
 })
 
 
@@ -101,7 +101,7 @@ const passwotdCheckHandler = async () => {
 
   if (result === true) {
     passwordCheck.value = true;
-    location.href='http://localhost:3000/mypage/password/update' // 비밀번호 일치
+    location.href='http://localhost:3001/mypage/password/update' // 비밀번호 일치
   } else {
     passwordCheck.value = false;  // 비밀번호 불일치
   }

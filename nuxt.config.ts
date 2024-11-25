@@ -8,6 +8,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: { apiBase: 'http://localhost:8081/api/v1' }
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['/image/시카고.jpg'],  // 외부화 처리, 빌드 시 이 파일을 제외
+      },
+    },
+  },
   // ssr: true,
 
   nitro: {

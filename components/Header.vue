@@ -33,7 +33,7 @@ const goToLoginPageHandler = () => {
   console.log("이동할 페이지 저장했다-" + currentUrl)
   sessionStorage.setItem('redirectUrl', currentUrl);  // 로그인 후 리디렉션할 URL 저장
   // 로그인 페이지로 이동
-  location.href = 'http://localhost:3000/login/'
+  location.href = 'http://localhost:3001/login/'
 
 };
 

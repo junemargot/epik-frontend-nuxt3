@@ -38,7 +38,7 @@
       </form>
 
       <div class="inqury-answer__menu gap-mt_2">
-        <button class="small_btn_grey answerBtn"><a href="http://localhost:3000/mypage/inquiry">목록</a></button>
+        <button class="small_btn_grey answerBtn"><a href="http://localhost:3001/mypage/inquiry">목록</a></button>
       </div>
 
     </section>

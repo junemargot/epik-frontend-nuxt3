@@ -156,7 +156,7 @@ const emailCodeHandler = async () => {
 const FindResultHandler = async() => {
 
     if(usernameCheck.value&&emailCodeCheck.value){
-    location.href='http://localhost:3000/find/password/change' 
+    location.href='http://localhost:3001/find/password/change' 
     localStorage.setItem('username', usernameCheckModel.value);
     }
 

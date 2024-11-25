@@ -17,13 +17,13 @@
       </div>
 
       <div class="gap-bmt_1">
-        <a href="http://localhost:3000/signup">
+        <a href="http://localhost:3001/signup">
           <button class="long_btn" @click="signinBtn">
             회원가입하기</button>
         </a>
       </div>
       <div class="gap-mt_1">
-        <a href="http://localhost:3000/find/id">
+        <a href="http://localhost:3001/find/id">
         <button class="long_btn">
           아이디 찾기</button>
         </a>

@@ -124,7 +124,7 @@ onMounted(() => {
 
   if (!token) {
     // 토큰이 없으면 메인 페이지로 리디렉션
-    location.href=('http://localhost:3000');  // 홈 페이지로 리디렉션
+    location.href=('http://localhost:3001');  // 홈 페이지로 리디렉션
   } else {
     const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
     userDetails.setAuthentication({

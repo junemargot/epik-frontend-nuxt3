@@ -63,7 +63,7 @@ const userDetails = useUserDetails();
 onMounted(()=>{
   if (!token) 
     // 토큰이 없으면 메인 페이지로 리디렉션
-    location.href=('http://localhost:3000'); 
+    location.href=('http://localhost:3001'); 
 })
 
 
@@ -164,7 +164,7 @@ const getMemberInfo = () => {
     console.log("새로운 토큰 사용했당")
     localStorage.removeItem("access_token");
     alert('비밀번호 변경이 완료되었습니다!');
-    location.href="http://localhost:3000/login"; 
+    location.href="http://localhost:3001/login"; 
   }
     catch{
       console.log("옲ㅍ")

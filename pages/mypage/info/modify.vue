@@ -96,7 +96,7 @@ onMounted(()=>{
   let token = localStorage.getItem("access_token");  
   if (!token) 
     // 토큰이 없으면 메인 페이지로 리디렉션
-    location.href=('http://localhost:3000'); 
+    location.href=('http://localhost:3001'); 
 })
 
 
@@ -254,7 +254,7 @@ const getMemberInfo = () => {
     userInfo.role.map(role => { console.log(role, role.authority) });
 
     console.log("새로운 토큰 사용했당")
-    location.href="http://localhost:3000/mypage"; 
+    location.href="http://localhost:3001/mypage"; 
 
   }
     catch{

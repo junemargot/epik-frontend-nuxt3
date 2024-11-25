@@ -36,7 +36,7 @@
       <h2 class="popup__title">Pop-up</h2>
       <div class="popup__grid">
         <div v-for="(item, index) in popupItems" :key="index" class="popup__item">
-          <a href="http://localhost:3000/popup/170"></a>
+          <a href="http://localhost:3001/popup/170"></a>
           <img :src="`http://localhost:8081/api/v1/uploads/images/popup/${item.imgSavedName}`"
             :alt="`Popup ${index + 1}`">
           <div class="popup__info">
@@ -58,8 +58,8 @@
 
       <div class="banner__grid">
         <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
-        <a href="http://localhost:3000/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
-        <a href="http://localhost:3000/musical/146"><img src="/images/베너3.png" alt="Banner 3" class="banner__item"></a>
+        <a href="http://localhost:3001/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
+        <a href="http://localhost:3001/musical/146"><img src="/images/베너3.png" alt="Banner 3" class="banner__item"></a>
         <img src="/images/베너4.png" alt="Banner 4" class="banner__item">
         <img src="/images/베너5.png" alt="Banner 5" class="banner__item">
         <img src="/images/베너6.png" alt="Banner 6" class="banner__item">

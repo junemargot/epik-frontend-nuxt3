@@ -9,7 +9,7 @@
 
       <div>
         <div class="inquryList__personal">
-          <a href="http://localhost:3000/mypage/inquiry/write"> <button class="personal-inqury-btn">1:1 문의 접수</button></a>
+          <a href="http://localhost:3001/mypage/inquiry/write"> <button class="personal-inqury-btn">1:1 문의 접수</button></a>
         </div>
 
         <div>
@@ -62,7 +62,7 @@
 
       <div>
         <ul class="">
-          <a href="http://localhost:3000/mypage/inquiry/%7Bid%7D/answer">
+          <a href="http://localhost:3001/mypage/inquiry/%7Bid%7D/answer">
           <li class="inquryList__list">
             <img class="inquryList__icon" src="/public/images/mypage/q.png">
             <span class="inquryList__list-arrange ">
