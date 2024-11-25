@@ -184,9 +184,12 @@
   margin-top: 8px;
   margin-bottom: 20px;
   font-size: 18px;
+  position: relative;
 }
 
 .popup__addinfo-address-detail div {
+  position: absolute;
+  bottom: 4px;
   width: 18px;
   height: 18px;
   margin-right: 2px;

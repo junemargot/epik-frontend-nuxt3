@@ -93,7 +93,7 @@ h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 27%;
+  height: 33%;
   background-color: rgba(217, 217, 217, 0.6);
   border-radius: 0 0 15px 15px;
 }
@@ -270,7 +270,7 @@ h2 {
   font-family: 'pretendard-medium';
   font-size: 14px;
   margin: 5px 0;
-  margin-left: 140px;
+  /* margin-left: 140px; */
 }
 
 .popup__date {

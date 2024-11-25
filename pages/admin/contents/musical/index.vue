@@ -64,7 +64,7 @@
           </button>
         </div>
         <div class="registration">
-          <RouterLink to="/admin/contents/concert/new">
+          <RouterLink to="/admin/contents/musical/new">
             <button type="button" class="registration__button">등록</button>
           </RouterLink>
         </div>
