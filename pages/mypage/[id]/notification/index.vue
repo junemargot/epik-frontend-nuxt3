@@ -2,7 +2,7 @@
   <div class="bookmark" @click="handleOutsideClick">
     <div class="bookmark__header">
       <div class="bookmark__title-container">
-        <h1 class="bookmark__heading">BOOKMARK</h1>
+        <h1 class="bookmark__heading">NOTIFICATION</h1>
         <form class="feed__form">
           <input class="feed__input" id="feed-search" type="text" placeholder="검색어를 입력해주세요">
           <label for="feed-search">
