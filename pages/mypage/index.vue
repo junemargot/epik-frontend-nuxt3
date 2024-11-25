@@ -122,8 +122,10 @@ const userDetails = useUserDetails();
 onMounted(() => {
   let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
 
-  if (token) {
-    // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
+  if (!token) {
+    // 토큰이 없으면 메인 페이지로 리디렉션
+    location.href=('http://localhost:3000');  // 홈 페이지로 리디렉션
+  } else {
     const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
     userDetails.setAuthentication({
       id: userInfo.id,
@@ -133,8 +135,7 @@ onMounted(() => {
       role: userInfo.role.map(role => role.authority),
       token: token
     });
-    console.log(userInfo)
-    console.log("토큰에서 정보 가져오기")
+    console.log("토큰에서 정보 가져오기", userInfo);
   }
 })
 

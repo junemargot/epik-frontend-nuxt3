@@ -53,6 +53,12 @@ const storedUserInfo = ref('');
 
 onMounted(()=>{
   storedUserInfo.value = localStorage.getItem("username");
+  console.log(storedUserInfo)
+  let token = localStorage.getItem("access_token");
+  
+  if (!token) 
+    // 토큰이 없으면 메인 페이지로 리디렉션
+    location.href=('http://localhost:3000'); 
 })
 
 

@@ -60,6 +60,13 @@ import { jwtDecode } from 'jwt-decode';
 
 const userDetails = useUserDetails();
 
+onMounted(()=>{
+  if (!token) 
+    // 토큰이 없으면 메인 페이지로 리디렉션
+    location.href=('http://localhost:3000'); 
+})
+
+
 watch([pwModel], () => {
   if (regex.test(pwModel.value))
     pwCheck.value = true
