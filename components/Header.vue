@@ -41,6 +41,7 @@ const goToLoginPageHandler = () => {
 const logoutHandler = () => {
   userDetails.logout();
   localStorage.clear();
+  location.reload();
 
 }
 

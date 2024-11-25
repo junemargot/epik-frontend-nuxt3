@@ -76,6 +76,8 @@ onMounted(() => {
 
     console.log("로컬에 있던 토큰 사용했당")
     console.log(userDetails.nickname)
+
+    localStorage.setItem("username", userInfo.username)
   }
 })
 
