@@ -54,6 +54,7 @@ const storedUserInfo = ref('');
 onMounted(()=>{
   storedUserInfo.value = localStorage.getItem("username");
   console.log(storedUserInfo)
+  
   let token = localStorage.getItem("access_token");
   
   if (!token) 
