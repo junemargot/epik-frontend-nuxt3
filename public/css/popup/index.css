@@ -160,7 +160,7 @@ h2 {
 
 .photo-slider__date {
   min-height: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 10p
 }
 
 .photo-slider__description {
@@ -256,7 +256,8 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
+  margin-top: 0px;
 }
 
 .popup__name {
@@ -269,10 +270,16 @@ h2 {
   font-family: 'pretendard-medium';
   font-size: 14px;
   margin: 5px 0;
+  margin-left: 140px;
 }
 
 .popup__date {
   margin-left: 10px;
+  font-size: 14px;
+}
+
+.popup__date-main {
+  /* margin-left: 10px; */
   /* color: #858585; */
   font-size: 14px;
 }
@@ -339,6 +346,8 @@ h2 {
   overflow: hidden;
   padding: 0 15px;
   box-sizing: border-box;
+  margin-left: 18px;
+  margin-bottom: 20px;
 }
 
 .video__slider {

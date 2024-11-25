@@ -3,22 +3,23 @@
     <!-- MAIN -->
     <div class="contents-wrap">
       <form @submit.prevent="submitHandler" action="#" method="POST" id="regForm" enctype="multipart/form-data">
-      <section class="notice-registration">
-        <h1>공지사항 등록</h1>
-        <div class="input__item">
-          <div class="input__title">제목</div>
-          <input v-model="title" ref="titleInput" type="text" name="title" placeholder="제목을 입력해주세요" autocomplete="off" />
-        </div>
+        <section class="notice-registration">
+          <h1>공지사항 등록</h1>
+          <div class="input__item">
+            <div class="input__title">제목</div>
+            <input v-model="title" ref="titleInput" type="text" name="title" placeholder="제목을 입력해주세요"
+              autocomplete="off" />
+          </div>
 
-        <!-- 에디터를 적용할 요소 (컨테이너) -->
-        <div id="contsEditor" name="content"></div>
+          <!-- 에디터를 적용할 요소 (컨테이너) -->
+          <div id="contsEditor" name="content"></div>
 
-        <!-- 취소와 저장 버튼 -->
-        <div class="btn-bottom">
-          <button type="button" class="btn cancel" @click="cancelHandler">취소</button>
-          <button type="submit" class="btn submit">등록</button>
-        </div>
-      </section>
+          <!-- 취소와 저장 버튼 -->
+          <div class="btn-bottom">
+            <button type="button" class="btn cancel" @click="cancelHandler">취소</button>
+            <button type="submit" class="btn submit">등록</button>
+          </div>
+        </section>
       </form>
     </div>
     <!-- END CONTENTS WRAP -->
@@ -63,23 +64,23 @@ onMounted(() => {
 
 
 // API 요청 함수 구현 - 컴포저블 사용 안하기
-const fetchData = async(url, options) => {
+const fetchData = async (url, options) => {
   try {
     const response = await fetch(url, options);
 
     const contentType = response.headers.get('Content-Type');
-    if(!contentType || !contentType.includes('application/json')) {
+    if (!contentType || !contentType.includes('application/json')) {
       const text = await response.text();
       throw new Error(`Unexpected response: ${text}`);
     }
 
-    if(!response.ok) {
+    if (!response.ok) {
       const errorDetails = await response.json();
       throw new Error(`HTTP Error ${response.status}: ${errorDetails.message}`);
     }
 
     return await response.json(); // 응답 처리
-  } catch(error) {
+  } catch (error) {
     console.error("API 요청 중 에러 발생: ", error);
     throw error;
   }
@@ -94,15 +95,15 @@ const cancelHandler = () => {
 
   // editorContent가 실제 내용인지 확인하기 위해 html 태그 검사
   const isEditorEmpty = editorContent === '<p><br></p>' || editorContent === ''; // 에디터가 비어있는지 확인
-  
+
   // 제목, 에디터 내용, 이미지가 있을 경우에만 팝업창 안내
-  if(titleValue.length > 0 || !isEditorEmpty) {
+  if (titleValue.length > 0 || !isEditorEmpty) {
     console.log("title", titleValue, "editor", editorContent);
     const userConfirmed = window.confirm("작성 중인 글쓰기를 종료하시겠습니까?");
 
-    if(userConfirmed) {
+    if (userConfirmed) {
       router.push('/admin/notice');
-    } 
+    }
   } else {
     router.push('/admin/notice'); // 내용이 없을 경우 바로 이동
   }
@@ -115,11 +116,11 @@ const submitHandler = async () => {
   const editorContent = editor.value.getHTML().trim(); // 내용
 
   // 제목과 에디터 내용 유효성 검사
-  if(titleValue === '') {
+  if (titleValue === '') {
     alert("제목을 입력해주세요.")
     return;
 
-  } else if(editorContent === '') {
+  } else if (editorContent === '') {
     alert("내용을 입력해주세요.");
     return;
   }
@@ -149,14 +150,14 @@ const submitHandler = async () => {
     console.log("공지사항 등록 성공: ", response);
     alert("게시글이 등록되었습니다.");
 
-     // 로컬 스토리지에 페이지 정보 저장
+    // 로컬 스토리지에 페이지 정보 저장
     localStorage.setItem('currentPage', '1');
     localStorage.setItem('forceRefresh', 'true');
 
     // 공지사항 등록 성공 시 페이지 이동 처리
     router.push('/admin/notice');
 
-  } catch(error) {
+  } catch (error) {
     console.error('Error submitting the notice:', error);
     alert('api 요청 중 에러 발생: ', error);
   }
