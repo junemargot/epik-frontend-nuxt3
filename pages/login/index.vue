@@ -77,7 +77,6 @@ onMounted(() => {
     console.log("로컬에 있던 토큰 사용했당")
     console.log(userDetails.nickname)
 
-    localStorage.setItem("username",userInfo.username)
   }
 })
 
@@ -104,6 +103,8 @@ const localLoginHandler = async () => {
     localStorage.setItem("access_token", response.token)
     console.log("토큰 확인-"+response.token )
 
+    
+
 
  
     // await getMemberInfo();
@@ -126,6 +127,8 @@ const localLoginHandler = async () => {
 
     const memberRole = userInfo.role.map((role) => role.authority);
     console.log(memberRole);
+
+    localStorage.setItem("username",userInfo.username)
 
   
     console.log("새로운 토큰 사용했당")
