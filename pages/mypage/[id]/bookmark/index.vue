@@ -3,23 +3,23 @@
     <div class="bookmark__header">
       <div class="bookmark__title-container">
         <h1 class="bookmark__heading">BOOKMARK</h1>
-        <form class="feed__form">
+        <!-- <form class="feed__form">
           <input class="feed__input" id="feed-search" type="text" placeholder="검색어를 입력해주세요">
           <label for="feed-search">
             <i class="fa-solid fa-magnifying-glass"></i>
           </label>
           <input type="submit" value="submit" style="display: none;">
-        </form>
+        </form> -->
       </div>
       <hr class="bookmark__divider">
       <ul class="bookmark__nav">
-      <li class="bookmark__nav-item" v-for="section in sections" :key="section"
+        <li class="bookmark__nav-item" v-for="section in sections" :key="section"
           :class="{ 'active': currentSection === section }">
-        <a href="#" @click.prevent="currentSection = section"
-          :class="{ 'active': currentSection === section }">{{ section }}
-        </a>
-      </li>
-    </ul>
+          <a href="#" @click.prevent="currentSection = section" :class="{ 'active': currentSection === section }">{{
+            section }}
+          </a>
+        </li>
+      </ul>
       <hr class="bookmark__divider">
     </div>
 
@@ -32,13 +32,15 @@
         </div>
       </div>
 
-      <div class="bookmark__popup" v-for="section in (currentSection === 'All' ? sections.slice(1) : [currentSection])" :key="section">
+      <div class="bookmark__popup" v-for="section in (currentSection === 'All' ? sections.slice(1) : [currentSection])"
+        :key="section">
         <div class="bookmark__section">
           <div class="bookmark__header-container">
             <h2>{{ section }}</h2>
           </div>
           <div class="bookmark__grid">
-            <div class="bookmark__item" v-for="(item, index) in getSectionItems(section)" :key="index" @click="toggleItemSelection(item)">
+            <div class="bookmark__item" v-for="(item, index) in getSectionItems(section)" :key="index"
+              @click="toggleItemSelection(item)">
               <div class="bookmark__image-container">
                 <img :src="item.image" :alt="item.title">
                 <span class="bookmark__status">{{ item.status }}</span>
@@ -61,13 +63,13 @@
         </div>
       </div>
       <Modal v-model="showDeleteModal">
-      <div class="delete-confirmation">
-        <h2>삭제 확인</h2>
-        <p>선택한 항목을 정말 삭제하시겠습니까?</p>
-        <div class="modal-buttons">
-          <button @click="confirmDelete">확인</button>
-          <button @click="cancelDelete">취소</button>
-        </div>
+        <div class="delete-confirmation">
+          <h2>삭제 확인</h2>
+          <p>선택한 항목을 정말 삭제하시겠습니까?</p>
+          <div class="modal-buttons">
+            <button @click="confirmDelete">확인</button>
+            <button @click="cancelDelete">취소</button>
+          </div>
         </div>
       </Modal>
     </div>
@@ -75,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref , onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 // 편집 모드 상태
 const editMode = ref(false);
@@ -145,7 +147,7 @@ const selectAll = () => {
 const removeSelected = () => {
   const currentItems = getSectionItems(currentSection.value);
   const updatedItems = currentItems.filter(item => !item.selected);
-  
+
   switch (currentSection.value) {
     case 'Pop-up':
       popUpItems.value = updatedItems;
