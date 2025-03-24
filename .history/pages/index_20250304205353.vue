@@ -348,9 +348,6 @@ const videoSliderStyle = computed(() => ({
 const updateDimensions = () => {
   if (!sliderRef.value) return
   const slides = sliderRef.value.querySelectorAll('.photo-slider__item')
-
-  if(slides.length === 0) return;
-
   containerWidth.value = sliderRef.value.parentElement.offsetWidth
   slideWidth.value = slides[0].offsetWidth + parseFloat(getComputedStyle(slides[0]).marginRight)
   sliderWidth.value = slideWidth.value * slides.length - parseFloat(getComputedStyle(slides[slides.length - 1]).marginRight)
