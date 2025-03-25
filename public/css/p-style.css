@@ -17,19 +17,19 @@ textarea::placeholder {
 .small_text_red {
   color: var(--accent-1);
   font-size: var(--font-size-4);
-  margin-top: 0;
+  margin-top: 5px;
 }
 
 .small_text_green {
-  color: var(--color-point-1);
+  color: var(--color-point-2);
   font-size: var(--font-size-4);
-  margin-top: 0;
+  margin-top: 5px;
 }
 
 .agree_text_bold {
   color: var(--black);
   font-size: var(--font-size-5);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .agree_text {
@@ -41,7 +41,8 @@ textarea::placeholder {
   content: "*";
   color: var(--accent-1);
   position: relative;
-  bottom: 4px;
+  bottom: 1px;
+  margin-left: 2px;
 }
 
 .bold_blue_text {

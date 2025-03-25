@@ -49,7 +49,7 @@
           <div class="gap-mb_6">
             <label>
               <div class="star_top">비밀번호</div>
-              <input class="password form long_form gap-mt_1" v-model="pwModel" id="password" type="text"
+              <input class="password form long_form gap-mt_1" v-model="pwModel" id="password" type="password"
                 placeholder="영어+숫자, 대/소문자 구분 없이 6자리 이상을 입력해주세요">
             </label>
             <div class="message-container">
@@ -63,7 +63,7 @@
             <label>
               <div class="star_top">비밀번호 확인</div>
               <input class="password-retype form long_form gap-mt_1" v-model="pwReModel" id="password-retype"
-                type="text" placeholder="비밀번호를 한번 더 입력해주세요">
+                type="password" placeholder="비밀번호를 한번 더 입력해주세요">
             </label>
             <div class="message-container">
               <div class="hide small_text_green" v-if="pwReCheck===true">비밀번호가 일치합니다.</div>
@@ -166,8 +166,6 @@ const inputFocused = ref(false);
 const usernameButtonClicked = ref(false);
 const nicknameButtonClicked = ref(false);
 const emailButtonClicked = ref(false);
-
-
 
 //아이디 유효성 검사
 const usernameModel = ref('');
