@@ -4,36 +4,36 @@
   border-radius: 10px;
   margin-left: 4px;
   border: 1px solid var(--accent-1);
-  font-size: var(--font--size-7);
+  font-size: var(--font-size-7);
   color: var(--accent-1);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .long_btn {
   width: 340px;
   height: 45px;
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--accent-1);
-  font-size: var(--font--size-8);
+  font-size: var(--font-size-8);
   color: var(--accent-1);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .grey-long_btn {
   width: 340px;
   height: 45px;
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
-  font-size: var(--font--size-6);
+  font-size: var(--font-size-6);
   color: var(--color-grey-4);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 
 .btn_nomargin {
   height: 45px;
   width: 80px;
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--accent-1);
 }
 
@@ -41,17 +41,17 @@
 .red_btn {
   background-color: var(--accent-1);
   color: var(--color-grey-1);
-  font-size: var(--font--size-6);
-  font-weight: bold;
+  font-size: var(--font-size-6);
+  font-weight: 600;
 }
 
 .personal-inqury-btn {
   height: 21px;
   width: 71px;
-  color: #000;
+  color: var(--black);
   font-size: 10px;
   border: 1px solid var(--accent-1);
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
 }
 
 .small_btn_white {
@@ -59,8 +59,8 @@
   width: 75px;
   border: 1px solid var(--accent-1);
   color: var(--blcak);
-  font-weight: bold;
-  border-radius: var(--border-5);
+  font-weight: 600;
+  border-radius: var(--radius-5);
   background-color: var(--color-grey-1);
 }
 
@@ -71,7 +71,7 @@
   background-color: var(--color-grey-9);
   color: var(--color-grey-1);
   font-weight: 600;
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
 
 }
 
@@ -82,7 +82,7 @@
   background-color: var(--color-grey-4);
   color: var(--blcak);
   font-size: 13px;
-  border-radius: var(--border-2);
+  border-radius: var(--radius-2);
 }
 
 .small_btn_grey_click {
@@ -91,9 +91,9 @@
   background-color: var(--color-grey-5);
   border: 2px solid var(--color-grey-9);
   color: var(--black);
-  border-radius: var(--border-5);
-  font-size: var(--font--size-6);
-  font-weight: bold;
+  border-radius: var(--radius-5);
+  font-size: var(--font-size-6);
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,9 +106,9 @@
   background-color: var(--color-grey-2);
   border: 1.5px solid var(--color-grey-6);
   color: var(--color-grey-6);
-  border-radius: var(--border-5);
-  font-weight: bold;
-  font-size: var(--font--size-5);
+  border-radius: var(--radius-5);
+  font-weight: 600;
+  font-size: var(--font-size-5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +116,7 @@
 }
 
 .form {
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
   text-indent: 10px;
   background-color: var(--color-grey-1);
@@ -125,18 +125,18 @@
 }
 
 .short_form {
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
   text-indent: 10px;
   background-color: var(--color-grey-1);
   height: 45px;
   width: 253px;
-  border-radius: 10px;
+  border-radius: var(--radius-3);
 }
 
 
 .middle_form {
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
   text-indent: 10px;
   background-color: var(--color-grey-1);
@@ -146,7 +146,7 @@
 }
 
 .mid_big_form {
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
   text-indent: 10px;
   background-color: var(--color-grey-1);
@@ -156,7 +156,7 @@
 }
 
 .big_form {
-  border-radius: var(--border-5);
+  border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
   text-indent: 10px;
   background-color: var(--color-grey-1);
@@ -166,14 +166,14 @@
 }
 
 .non_change {
-  background-color: var(--color--border-1);
+  background-color: var(--color--border-1); /* 정의된 border 없음 */
 }
 
 .select_short {
   width: 154px;
   height: 45px;
-  border-radius: var(--border-5);
-  border: 1px solid #BDBDBD;
+  border-radius: var(--radius-5);
+  border: 1px solid var(--color-grey-6);
   text-indent: 10px;
 }
 

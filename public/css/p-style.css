@@ -11,7 +11,7 @@ textarea::placeholder {
 
 .small_text {
   color: var(--color-point-4);
-  font-size: var(--font-size-4);
+  font-size: var(--font-size-5);
 }
 
 .small_text_red {
