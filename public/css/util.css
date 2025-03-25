@@ -14,7 +14,6 @@ body {
 .small-wrap {
   width: 353px;
   height: auto;
-
   margin-left: 314px;
   margin-right: 314px;
   margin-top: 96px;
@@ -25,7 +24,6 @@ body {
 .content-wrap {
   width: 353px;
   height: auto;
-
   margin-left: 314px;
   margin-right: 314px;
   margin-top: 96px;
@@ -36,14 +34,12 @@ body {
 .chat-group-wrap {
   width: 893px;
   height: 754px;
-
   margin-left: 41px;
 }
 
 .chat-group-selector-wrap {
   width: 893px;
   height: 754px;
-
   display: flex;
 }
 
