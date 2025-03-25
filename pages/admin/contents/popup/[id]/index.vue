@@ -21,16 +21,13 @@
         </div>
         <!--태그-->
         <div class="product__tag">
-          <!-- <button>뷰티</button>
-          <button>잠실</button>
-          <button>한정이벤트</button> -->
           <button v-for="(tag, index) in popup.tags" :key="index">{{ tag }}</button>
         </div>
         <div class="product__registration">
           <div class="product__registration-writer-info">
             <span class="name">{{ popup.writer }}</span>
             <div class="product__registration-date">
-              <span>{{ popup.writeDate }}</span>
+              <span>{{ formatDate(popup.writeDate) }}</span>
             </div>
           </div>
         </div>
@@ -39,12 +36,8 @@
       <div class="product__content">
         <div class="product__content-images">
           <!-- 이미지 -->
-          <!-- <img src="http://localhost:8081/api/v1/uploads/images/popup/1aafb5399df54c078d1025d30e3eac7c.jpg" alt="센녹1" />
-          <img src="/images/sen_2.jpeg" alt="센녹2" />
-          <img src="/images/sen_3.jpeg" alt="센녹3" />
-          <img src="/images/sen_4.jpeg" alt="센녹4" /> -->
           <img v-for="(imageName, index) in popup.saveImageNames" :key="index"
-            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="'포스터이미지 ' + (index + 1)" />
+            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="'팝업이미지 ' + (index + 1)" />
         </div>
         <div class="product__content-detail">
           <!-- <p name="content">
@@ -124,11 +117,13 @@ watchEffect(async () => {
 const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).replace(/\. /g, '.').replace(/\.$/, '');
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
 onMounted(async () => {
