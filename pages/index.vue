@@ -4,7 +4,7 @@
     <div class="photo-slider">
       <div class="photo-slider__container" ref="sliderRef" :style="sliderStyle">
         <div v-for="(slide, index) in slides" :key="index" class="photo-slider__item">
-          <!-- <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`"> -->
+          <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`">
           <img class="photo-slider__image"
             :src="`http://localhost:8081/api/v1/uploads/images/popup/${slide.imgSavedName}`"
             :alt="`Image ${index + 1}`">
