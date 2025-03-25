@@ -1,139 +1,94 @@
 <template>
   <main class="signin-wrap">
     <section class="sign-in__wrap small-wrap">
-
       <div class="sign-in__intro">
-        <h1 class="sign-in__title intro-title">
-          회원가입
-        </h1>
+        <h1 class="sign-in__title intro-title">회원가입</h1>
       </div>
-
       <form @submit.prevent="submitForm" class="sign-in__form">
         <h2 hidden>회원가입폼</h2>
-
         <fieldset class="sign-in__id gap-mb_6 gap-mt_4 small_text">
           <label>
             <div class="star_top">아이디</div>
             <div class="gap-mt_1">
-              <input class="form short_form" v-model="usernameModel" id="username" type="text"
-                placeholder="6자리에서 15자리를 입력해주세요">
-              <button class="btn" type="button" @click="usernameHandler">
-              확인</button>
+              <input class="form short_form" v-model="usernameModel" id="username" type="text" placeholder="아이디를 입력해주세요" />
+              <button class="btn" type="button" @click="usernameHandler">확인</button>
             </div>
           </label>
           <div class="message-container">
-            <div v-if="usernameCheck===true" class="small_text_green">사용 가능한 아이디입니다.</div>
-            <div v-if="usernameCheck===false" class="small_text_red">아이디는 6자리에서 15자리
-              사이여야 합니다.</div>
+            <div v-if="usernameCheck === true" class="small_text_blue">{{ usernameMessage }}</div>
+            <div v-if="usernameCheck === false" class="small_text_red">{{ usernameMessage }}</div>
           </div>
         </fieldset>
-
-
         <fieldset class="sign-in__nickname gap-mb_6 small_text">
           <label>
             <div class="star_top">닉네임</div>
             <div class="gap-mt_1">
-              <input class="nickname form short_form" v-model="nicknameModel" id="nickname" type="text"
-                placeholder="20자리 이하를 입력해주세요">
+              <input class="nickname form short_form" v-model="nicknameModel" id="nickname" type="text" placeholder="닉네임을 입력해주세요" />
               <button class="btn" type="button" @click="nicknameHandler">확인</button>
             </div>
           </label>
           <div class="message-container">
-            <div class="small_text_green" v-if="nicknameCheck===true" >사용 가능한 닉네임입니다.</div>
-            <div class="small_text_red"  v-if="nicknameCheck===false" >사용 불가능한 닉네임입니다.</div>
+            <div class="small_text_blue" v-if="nicknameCheck === true">{{ nicknameMessage }}</div>
+            <div class="small_text_red" v-if="nicknameCheck === false">{{ nicknameMessage }}</div>
           </div>
         </fieldset>
-
-
         <fieldset class="sign-in__password gap-mb_6 small_text">
           <div class="gap-mb_6">
             <label>
               <div class="star_top">비밀번호</div>
-              <input class="password form long_form gap-mt_1" v-model="pwModel" id="password" type="password"
-                placeholder="영어+숫자, 대/소문자 구분 없이 6자리 이상을 입력해주세요">
+              <input class="password form long_form gap-mt_1" v-model="pwModel" id="password" type="password" placeholder="비밀번호를 입력해주세요" />
             </label>
             <div class="message-container">
-              <div class="small_text_green" v-if="pwCheck===true">사용 가능한 비밀번호입니다.</div>
-              <div class=" small_text_red" v-if="pwCheck===false">비밀번호는 대/소문자 구분 없이 6글자
-                이상 입력해주세요.</div>
+              <div class="small_text_blue" v-if="pwCheck===true">사용 가능한 비밀번호입니다.</div>
+              <div class=" small_text_red" v-if="pwCheck===false">비밀번호는 대/소문자 구분 없이 6글자 이상 입력해주세요.</div>
             </div>
           </div>
-
           <div>
             <label>
               <div class="star_top">비밀번호 확인</div>
-              <input class="password-retype form long_form gap-mt_1" v-model="pwReModel" id="password-retype"
-                type="password" placeholder="비밀번호를 한번 더 입력해주세요">
+              <input class="password-retype form long_form gap-mt_1" v-model="pwReModel" id="password-retype" type="password" placeholder="비밀번호를 한번 더 입력해주세요" />
             </label>
             <div class="message-container">
-              <div class="hide small_text_green" v-if="pwReCheck===true">비밀번호가 일치합니다.</div>
-              <div class="hide small_text_red" v-if="pwReCheck===false">비밀번호가 불일치합니다.</div>
+              <div class="hide small_text_blue" v-if="pwReCheck === true">비밀번호가 일치합니다.</div>
+              <div class="hide small_text_red" v-if="pwReCheck === false">비밀번호가 일치하지 않습니다. 다시 입력해주세요.</div>
             </div>
           </div>
         </fieldset>
-
-
         <fieldset class="sign-in__email gap-mb_6 small_text">
           <label>
             <div class="star_top">이메일</div>
             <div class="gap-mt_1">
-              <input class="email form short_form" v-model="emailModel" id="email" type="text"
-                placeholder="예) epik@epik.com">
+              <input class="email form short_form" v-model="emailModel" id="email" type="text" placeholder="이메일을 입력해주세요" />
               <button class="btn" type="button" @click="emailHandler">인증</button>
             </div>
             <div class="message-container">
-              <div v-if="emailValid" class="small_text_green">인증번호가 발송되었습니다.</div>
+              <div v-if="emailValid" class="small_text_blue">인증번호가 발송되었습니다.</div>
               <div v-if="emailValid===false" class="small_text_red">이메일을 다시 확인해주세요.</div>
-        </div>
+            </div>
           </label>
-
           <label>
             <div class="gap-mt_1">
-              <input class="email_check form short_form" v-model="emailCodeModel" type="text" placeholder="인증번호 6자리 입력">
+              <input class="email_check form short_form" v-model="emailCodeModel" type="text" placeholder="인증번호 6자리 입력" />
               <button class="btn" type="button" @click="emailCodeHandler">확인</button>
             </div>
           </label>
           <div class="message-container">
-          <div v-if="emailCodeCheck===true" class="small_text_green">인증번호가 일치합니다.</div>
-          <div v-if="emailCodeCheck===false" class="small_text_red">인증번호를 다시 확인해주세요.</div>
-        </div>
+            <div v-if="emailCodeCheck === true" class="small_text_blue">인증번호가 일치합니다.</div>
+            <div v-if="emailCodeCheck === false" class="small_text_red">인증번호를 다시 확인해주세요.</div>
+          </div>
         </fieldset>
-
-        <fieldset class="sign-in__introduce gap-mb_6 small_text">
-          소개글
-          <input class="introduce form middle_form gap-mt_1" type="text" placeholder="소개글을 입력해주세요." style="padding-top: 2px; padding-bottom: 2px;" >
-        </fieldset>
-
-
-
-        <!-- <div class="sign-in__terms">
+        <div class="sign-in__terms">
           <div>
-            <h2 class="small_text star_top gap-mt_2">이용약관동의</h2>
-            <ul class="gap-mt_2">
-              <li class="agree_text_bold"><input type="checkbox">전체동의합니다.
-                <span class="small_text">
-                  <br>선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</span>
-              </li>
-              <li class="agree_text gap-mt_1"><input type="checkbox">이용약관 동의<spna class="small_text">(필수)</spna>
-              </li>
-              <li class="agree_text gap-mt_1"><input type="checkbox">개인정보 수집 및 이용동의<spna class="small_text">(필수)
-                </spna>
-              </li>
-            </ul>
-          </div> -->
-
-
-          <div class="sign-in__terms">
-          <div>
-            <h2 class="small_text star_top gap-mt_2">이용약관동의</h2>
+            <h2 class="normal_text star_top gap-mt_2">이용약관동의</h2>
             <ul class="gap-mt_2">
               <!-- 전체 동의 체크박스 -->
               <li class="agree_text_bold">
-                <input type="checkbox" v-model="agreeAll" @change="toggleAgreeAll" />
-                전체동의합니다.
-                <span class="small_text">
-                  <br />선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.
-                </span>
+                <div class="agree-all-wrapper">
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="agreeAll" @change="toggleAgreeAll" />
+                    전체 동의합니다.
+                  </label>
+                </div>
               </li>
               <!-- 개별 동의 항목들 -->
               <li class="agree_text gap-mt_1">
@@ -146,12 +101,9 @@
               </li>
             </ul>
           </div>
-
-
           <div>
-            <button class="long_btn gap-mt_3" type="submit">가입하기</button>
+            <button class="long_btn gap-mt_3" type="submit">가입</button>
           </div>
-
         </div>
       </form>
     </section>
@@ -160,77 +112,90 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-const inputFocused = ref(false);
 
-//버튼 클릭 수 색 변경
-const usernameButtonClicked = ref(false);
-const nicknameButtonClicked = ref(false);
-const emailButtonClicked = ref(false);
-
-//아이디 유효성 검사
+// 아이디 유효성 검증
 const usernameModel = ref('');
-const usernameCheck = ref('');
+const usernameCheck = ref(null);
+const usernameMessage = ref('');
+const usernameRegex = /^[a-zA-Z0-9]{6,15}$/;
 
 const usernameHandler = async () => {
-  console.log(usernameModel.value)
-  const usernameCheckDto = {
-    username: usernameModel.value,
-  };
+  const inputValue = usernameModel.value.trim();
 
+  // 미입력 시
+  if(!inputValue) {
+    usernameCheck.value = false;
+    usernameMessage.value = '아이디를 입력해주세요';
+    return;
+  }
+
+  if (!usernameRegex.test(inputValue)) {
+    usernameCheck.value = false;
+    usernameMessage.value = '아이디는 영문 또는 영문+숫자로 6~15자리여야 합니다';
+    return;
+  }
+
+  // 중복 확인 API
   const response = await fetch('http://localhost:8081/api/v1/signup/checkUsername', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(usernameCheckDto),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: inputValue }),
   });
 
   const result = await response.json();
   console.log(result);
 
-  if (usernameModel.value === result.username) {
+  if(inputValue === result.username) {
     usernameCheck.value = false;
-    console.log("f")
+    usernameMessage.value = '이미 사용 중인 아이디입니다';
   } else {
     usernameCheck.value = true;
-    console.log("t")
+    usernameMessage.value = '사용 가능한 아이디입니다';
   }
 };
 
-//닉네임 조건
+// 닉네임 유효성 검증
 const nicknameModel = ref('');
-const nicknameCheck = ref('');
+const nicknameCheck = ref(null);
+const nicknameMessage = ref('');
 
 const nicknameHandler = async () => {
-  console.log(nicknameModel.value);
-  const nicknameCheckDto = {
-    nickname: nicknameModel.value
-  };
+  const inputValue = nicknameModel.value.trim();
 
+  // 미입력 시
+  if(!inputValue) {
+    nicknameCheck.value = false;
+    nicknameMessage.value = '닉네임을 입력해주세요';
+    return;
+  }
+
+  // 닉네임 유효성 검증 실패
+  if(inputValue.length > 10) {
+    nicknameCheck.value = false;
+    nicknameMessage.value = '닉네임은 10자 이하로 입력해주세요'
+    return;
+  }
+
+  // 중복 확인 API
   const response = await fetch('http://localhost:8081/api/v1/signup/checkNickname', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(nicknameCheckDto),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nickname: inputValue }),
   });
 
   const result = await response.json();
   console.log(result);
-  console.log(result.nickname);
 
-  if(nicknameModel.value===result.nickname){
-    nicknameCheck.value=false;
-    console.log("f")}
-  else{
-    nicknameCheck.value=true;
-    console.log("t")
+  if(inputValue === result.nickname) {
+    nicknameCheck.value = false;
+    nicknameMessage.value = '이미 사용 중인 닉네임입니다';
+  } else {
+    nicknameCheck.value = true;
+    nicknameMessage.value = '사용 가능한 닉네임입니다';
   }
 };
 
-
-
-//비밀번호 조건
+// 비밀번호 유효성 검증
 const pwModel = ref('');
 const pwReModel = ref('');
 const pwCheck = ref('');
@@ -263,8 +228,6 @@ const emailCodeCheck = ref('');
 const serverVerificationCode = ref('');
 const emailValid = ref(''); // 이메일 형식 유효성 확인 변수
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-
 
 const emailHandler = async () => {
    // 이메일 형식이 유효한지 확인
@@ -299,7 +262,6 @@ if (emailValid.value) {
     emailValid = false;
     console.log("이메일 형식 이상")
   }
-
 };
 
 //인증 코드 확인
@@ -313,18 +275,16 @@ const emailCodeHandler = async () => {
   }
 }
 
-
 // 체크박스 상태들
 const agreeAll = ref(false); // 전체 동의 체크 상태
 const agreeTerms = ref(false); // 이용약관 동의 체크 상태
 const agreePrivacy = ref(false); // 개인정보 동의 체크 상태
 
-// 전체 동의 시, 나머지 체크박스들을 자동으로 동기화
+// 전체 동의 시, 나머지 체크박스들 자동으로 동기화
 const toggleAgreeAll = () => {
   agreeTerms.value = agreeAll.value;
   agreePrivacy.value = agreeAll.value;
 };
-
 
 //회원가입 폼 제출 
 const submitForm = async () => {
@@ -365,10 +325,8 @@ const submitForm = async () => {
 
 <style scoped>
 .message-container {
-  min-height: 13px;
-  /* 메시지 공간의 최소 높이를 설정 */
-  transition: height 0.2s ease;
-  /* 부드러운 전환 효과 */
+  min-height: 13px; /* 메시지 공간의 최소 높이를 설정 */
+  transition: height 0.2s ease; /* 부드러운 전환 효과 */
 }
 
 .signin-wrap {
@@ -376,13 +334,12 @@ const submitForm = async () => {
   width: 960px;
   height: auto;
   min-height: 100%;
-  background-color: #F2F2F2;
+  background-color: var(--background-1);
 }
 
 .small-wrap {
   width: 353px;
   height: auto;
-
   margin-left: 270px;
   margin-right: 314px;
   margin-top: 96px;
@@ -390,22 +347,41 @@ const submitForm = async () => {
 }
 
 fieldset{
-  border: none
+  border: none;
 }
 
-.long_btn:hover
-{
+.long_btn:hover {
   background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
-  color: white;  /* 텍스트 색상 흰색으로 변경 */
+  color: #fff;  /* 텍스트 색상 흰색으로 변경 */
   cursor: pointer;
 }
 
-.btn:hover 
-{
+.btn:hover {
   background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
-  color: white;  /* 텍스트 색상 흰색으로 변경 */
+  color: #fff;  /* 텍스트 색상 흰색으로 변경 */
   cursor: pointer;
 }
 
+/* 체크박스 + 텍스트 라인 정렬 및 커서 */
+input[type="checkbox"] {
+  vertical-align: middle;
+  cursor: pointer;
+  margin-right: 6px;
+}
 
+.agree-all-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: var(--font-size-6);
+  color: var(--color-point-4);
+  cursor: pointer;
+}
 </style>

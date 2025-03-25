@@ -9,31 +9,41 @@ textarea::placeholder {
   font-weight: bold;
 }
 
-.small_text {
+.small_text,
+.agree_sub_text {
   color: var(--color-point-4);
   font-size: var(--font-size-5);
+}
+
+.normal_text {
+  display: inline-block;
+  color: var(--color-point-4);
+  font-size: var(--font-size-6);
+  font-weight: 500;
 }
 
 .small_text_red {
   color: var(--accent-1);
   font-size: var(--font-size-4);
-  margin-top: 5px;
+  margin: 5px 0 0 3px;
 }
 
-.small_text_green {
+.small_text_blue {
   color: var(--color-point-2);
   font-size: var(--font-size-4);
-  margin-top: 5px;
+  margin: 5px 0 0 3px;
 }
 
 .agree_text_bold {
-  color: var(--black);
+  display: flex;
+  color: var(--color-point-4);
   font-size: var(--font-size-5);
   font-weight: 600;
 }
 
 .agree_text {
-  color: var(--black);
+  display: flex;
+  color: var(--color-point-4);
   font-size: var(--font-size-5);
 }
 
