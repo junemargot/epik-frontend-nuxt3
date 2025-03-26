@@ -132,86 +132,89 @@ const hasPrevPage = ref(false);
 const hasNextPage = ref(false);
 const pages = ref([]);
 
+// 검색 기능
+const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
+const selectedCategory = ref('통합검색');
+const inputPlaceholder = ref('검색어를 입력해주세요');
+const searchQuery = ref('');
+const isOpen = ref(false); // dropdown 상태
+
+const categoryMapping = {
+  '통합검색': 'ALL',
+  '제목': 'TITLE',
+  '내용': 'CONTENT',
+  '작성자': 'WRITER'
+};
+
+const router = useRouter();
+const route = useRoute();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
 
-
+// 데이터 가져오기 함수
 const fetchConcerts = async (page = 1) => {
-  const pageNumber = page; // 0-based index
+  try {
+    const pageNumber = page; // 0-based index
 
-  const { data, error } = await useFetch('/admin/concert', {
-    baseURL: apiBase || 'http://localhost:8081/api/v1',
-    // params: { page: pageNumber }, // 서버로 요청할 페이지
-    params: {
+    // url 및 파라미터 구성
+    const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/concert`;
+    const params = {
       p: pageNumber,
-      k: searchQuery.value || '',
-      s: categoryMapping[selectedCategory.value] || 'ALL'
-    }, // 요청 페이지
-    cache: false, // 캐싱 비활성화
-    key: `concerts-page-${page}`,
-    onRequest({ options }) {
-      console.log("REQUEST SENT: ", options.url, options.params);
-      console.log("pagenumber: ", typeof (pageNumber));
-    },
-    onResponse({ response }) {
-      console.log("SERVER RAW RESPONSE: ", response);
-      console.log("SERVER RESPONSE DATAS: ", response._data);
-    }
-  });
+      ...(searchQuery.value ? { k: searchQuery.value } : {}),
+      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
+        ? { s: categoryMapping[selectedCategory.value] }
+        : {})
+    };
 
-  if (error.value) {
-    console.error("ERROR FETCHING CONCERT LIST: ", error.value);
-    return;
-  }
+    // url 쿼리 문자열 생성
+    const queryString = Object.entries(params)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&');
 
-  if (data.value) {
-    const responseData = data.value;
+    // api 요청 실행
+    const fullUrl = `${url}?${queryString}`;
+    console.log("REQUEST SENT TO: ", fullUrl);
 
-    // 서버 응답 디버깅
-    console.log("SERVER RESPONSE DATAS: ", responseData);
+    const responseData = await $fetch(fullUrl);
+    console.log("SERVER RESPONSE DATA: ", responseData);
 
+    // 응답데이터 처리
     concerts.value = responseData.concertList || [];
     totalCount.value = responseData.totalCount || 0;
     totalPages.value = responseData.totalPages || 0;
     hasPrevPage.value = responseData.hasPrev || false;
     hasNextPage.value = responseData.hasNext || false;
-    pages.value = responseData.pages || [];
-    // currentPage.value = page;
 
     // 페이지 번호 계산
     const rangeStart = Math.max(1, page - 2);
     const rangeEnd = Math.min(totalPages.value, page + 2);
-    pages.value = Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
+    pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
 
     currentPage.value = page;
-  } else {
-    console.warn("NO DATA RECEIVED");
+  } catch(error) {
+    console.error("ERROR FETCHING CONCERT LIST: ", error);
   }
 };
-
-
-onMounted(async () => {
-  await fetchConcerts(1); // 데이터 fetch 후 상태 갱신 - 페이지 로드 시 1 페이지 데이터 가져오기
-  console.log('Concerts: ', concerts.value); // 페이지 데이터
-  console.log('Total Count: ', totalCount.value); // 총 게시물수
-})
-
 
 // 페이지 이동 핸들러
 const changePage = async (page) => {
-  if (page < 1 || page > totalPages.value) {
-    console.warn("INVALID PAGE NUMBER:", page);
-    return;
-  }
+  if (page < 1 || page > totalPages.value) return;
 
-  console.log(`Changing to page: ${page}`); // 페이지 디버깅
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      page,
+      ...(searchQuery.value ? { k: searchQuery.value } : {}),
+      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
+        ? { s: categoryMapping[selectedCategory.value] }
+        : {})
+    }
+  });
+
   await fetchConcerts(page);
-  console.log("Current Page Data: ", concerts.value);
 };
 
-
 // 수정 버튼 이벤트
-const router = useRouter();
 const goToEditPage = (id) => {
   router.push(`/admin/contents/concert/${id}/edit`); // 하드코딩
 };
@@ -230,22 +233,7 @@ const goToEditPage = (id) => {
 //   }
 // };
 
-
-// 검색 기능
-const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
-const selectedCategory = ref('통합검색');
-const inputPlaceholder = ref('검색어를 입력해주세요');
-const searchQuery = ref('');
-const isOpen = ref(false); // dropdown 상태
-
-const categoryMapping = {
-  '통합검색': 'ALL',
-  '제목': 'TITLE',
-  '내용': 'CONTENT',
-  '작성자': 'WRITER'
-};
-
-
+// 드롭다운 토글
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
@@ -257,6 +245,7 @@ const selectCategory = (category) => {
   isOpen.value = false; // 선택 후 드롭다운 클로즈
 };
 
+// placeholder 업데이트
 const updatePlaceholder = (category) => {
   if (category === '통합검색') {
     inputPlaceholder.value = '검색어를 입력해주세요';
@@ -267,11 +256,22 @@ const updatePlaceholder = (category) => {
   }
 };
 
+// 검색 수행
 const performSearch = async () => {
   currentPage.value = 1;
 
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      page: 1,
+      ...(searchQuery.value ? { k: searchQuery.value } : {}),
+      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
+        ? { s: categoryMapping[selectedCategory.value] }
+        : {})
+    }
+  });
+
   await fetchConcerts();
-  router.push({ query: { k: searchQuery.value, s: categoryMapping[selectedCategory.value] } });
 }
 
 // 클릭 외부 영역 처리
@@ -280,27 +280,6 @@ const handleClickOutside = (e) => {
     isOpen.value = false;
   }
 };
-
-
-
-onMounted(() => {
-  window.addEventListener('click', handleClickOutside);
-
-  // console.log("FETCHED DATA:", data.value);
-  // console.log("ERROR:", error.value);
-
-  // if(data.value) {
-  //   concerts.value = data.value.concertList || [];
-  //   totalCount.value = data.value.totalCount || 0;
-  // } else {
-  //   console.warn("NO DATA RECEIVED OR DATA IS UNDEFINED");
-  // }
-
-});
-
-onUnmounted(() => {
-  window.removeEventListener('click', handleClickOutside);
-});
 
 // 날짜 포맷팅 함수 추가
 const formatDate = (dateString) => {
@@ -314,10 +293,54 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
+// URL 쿼리 파라미터 변경 감지
+const watchRouteQuery = () => {
+  const newPage = parseInt(route.query.page) || 1;
+  const newSearchQuery = route.query.k || '';
+  const newSearchType = route.query.s || '';
+
+  currentPage.value = newPage;
+  searchQuery.value = newSearchQuery;
+
+  if(newSearchType) {
+    const category = Object.entries(categoryMapping)
+      .find(([key, value]) => value === newSearchType)?.[0];
+
+    if(category) {
+      selectedCategory.value = category;
+      updatePlaceholder(category);
+    }
+  }
+
+    fetchConcerts(newPage);
+};
+
+// 단일 onMounted 훅으로 통합
+onMounted(async () => {
+  await watchRouteQuery(); // URL 쿼리 파라미터 기반으로 초기 데이터 로드
+
+  window.addEventListener('click', handleClickOutside);
+
+  // url 변경 감지 
+  watch(() => route.query, watchRouteQuery, { deep: true });
+});
+
+// beforeRouteUpdate 가드 추가
+const beforeRouteUpdate = async(to, from, next) => {
+  await watchRouteQuery();
+  next();
+};
+
+// defineExpose를 사용해 beforeRouteUpdate를 외부에 노출
+defineExpose({ beforeRouteUpdate });
+
+onUnmounted(() => {
+  window.removeEventListener('click', handleClickOutside);
+});
+
 
 </script>
 
 <style lang="css" scoped>
-/* @import "@/assets/css/admin/contents/concert/index.css"; */
 @import url("/public/css/admin/contents/concert/index.css");
 </style>
