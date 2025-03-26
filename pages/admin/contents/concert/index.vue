@@ -37,28 +37,7 @@
         </div> <!-- END BOARD LIST-->
       </div>
       <!-- END BOARD CONTAINER -->
-
-      <!-- PAGINATION / REGISTRATION -->
-      <!-- <div class=pagination-wrapper>
-        <div class="pagination">
-          <button type="button" class="page-btn start-page">
-            <i class='bx bx-chevrons-left'></i>
-          </button>
-          <button type="button" class="page-btn prev-page">
-            <i class='bx bx-chevron-left'></i>
-          </button>
-          <button type="button" class="page-btn active">1</button>
-          <button type="button" class="page-btn">2</button>
-          <button type="button" class="page-btn">3</button>
-          <button type="button" class="page-btn">4</button>
-          <button type="button" class="page-btn">5</button>
-          <button type="button" class="page-btn next-page">
-            <i class='bx bx-chevron-right'></i>
-          </button>
-          <button type="button" class="page-btn end-page">
-            <i class='bx bx-chevrons-right'></i>
-          </button>
-        </div> -->
+       
       <!-- PAGINATION -->
       <div class="pagination-wrapper">
         <div class="pagination">

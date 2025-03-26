@@ -30,7 +30,8 @@ export default defineNuxtConfig({
   },
 
   css: [
-    '/node_modules/@toast-ui/editor/dist/toastui-editor.css',
+    // '/node_modules/@toast-ui/editor/dist/toastui-editor.css',
+    '@toast-ui/editor/dist/toastui-editor.css',
     'boxicons/css/boxicons.min.css',
     '/public/css/fonts.css',
     '/public/css/p-style.css',
@@ -42,7 +43,7 @@ export default defineNuxtConfig({
       link: [
         { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css' },
         { rel: 'stylesheet', href: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css' },
-        { rel: 'stylesheet', href: '/node_modules/@toast-ui/editor/dist/toastui-editor.css' }
+        // { rel: 'stylesheet', href: '/node_modules/@toast-ui/editor/dist/toastui-editor.css' }
       ],
       script: [
         { src: 'https://cdn.jsdelivr.net/jquery/latest/jquery.min.js', defer: true },
