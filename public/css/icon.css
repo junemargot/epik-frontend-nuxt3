@@ -12,9 +12,9 @@
 .long_btn {
   width: 340px;
   height: 45px;
-  border-radius: var(--radius-5);
+  border-radius: var(--radius-3);
   border: 1px solid var(--accent-1);
-  font-size: var(--font-size-8);
+  font-size: var(--font-size-7);
   color: var(--accent-1);
   font-weight: 500;
 }
@@ -124,6 +124,11 @@
   width: 340px;
 }
 
+.form:focus {
+  outline: none;
+  border: 1px solid var(--accent-1);
+}
+
 .short_form {
   border-radius: var(--radius-5);
   border: 1px solid var(--color-grey-4);
@@ -133,7 +138,6 @@
   width: 261px;
   border-radius: var(--radius-3);
 }
-
 
 .middle_form {
   border-radius: var(--radius-3);

@@ -1,43 +1,44 @@
 <template>
   <main class="login-in-wrap">
-    <section class="log-in__wrap small-wrap">
-
-      <div class="log-in__intro">
-        <h1 class="log-in__title intro-title">로그인</h1>
-        <div class="log-in__text">에픽의 다양한 정보들을 받아보실 수 있어요.</div>
-      </div>
-
-      <div class="log-in__form">
-        <h2 hidden>로그인 입력폼</h2>
-        <div class="message-container">
-          <div v-if="memberCheck === false" class="small_text_red">아이디와 비밀번호를 확인해주세요</div>
+    <div class="login-in-inner">
+      <section class="log-in__wrap small-wrap">
+        <div class="log-in__intro">
+          <h1 class="log-in__title intro-title">로그인</h1>
+          <div class="log-in__text">당신의 일상에 특별한 문화 한 스푼, 지금 에픽에서 시작하세요.</div>
         </div>
-        <input class="log-in__id form" v-model="usernameModel" placeholder="아이디를 입력해주세요">
-        <input type="password" class="log-in__password form" v-model="passwordModel" placeholder="비밀번호를 입력해주세요">
-        <button class="long_btn" type="button" @click="localLoginHandler">로그인</button>
-      </div>
 
-      <nav class="log-in__social">
-        <h2 hidden>쇼셜 로그인폼</h2>
-        <!-- <button class="long_btn"><a @click.prevent="googleLoginHandler" class="log-in__google"> 구글 로그인 </a></button> -->
-        <ul class="log-in__icons">
-          <!-- <li class="log-in__icon"><a href="#" class="log-in__kakao">카카오<br>로그인</a></li>
-          <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li> -->
-          <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
-        </ul>
-      </nav>
+        <div class="log-in__form">
+          <h2 hidden>로그인 입력폼</h2>
+          <input class="log-in__id form" v-model="usernameModel" placeholder="아이디를 입력해주세요">
+          <input type="password" class="log-in__password form" v-model="passwordModel" placeholder="비밀번호를 입력해주세요">
+          <div class="message-container">
+            <div v-if="memberCheck === false" class="small_text_red">아이디와 비밀번호를 확인해주세요</div>
+          </div>
+          <button class="long_btn" type="button" @click="localLoginHandler">로그인</button>
+        </div>
 
-      <div class="log-in__search">
-        <h2 hidden>아이디,비밀번호 찿기</h2>
-        <nav>
-          <ul class="log-in__search-form">
-            <li><a href="http://localhost:3001/find/id" class="log-in__search-id">아이디찾기</a></li>
-            <li><a href="http://localhost:3001/find/password" class="log-in__search-password">비밀번호찾기</a></li>
+        <nav class="log-in__social">
+          <h2 hidden>쇼셜 로그인폼</h2>
+          <!-- <button class="long_btn"><a @click.prevent="googleLoginHandler" class="log-in__google"> 구글 로그인 </a></button> -->
+          <ul class="log-in__icons">
+            <li class="log-in__icon"><a href="#" class="log-in__kakao">카카오<br>로그인</a></li>
+            <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li>
+            <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
           </ul>
         </nav>
-      </div>
 
-    </section>
+        <div class="log-in__search">
+          <h2 hidden>아이디,비밀번호 찿기</h2>
+          <nav>
+            <ul class="log-in__search-form">
+              <li><a href="http://localhost:3000/find/id" class="log-in__search-id">아이디찾기</a></li>
+              <li><a href="http://localhost:3000/find/password" class="log-in__search-password">비밀번호찾기</a></li>
+            </ul>
+          </nav>
+        </div>
+
+      </section>
+    </div>
   </main>
 </template>
 
@@ -230,21 +231,24 @@ const googleLoginHandler = async () => {
 
 <style>
 @import url('/public/css/login/login.css');
-
 .message-container {
   min-height: 13px;
-  /* 메시지 공간의 최소 높이를 설정 */
   transition: height 0.2s ease;
-  /* 부드러운 전환 효과 */
 }
 
 .long_btn:hover {
   background-color: var(--accent-1);
-  color: white;
+  color: #fff;
   cursor: pointer;
 }
 
 .log-in__icon {
   cursor: pointer;
+}
+
+.small_text_red {
+  color: var(--accent-1);
+  margin: 0 0 0 4px;
+  font-size: var(--font-size-5);
 }
 </style>

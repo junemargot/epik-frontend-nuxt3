@@ -4,12 +4,13 @@
 
 .log-in__text {
 	text-align: center;
-	font-size: var(--font--size-6);
-	margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-grey-7);
+	margin-top: 10px;
 }
 
 .log-in__form {
-	margin-top: 35px;
+	margin-top: 26px;
 	height: 190px;
 	display: flex;
 	flex-wrap: wrap;
@@ -71,7 +72,7 @@
 .log-in__search {
 	display: flex;
 	justify-content: space-around;
-	width: 332px;
+	/* width: 332px; */
 	border-top: solid 1px var(--color-grey-4);
 	margin-right: auto;
 	margin-left: auto;
@@ -110,20 +111,38 @@
   background-color: var(--color-grey-3);
 }
 
-.login-in-wrap {
+/* .login-in-wrap {
   margin: auto;
   width: 960px;
   height: auto;
   min-height: 100%;
   background-color: var(--background-1);
+} */
+
+.login-in-wrap {
+  width: 100vw;
+	min-height: 100vh;
+	background-color: var(--white);
+	display: flex;
+	justify-content: center;
 }
 
+.login-in-inner {
+  width: 960px;
+  background-color: var(--background-1);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-top: 96px; */
+}
 
 .small-wrap {
   width: 353px;
   height: auto;
-  margin-left: 314px;
-  margin-right: 314px;
-  margin-top: 96px;
   margin-bottom: 110px;
+}
+
+main {
+  padding: 0;
 }

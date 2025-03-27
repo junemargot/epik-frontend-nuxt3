@@ -175,10 +175,6 @@ const closeSidebarOnNav = () => {
 
 
 <style lang="css" scoped>
-/* @import '@/assets/header.css'; */
-/* @import '/public/css/reset.css';
-@import '/public/css/fonts.css'; */
-/* @import '/public/css/header.css'; */
 @import url('/public/css/fonts.css');
 @import url('/public/css/header.css');
 </style>
