@@ -1,5 +1,4 @@
 <template>
-  <!-- Main 사진 -->
   <div class="container">
     <div class="photo-slider">
       <div class="photo-slider__container" ref="sliderRef" :style="sliderStyle">
@@ -15,12 +14,12 @@
             </div>
             <!-- 풋터 영역: 팝업 기간과 장소 -->
             <div class="overlay-footer">
-              <p class="popup__date-main">
+              <p class="card__date-main">
                 <span>{{ formatDate(slide.startDate) }}</span>
                 <span>~</span>
                 <span>{{ formatDate(slide.endDate) }}</span>
               </p>
-              <p class="popup__location">{{ slide.address }}</p>
+              <p class="card__location">{{ slide.address }}</p>
             </div>
           </div>
         </div>
@@ -38,23 +37,23 @@
 
     <!-- 팝업 -->
     <div class="popup">
-      <h2 class="popup__title">Pop-up</h2>
-      <div class="popup__grid">
-        <div v-for="(item, index) in popupItems" :key="index" class="popup__item">
+      <h2 class="card__title">Pop-up</h2>
+      <div class="card__grid">
+        <div v-for="(item, index) in popupItems" :key="index" class="card__item">
           <a href="http://localhost:3001/popup/170"></a>
           <img :src="`http://localhost:8081/api/v1/uploads/images/popup/${item.imgSavedName}`"
             :alt="`Popup ${index + 1}`">
-          <div class="popup__info">
+          <div class="card__info">
             <!-- 팝업 상태 라벨 -->
-            <div class="popup__status-tag">
-              <span class="popup__status">진행중</span>
+            <div class="card__status-tag">
+              <span class="card__status">진행중</span>
             </div>
-            <div class="popup__info-header">
+            <div class="card__info-header">
               <h3>{{ item.title }}</h3>
             </div>
-            <div class="popup__info-footer">
-              <p class="popup__location">{{ item.address }}</p>
-              <p class="popup__date-main">
+            <div class="card__info-footer">
+              <p class="card__location">{{ item.address }}</p>
+              <p class="card__date-main">
                 <span>{{ formatDate(item.startDate) }}</span>
                 <span>~</span>
                 <span>{{ formatDate(item.endDate) }}</span>
@@ -78,49 +77,63 @@
     </div> -->
 
     <!-- 콘서트 -->
-    <div class="popup">
-      <h2 class="popup__title">Concert</h2>
-      <div class="popup__grid">
-        <div v-for="(item, index) in concertItems" :key="index" class="popup__item">
+    <div class="concert">
+      <h2 class="card__title">Concert</h2>
+      <div class="card__grid">
+        <div v-for="(item, index) in concertItems" :key="index" class="card__item">
           <img :src="`http://localhost:8081/api/v1/uploads/images/concert/${item.fileSavedName}`"
             :alt="`Image ${index + 1}`">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>{{ item.title }}</h3>
-            <p class="popup__location">{{ item.venue }}</p>
-            <p class="popup__date-main">
-              <span>{{ formatDate(item.startDate) }}</span>
-              <span>~</span>
-              <span>{{ formatDate(item.endDate) }}</span>
-            </p>
+          <div class="card__info">
+            <!-- 상태 라벨 -->
+            <div class="card__status-tag">
+              <span class="card__status">진행중</span>
+            </div>
+            <div class="card__info-header">
+              <h3>{{ item.title }}</h3>
+            </div>
+            <div class="card__info-footer">
+              <p class="card__location">{{ item.venue }}</p>
+              <p class="card__date-main">
+                <span>{{ formatDate(item.startDate) }}</span>
+                <span>~</span>
+                <span>{{ formatDate(item.endDate) }}</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 뮤지컬 -->
-    <div class="popup">
-      <h2 class="popup__title">Musical</h2>
-      <div class="popup__grid">
-        <div v-for="(item, index) in musicalItems" :key="index" class="popup__item">
+    <div class="musical">
+      <h2 class="card__title">Musical</h2>
+      <div class="card__grid">
+        <div v-for="(item, index) in musicalItems" :key="index" class="card__item">
           <img :src="`http://localhost:8081/api/v1/uploads/images/musical/${item.fileSavedName}`"
-            :alt="`Popup ${index + 1}`">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>{{ item.title }}</h3>
-            <p class="popup__location">{{ item.venue }}</p>
-            <p class="popup__date-main">
-              <span>{{ formatDate(item.startDate) }}</span>
-              <span>~</span>
-              <span>{{ formatDate(item.endDate) }}</span>
-            </p>
+               :alt="`Musical ${index + 1}`">
+          <div class="card__info">
+            <!-- 상태 라벨 -->
+            <div class="card__status-tag">
+              <span class="card__status">진행중</span>
+            </div>
+            <div class="card__info-header">
+              <h3>{{ item.title }}</h3>
+            </div>
+            <div class="card__info-footer">
+              <p class="card__location">{{ item.venue }}</p>
+              <p class="card__date-main">
+                <span>{{ formatDate(item.startDate) }}</span>
+                <span>~</span>
+                <span>{{ formatDate(item.endDate) }}</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 영상 섹션 -->
-    <div class="video">
+    <!-- <div class="video">
     <div class="video__container">
       <button class="video__nav video__nav--left" @click="moveVideoSlider(-1)">&#8249;</button>
       <div class="video__slider" ref="videoSliderRef" :style="videoSliderStyle">
@@ -135,21 +148,21 @@
       </div>
       <button class="video__nav video__nav--right" @click="moveVideoSlider(1)">&#8250;</button>
     </div>
-  </div>
+  </div> -->
 
-    <!-- EXHIBITION -->
-    <!-- <div class="popup">
-      <h2 class="popup__title">Exhibition</h2>
-      <div class="popup__grid">
-        <div v-for="(item, index) in exhibitionItems" :key="index" class="popup__item">
+    <!-- 전시회 -->
+    <div class="exhibition">
+      <h2 class="card__title">Exhibition</h2>
+      <div class="card__grid">
+        <div v-for="(item, index) in exhibitionItems" :key="index" class="card__item">
           <img class="photo-slider__image"
             :src="`http://localhost:8081/api/v1/uploads/images/exhibition/${item.fileSavedName}`"
             :alt="`Image ${index + 1}`">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
+          <div class="card__info">
+            <span class="card__status">진행중</span>
             <h3>{{ item.title }}</h3>
-            <p class="popup__location">{{ item.venue }}</p>
-            <p class="popup__date">
+            <p class="card__location">{{ item.venue }}</p>
+            <p class="card__date">
               <span>{{ formatDate(item.startDate) }}</span>
               <span>~</span>
               <span>{{ formatDate(item.endDate) }}</span>
@@ -157,55 +170,7 @@
           </div>
         </div>
       </div>
-    </div> -->
-    <!-- <div class="container"> -->
-    <div class="popup">
-      <h2 class="popup__title">Exhibition</h2>
-      <div class="popup__grid">
-        <div class="popup__item">
-          <img src="/images/툴루즈 로트렉.gif" alt="exhibition 1">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>툴루즈 로트렉</h3>
-            <p class="popup__location">서울특별시 강남구</p>
-            <p class="popup__date-main">24.09.14-03.03</p>
-          </div>
-        </div>
-
-        <div class="popup__item">
-          <img src="/images/르네그뤼오.gif" alt="exhibition 2">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>르네 그뤼오 : 르 엘레강스</h3>
-            <p class="popup__location">서울 마포구</p>
-            <p class="popup__date-main">24.11.11-25.01.19</p>
-          </div>
-        </div>
-
-        <div class="popup__item">
-          <img src="/images/퓰리처상.gif" alt="exhibition 3">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>퓰리처상 사진전</h3>
-            <p class="popup__location">서울특별시 서초구</p>
-            <p class="popup__date-main">24.12.21-25.01.31</p>
-          </div>
-        </div>
-
-        <div class="popup__item">
-          <img src="/images/어반아트.gif" alt="exhibition 4">
-          <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>나가노마켓 팝업스토어</h3>
-            <p class="popup__location">서울특별시 중구</p>
-            <p class="popup__date-main">24.10.02-25.02.02</p>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- </div> -->
-
-
   </div>
 </template>
 
@@ -284,14 +249,14 @@ const formatDate = (date) => {
 //exhibition 랜덤 조회
 const { data: exhibitionData, error: exhibitionError } = await useFetch('/api/v1/exhibition/random', {
   baseURL: 'http://localhost:8081',
-})
+});
 
 if (exhibitionError.value) {
   console.error('API 호출 에러:', exhibitionError.value)
 } else if (exhibitionData.value) {
   exhibitionItems.value = (Array.isArray(exhibitionData.value) ? exhibitionData.value : [exhibitionData.value]).slice(0, 4)
   console.log('Fetched exhibition items:', exhibitionItems.value)
-}
+};
 
 
 // YouTube URL 관리

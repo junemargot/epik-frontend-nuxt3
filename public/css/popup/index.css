@@ -223,49 +223,54 @@ h2 {
 }
 
 /* 팝업 */
-.popup__title {
+.card__title {
   font-family: 'pretendard-bold';
   font-size: 28px;
   padding: 0 !important;
   margin: 0 0 12px 10px;
 }
 
-.popup__grid {
+.card__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 35px;
-  width: 100%;
   max-width: 920px;
+  gap: 15px;
+  /* width: fit-content; */
   margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
 }
 
-.popup__item {
+.card__item {
+  position: relative;
   height: 180px;
-  border: 1px solid #bbbbbb;
+  border: 1px solid var(--color-grey-5);
   border-radius: 10px;
   overflow: hidden;
   display: flex;
   justify-items: center;
-  width: 440px;
-  transition: all 0.3s ease;
-  position: relative;
+  /* width: 440px; */
+  width: 100%;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.popup__item:hover {
-  border-color: #F62F2F;
+.card__item:hover {
+  cursor: pointer;
+  background: #f8f7f4;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.025);
   transform: translateY(-1px);
   z-index: 1;
 }
 
-.popup__item img {
+.card__item img {
   width: 116px;
   height: 155px;
   object-fit: cover;
   margin: 10px;
 }
 
-.popup__info {
+.card__info {
   padding: 12px 10px 12px 8px;
   display: flex;
   flex-direction: column;
@@ -274,17 +279,16 @@ h2 {
   box-sizing: border-box;
 }
 
-.popup__status-tag {
+.card__status-tag {
   margin-bottom: 4px;
 }
 
-.popup__status {
+.card__status {
   font-family: 'pretendard-bold';
   font-size: 13px;
-  background-color: #efefef;
   padding: 4px 10px;
   border-radius: 8px;
-  border: 1px solid #454545;
+  border: 1px solid var(--color-point-4);
   width: fit-content;
   height: 24px;
   display: flex;
@@ -293,7 +297,7 @@ h2 {
   color: #333;
 }
 
-.popup__info-header h3 {
+.card__info-header h3 {
   font-size: 16px;
   line-height: 1.4;
   font-family: 'pretendard-bold';
@@ -301,14 +305,14 @@ h2 {
   word-break: keep-all;
 }
 
-.popup__info-footer {
+.card__info-footer {
   margin-top: auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.popup__location {
+.card__location {
   font-family: 'pretendard-medium';
   font-size: 14px;
   margin: 0;
@@ -318,13 +322,13 @@ h2 {
   text-overflow: ellipsis;
 }
 
-.popup__date-main {
+.card__date-main {
   font-family: 'pretendard-medium';
   font-size: 13px;
   color: var(--color-grey-8);}
 
-.popup__location,
-.popup__date-main {
+.card__location,
+.card__date-main {
   font-size: 14px;
   font-weight: 600;
 }
