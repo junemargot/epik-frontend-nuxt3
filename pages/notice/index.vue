@@ -56,37 +56,7 @@
       </div>
     </div>
     <!-- END PAGINATION -->
-
-    <!-- PAGINATION / REGISTRATION -->
-    <!-- <div class=pagination-wrapper>
-        <div class="pagination">
-          <button type="button" class="page-btn start-page">
-            <i class='bx bx-chevrons-left'></i>
-          </button>
-          <button type="button" class="page-btn prev-page">
-            <i class='bx bx-chevron-left'></i>
-          </button>
-          <button type="button" class="page-btn active">1</button>
-          <button type="button" class="page-btn">2</button>
-          <button type="button" class="page-btn">3</button>
-          <button type="button" class="page-btn">4</button>
-          <button type="button" class="page-btn">5</button>
-          <button type="button" class="page-btn next-page">
-            <i class='bx bx-chevron-right'></i>
-          </button>
-          <button type="button" class="page-btn end-page">
-            <i class='bx bx-chevrons-right'></i>
-          </button>
-        </div>
-      </div> -->
-      <!-- END PAGINATION -->
-    <!-- <div class="pagination">
-      <a href="#" class="pagination__prev"><i class="fa-solid fa-angle-left"></i></a>
-      <ul class="pagination__list">
-      </ul>
-      <a href="#" class="pagination__next"><i class="fa-solid fa-angle-right"></i></a>
-    </div> -->
-  </div><!--end 공지사항 전체 영역 -->
+  </div>
 </template>
 
 <script setup>
@@ -129,7 +99,6 @@ const changePage = (page) => {
 };
 
 
-
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -139,16 +108,16 @@ const formatDate = (dateString) => {
   return formattedDate.replace(/\s/g, '').replace(/\.$/, '')
 };
 
-
-
-
 </script>
 
 <style scoped>
 .notice__wrap {
-  width: 858px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   min-height: calc(100vh - 150px);
+  margin: 0 auto;
+  width: 858px;
   box-sizing: border-box;
   margin-bottom: 20px;
 }
@@ -160,7 +129,7 @@ const formatDate = (dateString) => {
 
 .notice__title h2 {
   font-family: 'pretendard-semibold';
-  font-size: 26px;
+  font-size: var(--font-size-12);
 }
 
 /* 공지사항 항목 영역*/
@@ -170,7 +139,7 @@ const formatDate = (dateString) => {
   margin-top: 20px;
   font-family: 'pretendard-regular';
   font-size: 15px;
-  min-height: 400px;
+  min-height: 370px;
   margin-bottom: 20px;
 }
 
@@ -180,13 +149,13 @@ const formatDate = (dateString) => {
   align-items: center;
   justify-content: center;
   height: 100px; /* 빈 상태에서도 일정한 높이 유지 */
-  color: #aaa;
+  color: var(--color-grey-5);
   font-size: 16px;
 }
 
 .notice__table-head-row {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border-top: 1px solid var(--black);
+  border-bottom: 1px solid var(--black);
 }
 
 .notice__table-head-row th,
@@ -196,7 +165,7 @@ const formatDate = (dateString) => {
 
 .notice__table-row td {
   text-align: center;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid var(--color-grey-4);
 }
 
 .notice__table-row .notice__table-title {
@@ -225,10 +194,9 @@ const formatDate = (dateString) => {
 
 /* PAGINATION */
 .pagination-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  margin-top: auto;
+  padding: 20px 0 0;
+  justify-content: center;
 }
 
 .pagination {
@@ -253,7 +221,7 @@ const formatDate = (dateString) => {
 
 .pagination button i {
   color: var(--black);
-  font-size: 18px;
+  font-size: var(--font-size-8);
 }
 
 .pagination .page-btn {
@@ -261,7 +229,7 @@ const formatDate = (dateString) => {
   color: var(--black);
   height: 36px;
   border: 1px solid var(--color-grey-6);
-  border-radius: var(--border-1);
+  border-radius: var(--radius-1);
   padding: 0 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -286,6 +254,4 @@ const formatDate = (dateString) => {
 .page-btn[disabled] {
   opacity: 0.3;
 }
-
-
 </style>

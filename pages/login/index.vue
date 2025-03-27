@@ -85,7 +85,6 @@ onMounted(() => {
 })
 
 //로그인 후 페이지 이동 url 저장
-
 const localLoginHandler = async () => {
   try {
     console.log("전송");
@@ -145,7 +144,7 @@ const localLoginHandler = async () => {
       location.href = redirectUrl;
     }
     else if (memberRole.includes("ROLE_ADMIN")) {
-      location.href = 'http://localhost:3001/admin'
+      location.href = 'http://localhost:3000/admin'
     }
   } catch {
     memberCheck.value = false;
