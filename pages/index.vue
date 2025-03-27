@@ -4,28 +4,33 @@
     <div class="photo-slider">
       <div class="photo-slider__container" ref="sliderRef" :style="sliderStyle">
         <div v-for="(slide, index) in slides" :key="index" class="photo-slider__item">
-          <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`">
+          <!-- <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`"> -->
           <img class="photo-slider__image"
             :src="`http://localhost:8081/api/v1/uploads/images/popup/${slide.imgSavedName}`"
             :alt="`Image ${index + 1}`">
           <div class="photo-slider__overlay">
-            <div class="photo-slider__tags">
-              <span v-for="(tag, tagIndex) in slide.tags" :key="tagIndex" class="photo-slider__tag">{{ tag }}</span>
-            </div>
-            <a href="#" class="photo-slider__link"><i class="fas fa-arrow-right"></i></a>
-            <div class="photo-slider__info">
+            <!-- 헤더 영역: 팝업 제목 -->
+            <div class="overlay-header">
               <h2 class="photo-slider__title">{{ slide.title }}</h2>
-              <p class="popup__date">
+            </div>
+            <!-- 풋터 영역: 팝업 기간과 장소 -->
+            <div class="overlay-footer">
+              <p class="popup__date-main">
                 <span>{{ formatDate(slide.startDate) }}</span>
                 <span>~</span>
                 <span>{{ formatDate(slide.endDate) }}</span>
               </p>
+              <p class="popup__location">{{ slide.address }}</p>
             </div>
           </div>
         </div>
       </div>
-      <button class="photo-slider__arrow photo-slider__arrow--left" @click="moveSlider(-1)">&#8592;</button>
-      <button class="photo-slider__arrow photo-slider__arrow--right" @click="moveSlider(1)">&#8594;</button>
+      <button class="photo-slider__arrow photo-slider__arrow--left" @click="moveSlider(-1)">
+        <i class='bx bx-chevron-left'></i>
+      </button>
+      <button class="photo-slider__arrow photo-slider__arrow--right" @click="moveSlider(1)">
+        <i class='bx bx-chevron-right'></i>
+      </button>
       <div class="photo-slider__scrollbar" @mousedown="onScrollbarClick">
         <div class="photo-slider__scrollbar-thumb" ref="scrollbarThumbRef" :style="scrollbarThumbStyle"></div>
       </div>
@@ -40,22 +45,28 @@
           <img :src="`http://localhost:8081/api/v1/uploads/images/popup/${item.imgSavedName}`"
             :alt="`Popup ${index + 1}`">
           <div class="popup__info">
-            <span class="popup__status">진행중</span>
-            <h3>{{ item.title }}</h3>
-            <p class="popup__location">{{ item.address }}</p>
-            <p class="popup__date-main">
-              <span>{{ formatDate(item.startDate) }}</span>
-              <span>~</span>
-              <span>{{ formatDate(item.endDate) }}</span>
-            </p>
+            <!-- 팝업 상태 라벨 -->
+            <div class="popup__status-tag">
+              <span class="popup__status">진행중</span>
+            </div>
+            <div class="popup__info-header">
+              <h3>{{ item.title }}</h3>
+            </div>
+            <div class="popup__info-footer">
+              <p class="popup__location">{{ item.address }}</p>
+              <p class="popup__date-main">
+                <span>{{ formatDate(item.startDate) }}</span>
+                <span>~</span>
+                <span>{{ formatDate(item.endDate) }}</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 배너 섹션 -->
-    <div class="banner">
-
+    <!-- <div class="banner">
       <div class="banner__grid">
         <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
         <a href="http://localhost:3001/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
@@ -64,8 +75,7 @@
         <img src="/images/베너5.png" alt="Banner 5" class="banner__item">
         <img src="/images/베너6.png" alt="Banner 6" class="banner__item">
       </div>
-    </div>
-
+    </div> -->
 
     <!-- 콘서트 -->
     <div class="popup">
@@ -375,10 +385,14 @@ const moveVideoSlider = (direction) => {
 
 const onScrollbarClick = (e) => {
   const thumbRect = scrollbarThumbRef.value.getBoundingClientRect()
-  if (e.clientX < thumbRect.left || e.clientX > thumbRect.right) {
-    const percentage = (e.clientX - sliderRef.value.getBoundingClientRect().left) / sliderRef.value.offsetWidth
-    updateSliderPosition(percentage)
-  }
+  const clickX = e.clientX - scrollbarRect.left;
+  const percentage = clickX / scrollbarRect.width;
+
+  // if (e.clientX < thumbRect.left || e.clientX > thumbRect.right) {
+  //   const percentage = (e.clientX - sliderRef.value.getBoundingClientRect().left) / sliderRef.value.offsetWidth
+  //   updateSliderPosition(percentage)
+  // }
+  sliderPositionPosition.value = Math.min(maxScroll.value, Math.max(0, percentage * maxScroll.value));
 }
 
 const startDragging = (e) => {
