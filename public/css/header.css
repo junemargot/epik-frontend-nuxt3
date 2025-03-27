@@ -21,7 +21,6 @@
   display: flex;
   justify-content: center;
   margin-left: 210px;
-  /* font-family: 'dahlia-bold'; */
   font-family: 'Dahlia-Regular';
 }
 
@@ -35,12 +34,12 @@
 
 .top-bar__column:nth-child(2) a {
   margin-right: 12px;
-  cursor: pointer; /* 왜 적용이 안되지?? */
+  cursor: pointer;
   color: var(--white);
 }
 
 .top-bar__column:nth-child(2) a:hover {
-  color: var(--black);
+  text-decoration: underline;
 }
 
 .main-header {
@@ -58,16 +57,7 @@
   font-family: 'Dahlia-Bold';
   margin: 0;
   line-height: 1;
-
-  /* text-align: center;
-  align-items: center; */
 }
-
-/* .main-header__title h1 a {
-  text-align: center;
-  align-items: center;
-} */
-
 
 /* 아이콘 수정 */
 .main-header__icon i {
