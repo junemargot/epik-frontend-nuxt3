@@ -117,9 +117,11 @@ const formatDate = (dateString) => {
   justify-content: space-between;
   min-height: calc(100vh - 150px);
   margin: 0 auto;
-  width: 858px;
+  width: 960px;
+  margin: 0 auto;
   box-sizing: border-box;
-  margin-bottom: 20px;
+  flex-grow: 1;
+  background: var(--background-1);
 }
 
 /* 공지사항 제목 영역 */
@@ -130,6 +132,7 @@ const formatDate = (dateString) => {
 .notice__title h2 {
   font-family: 'pretendard-semibold';
   font-size: var(--font-size-12);
+  margin-left: 30px;
 }
 
 /* 공지사항 항목 영역*/
@@ -201,7 +204,7 @@ const formatDate = (dateString) => {
 
 .pagination {
   display: flex;
-  padding: 25px;
+  padding: 25px 25px 35px 25px;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
