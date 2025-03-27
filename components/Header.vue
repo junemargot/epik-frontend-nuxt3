@@ -116,7 +116,7 @@ const closeSidebarOnNav = () => {
               </div>
             </div>
 
-            <div class="search-bar">
+            <!-- <div class="search-bar">
               <form>
                 <button type="submit" class="search-bar__submintbutton">
                   <i class='bx bx-search'></i>
@@ -128,7 +128,7 @@ const closeSidebarOnNav = () => {
                   </button>
                 </div>
               </form>
-            </div>
+            </div> -->
 
             <nav>
               <ul>
