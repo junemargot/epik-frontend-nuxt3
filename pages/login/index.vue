@@ -237,7 +237,7 @@ const googleLoginHandler = async () => {
 
 .long_btn:hover {
   background-color: var(--accent-1);
-  color: #fff;
+  color: var(--white);
   cursor: pointer;
 }
 

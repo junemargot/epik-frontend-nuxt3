@@ -3,9 +3,9 @@
     <section class="sign-in__wrap small-wrap">
       <div class="sign-in__intro">
         <h1 class="sign-in__title intro-title">회원가입</h1>
+        <div class="sign-in__text">당신의 일상에 특별한 문화 한 스푼, 지금 에픽에서 시작하세요.</div>
       </div>
       <form @submit.prevent="submitForm" class="sign-in__form">
-        <h2 hidden>회원가입폼</h2>
         <fieldset class="sign-in__id gap-mb_6 gap-mt_4 small_text">
           <label>
             <div class="star_top">아이디</div>
@@ -385,4 +385,16 @@ input[type="checkbox"] {
   color: var(--color-point-4);
   cursor: pointer;
 }
+
+.sign-in__title {
+  text-align: center;
+}
+
+.sign-in__text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-grey-7);
+	margin-top: 10px;
+}
+
 </style>
