@@ -162,8 +162,14 @@ const closeSidebarOnNav = () => {
             </nav>
 
             <div class="dropdown-menu__auth">
-              <NuxtLink to="/signup"><span>회원가입</span></NuxtLink>
-              <NuxtLink to="/login"><span>로그인</span></NuxtLink>
+              <div v-if="userDetails.isAnonymous()">
+                <a href="/signup">회원가입</a>
+                <a @click="goToLoginPageHandler">로그인</a>
+              </div>
+              <div v-else="!userDetails.isAnonymous()">
+                <a href="/mypage">마이페이지</a>
+                <a @click="logoutHandler" href="#">로그아웃</a>
+              </div>
             </div>
 
           </div> <!-- sidebar-inner -->

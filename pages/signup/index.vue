@@ -324,6 +324,10 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
+main {
+  padding: 24px 20px 20px 20px !important;
+}
+
 .message-container {
   min-height: 13px; /* 메시지 공간의 최소 높이를 설정 */
   transition: height 0.2s ease; /* 부드러운 전환 효과 */
@@ -340,10 +344,7 @@ const submitForm = async () => {
 .small-wrap {
   width: 353px;
   height: auto;
-  margin-left: 270px;
-  margin-right: 314px;
-  margin-top: 96px;
-  margin-bottom: 110px;
+  margin: 96px auto 110px auto;
 }
 
 fieldset{
@@ -352,13 +353,13 @@ fieldset{
 
 .long_btn:hover {
   background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
-  color: #fff;  /* 텍스트 색상 흰색으로 변경 */
+  color: var(--white);  /* 텍스트 색상 흰색으로 변경 */
   cursor: pointer;
 }
 
 .btn:hover {
   background-color: var(--accent-1); /* 버튼 색상 회색으로 변경 */
-  color: #fff;  /* 텍스트 색상 흰색으로 변경 */
+  color: var(--white);  /* 텍스트 색상 흰색으로 변경 */
   cursor: pointer;
 }
 

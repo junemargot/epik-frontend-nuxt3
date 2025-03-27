@@ -4,7 +4,7 @@
 .header-box {
   width: 960px;
   margin: 0 auto;
-  background-color: #F2F2F2;
+  background-color: var(--background-1);
 }
 
 .top-bar {
@@ -50,7 +50,7 @@
   /* 상하 좌우 */
   padding: 10px 30px;
   /* padding-bottom: 17px; */
-  border-bottom: 1px solid #222222;
+  border-bottom: 1px solid var(--black);
 }
 
 .main-header__title h1 {
@@ -76,12 +76,10 @@
   cursor: pointer;
 }
 
-
 /* ****** dropdown-menu ******  */
-
 .dropdown-menu {
   width: 960px;
-  height: 710px;
+  height: 800px;
   position: fixed;
   top: -710px;
   left: 50%;
@@ -93,9 +91,9 @@
 
 .move-sidebar {
   display: block;
-  background-color: #F2F2F2;
+  background-color: var(--background-1);
   width: 960px;
-  height: 750px;
+  height: 860px;
   position: fixed;
   top: 0;
   left: 50%;
@@ -137,7 +135,7 @@
   border-bottom: 1px solid var(--color-grey-4);
 }
 
-.dropdown-menu__link:first-child>ul {
+.dropdown-menu__link:first-child > ul {
   margin-top: 10px;
   line-height: 24px;
   font-size: 18px;
@@ -152,7 +150,7 @@
   color: var(--accent-1);
 }
 
-.dropdown-menu__link>a {
+.dropdown-menu__link > a {
   font-family: pretendard-bold;
   font-size: 24px;
 }
@@ -166,7 +164,7 @@
   color: var(--accent-1);
 }
 
-.dropdown-menu__link>span {
+.dropdown-menu__link > span {
   display: block;
   margin-top: 5px;
   color: var(--color-grey-7);
@@ -179,7 +177,7 @@
   padding: 25px 10px;
 }
 
-.dropdown-menu__auth>a {
+.dropdown-menu__auth > a {
   margin-left: 22px;
   font-family: pretendard-regular;
 }
@@ -206,24 +204,24 @@
   top: 15px;
   left: 30px;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--white);
 }
 
 .search-bar__submintbutton i {
   font-size: 18px;
-  color: #BDBDBD;
+  color: var(--color-grey-6);
 }
 
 .search-bar__input-wrap {
   width: 870px;
-  background-color: #ffffff;
+  background-color: var(--white);
   padding: 10px;
-  border: 1px solid #CFCFCF;
-  border-radius: 15px;
+  border: 1px solid var(--color-grey-4);
+  border-radius: var(--radius-5);
   margin-bottom: 10px;
 }
 
-.search-bar__input-wrap>input {
+.search-bar__input-wrap > input {
   border: none;
   width: 800px;
   margin-left: 35px;
