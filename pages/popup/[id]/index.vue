@@ -1,3 +1,97 @@
+<template>
+  <!-- popup -->
+  <main class="popup__wrap">
+    <section class="popup__infomation">
+      <div class="popup__information-inner">
+      <div class="popup-info__slider">
+        <div class="popup-info__slides">
+          <img class="popup-info__slide" v-for="(imageName, index) in popup?.saveImageNames" :key="index"
+            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="`이미지 #${index + 1}`" />
+        </div>
+        <a class="popup-info__prev" @click="prevSlide"><i class='bx bx-chevron-left'></i></a>
+        <a class="popup-info__next" @click="nextSlide"><i class='bx bx-chevron-right'></i></a>
+      </div>
+
+      <div class="popup__details">
+        <div class="">
+          <h1 class="popup__title">{{ popup?.title }}</h1>
+          <div class="popup__address">
+            <i class='bx bx-map'></i>
+            <span>{{ popup?.address }}</span>
+          </div>
+          <div class="popup__date">
+            <i class='bx bx-calendar'></i>
+            <span name="startDate">{{ formatDate(popup?.startDate) }}</span>
+            <span>~</span>
+            <span name="endDate">{{ formatDate(popup?.endDate) }}</span>
+          </div>
+          <div class="popup__tags">
+            <span v-for="(tag, index) in popup?.tags" :key="index" class="popup__tag">
+              {{ tag }} <!-- tag 객체에서 tag 필드만 출력 -->
+            </span>
+          </div>
+        </div>
+
+        <!-- <div class="popup__links">
+          <a href="#" class="popup__icon-link" @click.prevent="clickBookmark">
+            <i :class="['icon', isBookmark ? 'bx bxs-bookmark' : 'bx bx-bookmark', { bookmarkCheck: isBookmark }]"></i>
+            <span>북마크</span>
+          </a>
+        </div> -->
+      </div>
+      </div>
+    </section>
+
+    <!-- section 2 -->
+    <div class="popup__description popup__information-inner" v-html="popup?.content"></div>
+
+    <!-- section 3 -->
+    <!-- <section class="popup__addinfo popup__information-inner">
+      <h1>상세 정보</h1>
+      <div class="popup__addinfo-address">
+        <i class='bx bx-map-alt'></i>
+        <span>{{ popup?.address }}</span>
+      </div>
+      <div id="map" style="width:100%;height:400px;"></div>
+      <div class="popup-detail__sns">
+        <a :href="popup?.snsLink" class="popup__sns-link">
+          <i class='bx bxl-instagram'></i>
+          <span>SNS 바로가기</span>
+        </a>
+        <a :href="popup?.webLink" class="popup__sns-link">
+          <i class='bx bx-globe'></i>
+          <span>브랜드 홈페이지 바로가기</span>
+        </a>
+      </div>
+    </section> -->
+    <section class="popup__addinfo popup__information-inner">
+      <!-- 지도 영역 -->
+      <div id="map" style="width:100%;height:400px;"></div>
+      <!-- 상세 주소 박스 -->
+      <div class="popup__location-box">
+        <div class="popup__location-address">
+          <span>{{ popup?.address }} {{ popup?.addressDetail }}</span>
+          <button class="copy-btn" @click="copyAddress">주소복사</button>
+        </div>
+        
+        <div class="popup__location-link" @click="openLink(popup?.snsLink)">
+          <a :href="popup?.snsLink" class="popup__sns-link">
+            <span>SNS 바로가기</span>
+          </a>
+          <i class='bx bx-chevron-right'></i>
+        </div>
+
+        <div class="popup__location-link" @click="openLink(popup?.webLink)">
+          <a :href="popup?.snsLink" class="popup__sns-link">
+            <span>브랜드 홈페이지 바로가기</span>
+          </a>
+          <i class='bx bx-chevron-right'></i>
+        </div>
+      </div>
+    </section>
+  </main>
+</template>
+
 <script setup>
 import { ref, onMounted, nextTick, watch, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
@@ -154,6 +248,14 @@ function initMap() {
   infowindow = new naver.maps.InfoWindow();
 }
 
+// 복사 
+function copyAddress() {
+  const fullAddress = `${popup.value?.address} ${popup.value?.addressDetail || ''}`.trim();
+  navigator.clipboard.writeText(fullAddress).then(() => {
+    alert('주소가 복사되었습니다.');
+  });
+}
+
 
 // 클라이언트에서만 실행되도록 지도를 초기화
 onMounted(() => {
@@ -165,122 +267,7 @@ onMounted(() => {
 });
 </script>
 
-<template>
-  <!-- popup -->
-  <main class="popup__wrap">
-    <!-- section 1 -->
-    <section class="popup__infomation">
 
-      <!-- /images-slider 파란선 -->
-      <div class="popup-info__slider">
-        <div class="popup-info__slides">
-          <!-- <img class="popup-info__slide" src="/images/나가노마켓1.jpg" alt="/images #1">
-          <img class="popup-info__slide" src="/images/나가노마켓2.jpg" alt="/images #2">
-          <img class="popup-info__slide" src="/images/나가노마켓3.jpg" alt="/images #3">
-          <img class="popup-info__slide" src="/images/나가노마켓4.jpg" alt="/images #4">
-          <img class="popup-info__slide" src="/images/나가노마켓5.jpg" alt="/images #5"> -->
-          <!-- <img v-for="(imageName, index) in (popup.saveImageNames || [])" :key="index"
-            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="'포스터이미지 ' + (index + 1)" /> -->
-          <img class="popup-info__slide" v-for="(imageName, index) in popup?.saveImageNames" :key="index"
-            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="`이미지 #${index + 1}`" />
-        </div>
-        <a class="popup-info__prev" @click="prevSlide"><i class='bx bx-chevron-left'></i></a>
-        <a class="popup-info__next" @click="nextSlide"><i class='bx bx-chevron-right'></i></a>
-      </div>
-
-      <!-- 파란선-->
-      <div class="popup__details">
-        <!-- 주황선 -->
-        <div class="">
-          <h1 class="popup__title">{{ popup?.title }}</h1>
-          <address class="popup__address">
-            <i class='bx bx-map'></i>
-            <span>{{ popup?.address }}</span>
-          </address>
-          <div class="popup__date">
-            <i class='bx bx-calendar'></i>
-            <span name="startDate">{{ formatDate(popup?.startDate) }}</span>
-            <span>~</span>
-            <span name="endDate">{{ formatDate(popup?.endDate) }}</span>
-          </div>
-          <div class="popup__tags">
-            <span v-for="(tag, index) in popup?.tags" :key="index" class="popup__tag">
-              {{ tag }} <!-- tag 객체에서 tag 필드만 출력 -->
-            </span>
-          </div>
-        </div>
-
-
-        <!-- 주황선 -->
-        <div class="popup__links">
-          <a href="#" class="popup__icon-link">
-            <i class='bx bx-conversation'></i> <!-- icon -->
-            <span>채팅</span>
-          </a>
-          <a href="#" class="popup__icon-link" @click.prevent="clickBookmark">
-            <i :class="['icon', isBookmark ? 'bx bxs-bookmark' : 'bx bx-bookmark', { bookmarkCheck: isBookmark }]"></i>
-            <span>북마크</span>
-          </a>
-          <a href="#" class="popup__icon-link" @click.prevent="clickNotification">
-            <i
-              :class="['icon', isNotification ? 'bx bxs-bell' : 'bx bx-bell', { notificationCheck: isNotification }]"></i>
-            <span>알림</span>
-          </a>
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- section 2 -->
-    <div class="popup__description">
-      <p>
-        📢 주술회전 0 전시회 팝업스토어 OPEN! 🎉
-        <br>
-        <br>
-        주술회전 0 전시회 오픈 기념, 전시회의 감동을 굿즈로!!!!<br>
-        주술회전 팬분들을 위한 깜짝 팝업스토어 OPEN🌟🌟🌟<br>
-        <br>
-        극장판 주술회전 0의 원화와 그림 콘티 등 전시회 한정으로 준비된<br> 다양한 굿즈, 뜨거운 인기로 조기 품절된 한정 굿즈도 다시 만나볼 수 있는 기회!<br>
-        <br>
-
-
-        전시회에서 한 번😭<br>
-        팝업스토에서 두 번😭😭<br>
-        극장판 주술회전 0의 감동을 느껴보세요!<br>
-
-        <br>
-        ◾팝업스토어 정보
-        기간 : 2024.11.23(토) ~ 12.01(일)
-        장소 : 아이파크몰 용산점 6F 더 코너
-      </p>
-    </div>
-
-    <!-- section 3 -->
-    <section class="popup__addinfo">
-      <h1>상세 정보</h1>
-      <address class="popup__addinfo-address">
-        <i class='bx bx-map-alt'></i>
-        <span>{{ popup?.address }}</span>
-      </address>
-      <address class="popup__addinfo-address-detail">
-        <div>5</div>
-        <span>{{ popup?.addressDetail }}</span>
-      </address>
-      <div id="map" style="width:100%;height:400px;"></div>
-      <div class="popup-detail__sns">
-        <a :href="popup?.snsLink" class="popup__sns-link">
-          <i class='bx bxl-instagram'></i>
-          <span>SNS 바로가기</span>
-        </a>
-        <a :href="popup?.webLink" class="popup__sns-link">
-          <i class='bx bx-globe'></i>
-          <span>브랜드 홈페이지 바로가기</span>
-        </a>
-      </div>
-    </section>
-  </main>
-</template>
 <style scoped>
 @import url('/public/css/popup/[id]/index.css');
 </style>

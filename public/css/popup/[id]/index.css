@@ -1,38 +1,41 @@
 /* ****** main 영역 ****** */
 .popup__wrap {
-  width: 902px;
+  width: 960px;
   margin: 0 auto;
+  background: var(--background-1);
+  box-sizing: border-box;
+  padding: 10px 20px;
 }
 
 /* ****** 이미지 슬라이드 ****** */
 .popup-info__slider {
   position: relative;
-  width: 900px;
-  /* 두 이미지의 총 너비 */
+  width: 100%;
+  max-width: 900px;
   height: 450px;
   margin: 20px auto;
   overflow: hidden;
   display: flex;
   align-items: center;
-  border: 1px black solid;
+  border: 1px solid var(--black);
 }
 
 .popup-info__slides {
   display: flex;
+  transition: transform .5s ease;
 }
 
 .popup-info__slide {
   width: 450px;
   height: 450px;
-  display: block;
+  object-fit: cover;
 }
 
+/* 팝업 슬라이더 아이콘 */
 .popup-info__slider a {
   position: absolute;
-  /* 부모를 기준으로 */
   top: 50%;
   transform: translateY(-50%);
-  /* slider 박스에서 중앙에 위치시키기위해 */
   font-size: 2rem;
   padding: 10px 15px;
   background-color: transparent;
@@ -45,194 +48,179 @@
   left: 0;
 }
 
-.popup-info__prev i {
-  font-size: 50px;
-}
-
 .popup-info__next {
   right: 0;
 }
 
+.popup-info__prev i,
 .popup-info__next i {
   font-size: 50px;
 }
 
-/* ****** section 1 ****** */
-
 .popup__infomation {
-  padding-bottom: 30px;
-  border-bottom: 1px solid var(--color-grey-6);
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--black);
 }
 
+.popup__information-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 북마크 영역 */
 .popup__details {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 20px 0 0 6px;
 }
 
-/* info */
+/* 팝업 정보 */
 .popup__title {
   font-family: 'pretendard-bold';
-  font-size: 32px;
-  margin-bottom: 10px;
+  font-size: 28px;
 }
 
 .popup__address {
-  font-family: 'pretendard-medium';
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-family: 'pretendard-regular';;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 10px 0 8px 0;
 }
 
 .popup__date {
-  font-family: 'pretendard-medium';
-  font-size: 20px;
-  margin-bottom: 25px;  
-  color: black;
+  font-family: 'pretendard-regular';;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--black);
 }
 
-.popup__date span {
-  color: black;
-}
-
+.popup__address i,
 .popup__date i {
-  margin-right: 10px;
+  margin-right: 5px;
+}
+
+.popup__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
 }
 
 .popup__tags span {
   font-family: 'pretendard-medium';
   border: 1px solid var(--black);
-  border-radius: var(--border-2);
-  padding: 4px 10px;
-  background-color: var(--color-grey-3);
-  margin-right: 3px;
+  border-radius: var(--radius-2);
+  padding: 4px 8px;
+  background-color: #edede9;
+  color: var(--black);
+  font-size: 15px;
 }
-
-/* link icons*/
-.popup__links {
-  width: 20%;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-right: -20px;
-}
-
-.popup__icon-link {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-
-.popup__icon-link i {
-  font-size: 22px;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.bookmarkCheck {
-  color: #EA3921;
-  font-size: 20px;
-}
-
-.notificationCheck {
-  color: #EA3921;
-  font-size: 20px;
-}
-
-/* ****** section 2 ****** */
 
 .popup__description {
-  margin-top: 20px;
-  border-bottom: 1px rgb(211, 210, 210) solid;
-  padding-bottom: 30px;
-}
-
-.popup__description h1 {
-  font-family: 'pretendard-bold';
-  font-size: 23px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.popup__description p {
-  font-family: 'pretendard-reqular';
-  line-height: 25px;
+  font-family: 'pretendard-regular';
+  line-height: 1.7;
+  margin-bottom: 1em;
+  white-space: pre-line;
+  padding: 20px 0 20px 0;
+  font-size: 15px;
+  border-bottom: 1px solid var(--black);
+  margin-bottom: 0;
 }
 
 /* ****** section 3 ****** */
 .popup__addinfo {
   display: flex;
   flex-direction: column;
+  padding-top: 20px;
 }
 
 .popup__addinfo h1 {
   font-family: 'pretendard-bold';
-  font-size: 23px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.popup__addinfo-address {
   font-size: 18px;
+  margin-bottom: 15px;
 }
 
-.popup__addinfo-address i {
-  margin-right: 5px;
-}
-
+.popup__addinfo-address,
 .popup__addinfo-address-detail {
+  font-family: 'pretendard-regular';
+  font-size: 15px;
+  color: var(--black);
+  margin-bottom: 10px;
   display: flex;
-  margin-left: 20px;
-  margin-top: 8px;
-  margin-bottom: 20px;
-  font-size: 18px;
-  position: relative;
-}
-
-.popup__addinfo-address-detail div {
-  position: absolute;
-  bottom: 4px;
-  width: 18px;
-  height: 18px;
-  margin-right: 2px;
-  border: 1px solid purple;
-  border-radius: 50%;
-  text-align: center;
-  background-color: purple;
-  color: white;
-}
-
-.popup__map {
-  margin-bottom: 50px;
-}
-
-.popup__hours {
-  display: flex;
-  flex-direction: column;
-  font-size: 18px;
-}
-
-.popup__hours span {
-  margin-bottom: 4px;
-}
-
-.popup__hours i {
-  margin-right: 9px;
-}
-
-.popup__hours p {
-  margin-left: 26px;
-  line-height: 22px;
+  align-items: center;
+  gap: 5px;
 }
 
 .popup-detail__sns {
+  margin-top: 20px;
   margin-bottom: 40px;
 }
 
-.popup-detail__sns i {
+.popup__sns-link {
+  font-family: 'pretendard-regular';
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: var(--black);
+  margin: 10px 0;
+}
+
+.popup__sns-link i {
   margin-right: 10px;
 }
 
-.popup-detail__sns a {
-  display: block;
-  margin: 15px 0px;
+.popup__location-box {
+  color: var(--black);
+  padding-top: 20px;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup__location-address {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'pretendard-regular';
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.copy-btn {
+  border: 1px solid var(--black);
+  background: transparent;
+  color: var(--black);
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.popup__location-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 0;
+  border-top: 1px solid var(--color-grey-5);
+  font-size: 15px;
+  color: var(--black);
+  min-height: 42px;
+}
+
+.popup__location-link span {
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.popup__location-link i {
   font-size: 18px;
+  color: var(--black);
+  display: flex;
+  align-items: center;
 }
