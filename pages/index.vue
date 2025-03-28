@@ -1,11 +1,12 @@
+<!-- MAIN PAGE -->
 <template>
   <div class="container">
     <div class="photo-slider">
       <div class="photo-slider__container" ref="sliderRef" :style="sliderStyle">
         <div v-for="(slide, index) in slides" :key="index" class="photo-slider__item">
-          <!-- <img class="photo-slider__image" :src="slide.image" :alt="`Image ${index + 1}`"> -->
+          <RouterLink :to="`/popup/${slide.id}`" class="card__link" />
           <img class="photo-slider__image"
-            :src="`http://localhost:8081/api/v1/uploads/images/popup/${slide.imgSavedName}`"
+            :src="`http://localhost:8081/api/v1/uploads/images/popup/${slide.imageFileName}`"            
             :alt="`Image ${index + 1}`">
           <div class="photo-slider__overlay">
             <!-- 헤더 영역: 팝업 제목 -->
@@ -40,7 +41,7 @@
       <h2 class="card__title">Pop-up</h2>
       <div class="card__grid">
         <div v-for="(item, index) in popupItems" :key="index" class="card__item">
-          <a href="http://localhost:3001/popup/170"></a>
+          <RouterLink :to="`/popup/${item.id}`" class="card__link" />
           <img :src="`http://localhost:8081/api/v1/uploads/images/popup/${item.imgSavedName}`"
             :alt="`Popup ${index + 1}`">
           <div class="card__info">
@@ -81,8 +82,9 @@
       <h2 class="card__title">Concert</h2>
       <div class="card__grid">
         <div v-for="(item, index) in concertItems" :key="index" class="card__item">
-          <img :src="`http://localhost:8081/api/v1/uploads/images/concert/${item.fileSavedName}`"
-            :alt="`Image ${index + 1}`">
+          <RouterLink :to="`/concert/${item.id}`" class="card__link" />
+          <img :src="`http://localhost:8081/api/v1/uploads/images/concert/${item.imageFileName}`"
+               :alt="`Image ${index + 1}`">
           <div class="card__info">
             <!-- 상태 라벨 -->
             <div class="card__status-tag">
@@ -109,7 +111,8 @@
       <h2 class="card__title">Musical</h2>
       <div class="card__grid">
         <div v-for="(item, index) in musicalItems" :key="index" class="card__item">
-          <img :src="`http://localhost:8081/api/v1/uploads/images/musical/${item.fileSavedName}`"
+          <RouterLink :to="`/musical/${item.id}`" class="card__link" />
+          <img :src="`http://localhost:8081/api/v1/uploads/images/musical/${item.imageFileName}`"
                :alt="`Musical ${index + 1}`">
           <div class="card__info">
             <!-- 상태 라벨 -->
@@ -155,18 +158,24 @@
       <h2 class="card__title">Exhibition</h2>
       <div class="card__grid">
         <div v-for="(item, index) in exhibitionItems" :key="index" class="card__item">
-          <img class="photo-slider__image"
-            :src="`http://localhost:8081/api/v1/uploads/images/exhibition/${item.fileSavedName}`"
-            :alt="`Image ${index + 1}`">
+          <RouterLink :to="`/exhibition/${item.id}`" class="card__link" />
+          <img :src="`http://localhost:8081/api/v1/uploads/images/exhibition/${item.imageFileName}`"
+               :alt="`Exhibition ${index + 1}`">
           <div class="card__info">
-            <span class="card__status">진행중</span>
-            <h3>{{ item.title }}</h3>
-            <p class="card__location">{{ item.venue }}</p>
-            <p class="card__date">
-              <span>{{ formatDate(item.startDate) }}</span>
-              <span>~</span>
-              <span>{{ formatDate(item.endDate) }}</span>
-            </p>
+            <div class="card__status-tag">
+              <span class="card__status">진행중</span>
+            </div>
+            <div class="card__info-header">
+              <h3>{{ item.title }}</h3>
+            </div>
+            <div class="card__info-footer">
+              <p class="card__location">{{ item.venue }}</p>
+              <p class="card__date-main">
+                <span>{{ formatDate(item.startDate) }}</span>
+                <span>~</span>
+                <span>{{ formatDate(item.endDate) }}</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -177,6 +186,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFetch } from '#app';
+import { normalizeImageField } from '~/utils/normalizeData';
 
 const slides = ref([]);
 const popupItems = ref([]);
@@ -185,78 +195,107 @@ const musicalItems = ref([]);
 const exhibitionItems = ref([]);
 // const videos = ref([]);
 
-//slides 랜덤 조회
+// 팝업 슬라이드 데이터 조회 및 정규화 
 const { data: slidesData, error: slidesError } = await useFetch('/api/v1/popup/random', {
   baseURL: 'http://localhost:8081',
-})
+});
 
 if (slidesError.value) {
-  console.error('API 호출 에러:', slidesError.value)
+  console.error('슬라이드 API 호출 에러:', slidesError.value)
+
 } else if (slidesData.value) {
-  slides.value = (Array.isArray(slidesData.value) ? slidesData.value : [slidesData.value]).slice(0, 6)
-  console.log('Fetched popup items:', slides.value)
+  const rawData = Array.isArray(slidesData.value) ? slidesData.value : [slidesData.value];
+  slides.value = normalizeImageField(rawData.slice(0, 6), 'popup');
+  console.log('=== 슬라이드 팝업 데이터 ===:', slides.value)
 }
 
 
-//popup 랜덤 조회
+// 팝업 데이터 조회 및 정규화
 const { data: popupData, error: popupError } = await useFetch('/api/v1/popup/random', {
   baseURL: 'http://localhost:8081',
-})
+});
 
 if (popupError.value) {
-  console.error('API 호출 에러:', popupError.value)
+  console.error('팝업 API 호출 에러:', popupError.value)
+
 } else if (popupData.value) {
-  popupItems.value = (Array.isArray(popupData.value) ? popupData.value : [popupData.value]).slice(0, 4)
-  popupItems.value.forEach((item, index) => {
-    console.log(`Item ${index}:`, item);  // 각 항목을 출력
-  });
-  console.log('Fetched popup items:', popupItems.value)
+  const rawData = Array.isArray(popupData.value) ? popupData.value : [popupData.value];
+  popupItems.value = normalizeImageField(rawData.slice(0, 4), 'popup');
+  console.log('=== 팝업 데이터 ===:', popupItems.value)
 }
 
-//concert 랜덤 조회
+// 콘서트 데이터 조회 및 정규화
 const { data: concertData, error: concertError } = await useFetch('/api/v1/concert/random', {
   baseURL: 'http://localhost:8081',
 })
 
 if (concertError.value) {
-  console.error('API 호출 에러:', concertError.value)
+  console.error('콘서트 API 호출 에러:', concertError.value)
+
 } else if (concertData.value) {
-  concertItems.value = (Array.isArray(concertData.value) ? concertData.value : [concertData.value]).slice(0, 4)
-  console.log('Fetched popup items:', concertItems.value)
+  const rawData = Array.isArray(concertData.value) ? concertData.value : [concertData.value];
+  concertItems.value = normalizeImageField(rawData.slice(0, 4), 'concert');
+  console.log('=== 콘서트 데이터 ===:', concertItems.value)
 }
 
-//musical 랜덤 조회
-const { data, error } = await useFetch('/api/v1/musical/random', {
+// 뮤지컬 데이터 조회 및 정규화
+const { data: musicalData, error: musicalError } = await useFetch('/api/v1/musical/random', {
   baseURL: 'http://localhost:8081',
 })
 
-if (error.value) {
-  console.error('API 호출 에러:', error.value)
-} else if (data.value) {
-  musicalItems.value = (Array.isArray(data.value) ? data.value : [data.value]).slice(0, 4)
-  musicalItems.value.forEach((item, index) => {
-    console.log(`Item ${index}:`, item);  // 각 항목을 출력
-  });
-  console.log('Fetched musical items:', musicalItems.value)
+if (musicalError.value) {
+  console.error('뮤지컬 API 호출 에러:', musicalError.value)
+
+} else if (musicalData.value) {
+  const rawData = Array.isArray(musicalData.value) ? musicalData.value : [musicalData.value];
+  musicalItems.value = normalizeImageField(rawData.slice(0, 4), 'musical');
+  console.log('=== 뮤지컬 데이터 ===:', musicalItems.value)
 }
 
-const formatDate = (date) => {
-  if (!date) return ''
-  const options = { year: 'numeric', month: 'short', day: 'numeric' }
-  return new Date(date).toLocaleDateString(undefined, options)
-}
-
-//exhibition 랜덤 조회
+// 전시회 데이터 조회 및 정규화
 const { data: exhibitionData, error: exhibitionError } = await useFetch('/api/v1/exhibition/random', {
   baseURL: 'http://localhost:8081',
 });
 
 if (exhibitionError.value) {
-  console.error('API 호출 에러:', exhibitionError.value)
+  const rawData = Array.isArray(exhibitionData.value) ? exhibitionData.value : [exhibitionData.value];
+  console.log('Raw Exhibition data:', JSON.stringify(rawData, null, 2));
+  console.error('전시회 API 호출 에러:', exhibitionError.value)
+  
+  exhibitionItems.value = normalizeImageField(rawData.slice(0, 4), 'exhibition');
+  console.log('Normalized exhibition items:', JSON.stringify(exhibitionItems.value, null, 2));
+
+  exhibitionItems.value.forEach((item, index) => {
+    console.log(`Exhibition ${index}:`, 
+      'Original fileSaveName:', item.fileSaveName,
+      'Normalized imageFileName:', item.imageFileName);
+  });
+
 } else if (exhibitionData.value) {
-  exhibitionItems.value = (Array.isArray(exhibitionData.value) ? exhibitionData.value : [exhibitionData.value]).slice(0, 4)
-  console.log('Fetched exhibition items:', exhibitionItems.value)
+  const rawData = Array.isArray(exhibitionData.value) ? exhibitionData.value : [exhibitionData.value];
+  exhibitionItems.value = normalizeImageField(rawData.slice(0, 4), 'exhibition');
+
+  // 정규화된 데이터 확인
+  console.log('Raw Exhibition data:', rawData);
+  console.log('Normalized exhibition items:', exhibitionItems.value);
+
+  // 각 항목의 이미지 필드 확인
+  exhibitionItems.value.forEach((item, index) => {
+    console.log(`Exhibition ${index} - Original field:`,
+      item.fileSaveName,
+      'Normalized field:',
+      item.imageFileName);
+  });
+
+  console.log('=== 전시회 데이터 ===:', exhibitionItems.value)
 };
+
+// 날짜 포맷팅 함수
+const formatDate = (date) => {
+  if (!date) return ''
+  const options = { year: 'numeric', month: 'short', day: 'numeric' }
+  return new Date(date).toLocaleDateString(undefined, options)
+}
 
 
 // YouTube URL 관리

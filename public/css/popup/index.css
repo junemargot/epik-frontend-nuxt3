@@ -242,6 +242,12 @@ h2 {
   margin-bottom: 20px;
 }
 
+.card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
 .card__item {
   position: relative;
   height: 180px;

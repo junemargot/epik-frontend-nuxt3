@@ -380,6 +380,8 @@ const submitHandler = async () => {
     formDatas.append(`ticketOffices[${index}].link`, link.link);   // 판매처 URL
   });
 
+  formDatas.append('snsLink', snsLink.value);
+  formDatas.append('webLink', webLink.value);
 
 
   // 에디터로 업로드한 파일명 
@@ -408,11 +410,13 @@ const submitHandler = async () => {
 
     if (status.value === 'success') {
       console.log('등록 성공');
+      console.log('넘어온 번호', data.value.id);
       router.push({
         path: '/admin/contents/exhibition/' + data.value.id
       });
     } else {
       console.log('등록실패 : ', error.value);
+      console.log('넘어온 번호', data.value.id);
     }
 
   } catch (error) {

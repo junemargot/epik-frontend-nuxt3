@@ -397,6 +397,5 @@ const submitHandler = async () => {
 </script>
 
 <style lang="css">
-/* @import "@/assets/css/admin/contents/concert/new.css"; */
 @import url('/public/css/admin/contents/concert/new.css');
 </style>

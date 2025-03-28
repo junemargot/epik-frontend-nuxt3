@@ -10,7 +10,7 @@
         <div class="board__list">
           <div class="board__head">
             <div class="board__no">번호</div>
-            <div class="board__title">제목</div>
+            <div class="board₩__title">제목</div>
             <div class="board__writer">작성자</div>
             <div class="board__regDate">작성일</div>
             <div class="board__viewCnt">조회수</div>
@@ -170,6 +170,7 @@ const fetchConcerts = async (page = 1) => {
     pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
 
     currentPage.value = page;
+
   } catch(error) {
     console.error("ERROR FETCHING CONCERT LIST: ", error);
   }

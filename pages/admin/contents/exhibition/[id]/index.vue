@@ -1,22 +1,21 @@
 <template>
   <div class="main-wrap">
-    <section class="product__container">
-      <!-- BOARD HEADER -->
+    <section class="product__container" v-if="exhibition">
       <div class="product__header">
         <div class="product__category">
-          <a href="/admin/content/exhibition/list.html">
+          <RouterLink href="/admin/content/exhibition">
             <strong>전시회</strong>
             <i class='bx bx-chevron-right'></i>
-          </a>
+          </RouterLink>
         </div>
         <div class="product__title">
-          <div class="product__title-text">우연히 웨스 앤더슨 2</div>
+          <div class="product__title-text">{{ exhibition.title }}</div>
         </div>
         <div class="product__registration">
           <div class="product__registration-writer-info">
-            <span class="name">관리자1</span>
+            <span class="name">{{ exhibition.writer }}</span>
             <div class="product__registration-date">
-              <span>2024.10.10 14:30</span>
+              <span>{{ formatDate(exhibition.writeDate) }}</span>
             </div>
           </div>
         </div>
@@ -26,49 +25,45 @@
       <div class="product__content">
         <div class="product__content-summary">
           <div class="product__content-poster">
-            <!-- <img src="/images/exhibition.gif" alt="웨스앤더슨 포스터" /> -->
-            <img :src="`http://localhost:8081/api/v1/uploads/exhibition/${exhibition.saveImageName}`" />
+            <img :src="`http://localhost:8081/api/v1/uploads/images/exhibition/${exhibition.saveImageName}`" />
           </div>
           <ul class="product__content-info">
             <li class="product__content-info-item">
               <div class="infoLabel">장소</div>
-              <div class="infoDesc">그라운드시소 센트럴</div>
+              <div class="infoDesc">{{ exhibition.venue }}</div>
             </li>
             <li class="product__content-info-item">
               <div class="infoLabel">공연기간</div>
               <div class="infoDesc">
-                <span name="startDate">2024.10.18</span>
+                <span name="startDate">{{ formatDate(exhibition.startDate) }}</span>
                 <span>~</span>
-                <span name="endDate">2025.04.13</span>
+                <span name="endDate">{{ formatDate(exhibition.endDate) }}</span>
               </div>
             </li>
             <li class="product__content-info-item">
               <div class="infoLabel">관람시간</div>
-              <div class="infoDesc" name="runningTime">50분</div>
+              <div class="infoDesc" name="runningTime">{{ exhibition.runningTime }}</div>
             </li>
             <li class="product__content-info-item">
               <div class="infoLabel">관람연령</div>
-              <div class="infoDesc" name="ageRestriction">전체관람가</div>
+              <div class="infoDesc" name="ageRestriction">{{ exhibition.ageRestriction }}</div>
             </li>
             <li class="product__content-info-item">
               <div class="infoLabel">가격</div>
               <div class="infoDesc">
                 <ul class="infoPriceList">
-                  <li class="infoPriceItem">
-                    <span class="seat" name="seat">입장권</span>
-                    <span class="price" name="price">18,000원</span>
+                  <li class="infoPriceItem" v-for="(price) in exhibition.ticketPrices" :key="price.id">
+                    <span class="seat" name="seat">{{ price.seat }}</span>
+                    <span class="price" name="price">{{ price.price }}</span>
                   </li>
                 </ul>
               </div>
             </li>
             <li class="product__content-info-item">
-              <div class="infoLabel">예매처</div>
-              <div class="infoDesc ticketGroup">
-                <span class="ticketName" name="name">
-                  <a href="https://tickets.interpark.com/goods/24013174" target="_blank" name="link">인터파크</a>
-                </span>
-                <span class="ticketName" name="name">
-                  <a href="https://booking.naver.com/booking/5/bizes/1225096" target="_blank" name="link">네이버</a>
+              <div class="info__title">예매처</div>
+              <div class="info__desc ticketGroup">
+                <span class="ticketName" name="name" v-for="office in exhibition.ticketOffices" :key="office.id">
+                  <a :href="office.link" target="_blank" name="link">{{ office.name }}</a>
                 </span>
               </div>
             </li>
@@ -78,40 +73,15 @@
 
         <!-- PRODUCT CONTENT DETAIL -->
         <div class="product__content-detail">
-          <p>
-            관람시간 정보
-            매일 10:00~19:00 <br />
-            입장 마감: 18:00 <br />
-            휴관 안내: 12/2(월), 1/6(월), 2/3(월) *공휴일 정상 운영
-            <br />
-            <br />
-            <br />
-            공지사항
-            ＊본 티켓은 별도 배송 되지 않으며, 현장 매표소에서 예매자 성함 및 연락처 확인 후 입장하실 수 있습니다. <br />
-            ＊취소 및 환불 규정은 2025년 4월 12일 17시까지 가능하며, 이후 취소 및 환불은 불가합니다. <br />
-            <br />
-            <br />
-            <br />
-            상세정보
-            <img src="/images/exhibition_detail.jpg" alt="웨스앤더슨 상세" />
-          </p>
+          <h2>전시 정보</h2>
+          <div v-html="exhibition.content"></div>
         </div>
         <div class="product__content-detail-info">
-          상세 정보
+          <h2>상세 정보</h2>
           <div class="product__content-detail-info-map">
-            <span class="address">서울특별시 중구 남대문로5가 831 그랜드센트럴 3F 그라운드시소 센트럴</span>
+            <span class="address">{{ exhibition.address }}</span>
           </div>
-          <div class="product__content-detail-links">
-            <div class="instagram" name="snsLink">
-              <a href="https://www.instagram.com/groundseesaw/" target="_blank">인스타그램
-                <span>https://www.instagram.com/groundseesaw/</span></a>
-            </div>
-            <div class="web" name="webLink">
-              <a href="https://groundseesaw.co.kr/" target="_blank">공식 홈페이지
-                <span>https://groundseesaw.co.kr/</span>
-              </a>
-            </div>
-          </div>
+          <!-- 하단 버튼 -->
           <div class="product__content-buttons">
             <button type="button" class="service">서비스 홈페이지로 이동</button>
             <RouterLink to="/admin/contents/exhibition">
@@ -121,11 +91,48 @@
         </div>
       </div>
     </section>
+    <div v-else>전시회 데이터 로딩중</div>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const exhibitionId = route.params.id;
+
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase;
+
+const exhibition = ref(null);
+const error = ref(null);
+
+watchEffect(async () => {
+  const { data } = await useFetch(`/admin/exhibition/${exhibitionId}`, {
+    baseURL: apiBase,
+    key: `exhibition-${exhibitionId}`,
+  });
+
+  if(data.value) {
+    exhibition.value = data.value;
+  }
+});
+
+// 날짜 포맷팅 함수
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).replace(/\. /g, '.').replace(/\.$/, '');
+};
+
+onMounted(async () => {
+  // await fetchExhibitionDetail();
+})
 </script>
 
 <style lang="css" scoped>
