@@ -36,7 +36,7 @@
         <div class="upcoming-popup__boder-line">
           <div class="upcoming-popup__item">
             <div class="upcoming-popup__item-inner">
-              <img src="/images/줄라이팝업.jpg">
+              <img src="/images/profile3.jpg" />
               <div class="upcoming-popup__content">
                 <div class="upcoming-popup__content-header">
                   <div class="upcoming-popup__info">
@@ -55,7 +55,7 @@
 
           <div class="upcoming-popup__item">
             <div class="upcoming-popup__item-inner">
-              <img src="/images/줄라이팝업.jpg">
+              <img src="/images/profile3.jpg" />
               <div class="upcoming-popup__content">
                 <div class="upcoming-popup__content-header">
                   <div class="upcoming-popup__info">
@@ -76,7 +76,7 @@
         <div class="upcoming-popup__boder-line">
           <div class="upcoming-popup__item">
             <div class="upcoming-popup__item-inner">
-              <img src="/images/줄라이팝업.jpg">
+              <img src="/images/profile3.jpg" />
               <div class="upcoming-popup__content">
                 <div class="upcoming-popup__content-header">
                   <div class="upcoming-popup__info">
@@ -96,7 +96,7 @@
 
           <div class="upcoming-popup__item">
             <div class="upcoming-popup__item-inner">
-              <img src="/images/줄라이팝업.jpg">
+              <img src="/images/profile3.jpg" />
               <div class="upcoming-popup__content">
                 <div class="upcoming-popup__content-header">
                   <div class="upcoming-popup__info">
@@ -118,7 +118,7 @@
         <div class="upcoming-popup__boder-line">
           <div class="upcoming-popup__item">
             <div class="upcoming-popup__item-inner">
-              <img src="/images/줄라이팝업.jpg">
+              <img src="/images/profile3.jpg" />
               <div class="upcoming-popup__content">
                 <div class="upcoming-popup__content-header">
                   <div class="upcoming-popup__info">
@@ -137,7 +137,7 @@
 
           <div class="upcoming-popup__item">
             <div class="upcoming-popup__item-inner">
-              <img src="/images/줄라이팝업.jpg">
+              <img src="/images/profile3.jpg" />
               <div class="upcoming-popup__content">
                 <div class="upcoming-popup__content-header">
                   <div class="upcoming-popup__info">

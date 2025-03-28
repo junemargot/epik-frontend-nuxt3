@@ -42,7 +42,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/동글이.jpg">
+              <img src="/images/profile3.jpg" />
               <span>seungeun</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -70,7 +70,7 @@
           </div> <!-- feed__user end -->
 
           <div class="feed__image">
-            <img src="/images/feed.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -123,7 +123,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
@@ -175,7 +175,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/배추도사.png">
+              <img src="/images/profile3.jpg" />
               <span>배추도사</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -203,7 +203,7 @@
           </div> <!-- feed__user end -->
 
           <div class="feed__image">
-            <img src="/images/KakaoTalk_20241125_034418958.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -257,7 +257,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
@@ -309,7 +309,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/나미리.jpg">
+              <img src="/images/profile3.jpg" />
               <span>jeong</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -337,7 +337,7 @@
           </div> <!-- feed__user end -->
 
           <div class="feed__image">
-            <img src="/images/KakaoTalk_20241125_033508175.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -394,7 +394,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
@@ -446,7 +446,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/83416251-파인애플.jpg">
+              <img src="/images/profile3.jpg" />
               <span>파인애플</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -474,7 +474,7 @@
           </div> <!-- feed__user end -->
 
           <div class="feed__image">
-            <img src="/images/KakaoTalk_20241125_034131221.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -526,7 +526,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
@@ -578,7 +578,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/다운로드.jpg">
+              <img src="/images/profile3.jpg" />
               <span>yeo</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -607,7 +607,7 @@
 
 
           <div class="feed__image">
-            <img src="/images/KakaoTalk_20241125_033811741.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -660,7 +660,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
@@ -712,7 +712,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/오리.jpg">
+              <img src="/images/profile3.jpg" />
               <span>오리</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -740,7 +740,7 @@
           </div> <!-- feed__user end -->
 
           <div class="feed__image">
-            <img src="/images/KakaoTalk_20241125_034217645.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -792,7 +792,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
@@ -844,7 +844,7 @@
         <div class="feed__info-inner"><!--inner-->
           <div class="feed__user">
             <div class="feed__user-profile"> <!--사진 아이디-->
-              <img src="/images/빵빵이.jpg">
+              <img src="/images/profile3.jpg" />
               <span>빵빵이</span>
             </div>
             <!-- ######### click 이벤트 처리 #########  -->
@@ -872,7 +872,7 @@
           </div> <!-- feed__user end -->
 
           <div class="feed__image">
-            <img src="/images/KakaoTalk_20241125_034814523.jpg">
+            <img src="/images/profile3.jpg" />
           </div>
 
           <div class="feed__icons">
@@ -924,7 +924,7 @@
               <div class="comment__item">
                 <div class="comment__content-wrap">
                   <div class="comment__profile">
-                    <img src="/images/동글이.jpg">
+                    <img src="/images/profile3.jpg" />
                   </div>
                   <div class="comment__details">
                     <div class="comment__info">
