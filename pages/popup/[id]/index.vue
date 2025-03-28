@@ -8,8 +8,12 @@
           <img class="popup-info__slide" v-for="(imageName, index) in popup?.saveImageNames" :key="index"
             :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="`이미지 #${index + 1}`" />
         </div>
-        <a class="popup-info__prev" @click="prevSlide"><i class='bx bx-chevron-left'></i></a>
-        <a class="popup-info__next" @click="nextSlide"><i class='bx bx-chevron-right'></i></a>
+        <a class="popup-info__prev" @click="prevSlide">
+          <i class='bx bx-chevron-left'></i>
+        </a>
+        <a class="popup-info__next" @click="nextSlide">
+          <i class='bx bx-chevron-right'></i>
+        </a>
       </div>
 
       <div class="popup__details">
@@ -46,24 +50,6 @@
     <div class="popup__description popup__information-inner" v-html="popup?.content"></div>
 
     <!-- section 3 -->
-    <!-- <section class="popup__addinfo popup__information-inner">
-      <h1>상세 정보</h1>
-      <div class="popup__addinfo-address">
-        <i class='bx bx-map-alt'></i>
-        <span>{{ popup?.address }}</span>
-      </div>
-      <div id="map" style="width:100%;height:400px;"></div>
-      <div class="popup-detail__sns">
-        <a :href="popup?.snsLink" class="popup__sns-link">
-          <i class='bx bxl-instagram'></i>
-          <span>SNS 바로가기</span>
-        </a>
-        <a :href="popup?.webLink" class="popup__sns-link">
-          <i class='bx bx-globe'></i>
-          <span>브랜드 홈페이지 바로가기</span>
-        </a>
-      </div>
-    </section> -->
     <section class="popup__addinfo popup__information-inner">
       <!-- 지도 영역 -->
       <div id="map" style="width:100%;height:400px;"></div>
@@ -75,7 +61,7 @@
         </div>
         
         <div class="popup__location-link" @click="openLink(popup?.snsLink)">
-          <a :href="popup?.snsLink" class="popup__sns-link">
+          <a :href="popup?.snsLink" class="popup__sns-link" target="_blank">
             <span>SNS 바로가기</span>
           </a>
           <i class='bx bx-chevron-right'></i>
@@ -195,9 +181,11 @@ function nextSlide() {
 
 // 데이터 가져오기
 const popup = ref(null);
-const { data, error } = useFetch(`/admin/popup/${popupId}`, {
+const { data, error } = await useFetch(`/admin/popup/${popupId}`, {
   baseURL: apiBase,
   key: `popup-${popupId}`,
+  server: true,  // SSR에서 동작 보장
+  lazy: false    // 바로 fetch
 });
 
 watchEffect(() => {
