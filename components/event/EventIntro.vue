@@ -1,6 +1,5 @@
 <template>
   <section class="event__intro">
-    <h2>{{ title }} 소개</h2>
     <div v-html="content"></div>
     <div class="event__video" v-if="youtubeUrl">
       <iframe 
@@ -27,5 +26,14 @@
 </template>
 
 <script setup>
-
+defineProps({
+  title: String,
+  content: String,
+  youtubeUrl: String,
+  images: Array
+});
 </script>
+
+<style>
+@import url('/public/css/components/event.css');
+</style>

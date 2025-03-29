@@ -52,5 +52,53 @@
 
 
 <script setup>
+defineProps({
+  imageUrl: {
+    type: String,
+    required: true
+  },
+  imageAlt: {
+    type: String,
+    default: ''
+  },
+  venue: {
+    type: String,
+    required: true
+  },
+  runningTime: {
+    type: String,
+    required: true
+  },
+  startDate: {
+    type: String,
+    required: true
+  },
+  endDate: {
+    type: String,
+    required: true
+  },
+  ageRestriction: {
+    type: String,
+    required: true
+  },
+  ticketPrices: {
+    type: Array,
+    default: () => []
+  },
+  ticketOffices: {
+    type: Array,
+    default: () => []
+  }
+});
 
+// 날짜 포맷팅 함수
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).replace(/\. /g, '.').replace(/\.$/, '');
+};
 </script>
