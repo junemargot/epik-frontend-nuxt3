@@ -133,6 +133,17 @@ main {
   flex: 1;
   font-size: var(--font-size-7);
   color: var(--black);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.event__info-value i {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  font-size: var(--font-size-4);
 }
 
 .event__price-list {

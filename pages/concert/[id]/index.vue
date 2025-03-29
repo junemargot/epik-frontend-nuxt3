@@ -25,6 +25,7 @@
           :age-restriction="concert.ageRestriction"
           :ticket-prices="concert.ticketPrices"
           :ticket-offices="concert.ticketOffices"
+          :address="concert.address"
         />
 
         <!-- section 3 -->
@@ -36,10 +37,10 @@
         />
 
         <!-- section 4 -->
-        <EventLocation 
+        <!-- <EventLocation 
           :address="concert.address"
           :venue-name="concert.venue"
-        />
+        /> -->
       </main>
     </div>
   </div>

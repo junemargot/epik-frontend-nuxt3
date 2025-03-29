@@ -5,9 +5,11 @@
       :alt="imageAlt || '포스터 이미지'" 
     />
     <div class="event__info">
-      <div class="event__info-row">
+      <div class="event__info-row venue-row" @click="showVenueModal">
         <p class="event__info-label">장소</p>
-        <p class="event__info-value">{{ venue }}</p>
+        <p class="event__info-value">{{ venue }}
+          <i class='bx bxs-right-arrow'></i>
+        </p>
       </div>
       <div class="event__info-row">
         <p class="event__info-label">공연시간</p>
@@ -47,12 +49,23 @@
         </div>
       </div>
     </div>
+    <!-- 장소 모달 컴포넌트 -->
+    <VenueModal
+      v-if="isModalOpen"
+      :is-open="isModalOpen"
+      :venue="venue"
+      :address="address"
+      @close="isModalOpen = false"
+    />
   </div>
 </template>
 
 
 <script setup>
-defineProps({
+import { ref } from 'vue';
+import VenueModal from '../modal/VenueModal.vue';
+
+const props = defineProps({
   imageUrl: {
     type: String,
     required: true
@@ -88,8 +101,19 @@ defineProps({
   ticketOffices: {
     type: Array,
     default: () => []
+  },
+  address: {
+    type: String,
+    default: ''
   }
 });
+
+// 공연장 정보 모달
+const isModalOpen = ref(false);
+
+function showVenueModal() {
+  isModalOpen.value = true;
+}
 
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
