@@ -6,12 +6,15 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   components: true,
   runtimeConfig: {
-    public: { apiBase: 'http://localhost:8081/api/v1' }
+    public: { 
+      apiBase: 'http://localhost:8081/api/v1',
+      kakaoMapApiKey: process.env.NUXT_PUBLIC_KAKAO_MAP_API_KEY || ''
+    }
   },
   vite: {
     build: {
       rollupOptions: {
-        external: ['/image/시카고.jpg'],  // 외부화 처리, 빌드 시 이 파일을 제외
+        // external: ['/image/시카고.jpg'],  // 외부화 처리, 빌드 시 이 파일을 제외
       },
     },
   },
@@ -52,7 +55,7 @@ export default defineNuxtConfig({
         { src: 'https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js', defer: true },
         { src: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js', defer: true },
         { src: 'https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js', defer: true },
-        {src: 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder',async: true, defer: true,}
+        { src: '//dapi.kakao.com/v2/maps/sdk.js?appkey=NUXT_PUBLIC_KAKAO_MAP_API_KEY&libraries=services&autoload=false', defer: true },
       ],
     }
   }

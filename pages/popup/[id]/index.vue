@@ -60,18 +60,22 @@
 
     <!-- section 3 -->
     <section class="popup__addinfo popup__information-inner">
-      <div id="map" style="width:100%;height:400px;"></div>
+      <!-- 카카오맵 지도 API -->
+      <div id="kakao-map" style="width: 100%; height: 400px;"></div>
+
       <div class="popup__location-box">
         <div class="popup__location-address">
           <span>{{ popup?.address }} {{ popup?.addressDetail }}</span>
           <button class="copy-btn" @click="copyAddress">주소복사</button>
         </div>
+
         <div class="popup__location-link" @click="openLink(popup?.snsLink)">
           <a :href="popup?.snsLink" class="popup__sns-link" target="_blank">
             <span>SNS 바로가기</span>
           </a>
           <i class='bx bx-chevron-right'></i>
         </div>
+
         <div class="popup__location-link" @click="openLink(popup?.webLink)">
           <a :href="popup?.webLink" class="popup__sns-link" target="_blank">
             <span>브랜드 홈페이지 바로가기</span>
@@ -93,6 +97,12 @@ const route = useRoute();
 const popupId = route.params.id;
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
+const kakaoMapApiKey = config.public.kakaoMapApiKey; // 환경변수에서 API_KEY 로드
+
+// 카카오맵 관련
+let kakaoMap;
+let kakaoMarker;
+// const map = new window.kakao.Map(container, options);
 
 // 슬라이드 인덱스 & 상태 관리
 const currentIdx = ref(0);
@@ -288,22 +298,6 @@ function openLink(url) {
   window.open(url, '_blank');
 }
 
-// 지도 초기화 (CSR 전용) 관련 변수 및 함수
-let map;
-let marker;
-let infowindow;
-
-function initMap() {
-  const mapOptions = {
-    center: new naver.maps.LatLng(37.5297, 126.9647),
-    zoom: 15
-  };
-  map = new naver.maps.Map('map', mapOptions);
-  marker = new naver.maps.Marker({ position: mapOptions.center, map });
-  infowindow = new naver.maps.InfoWindow();
-}
-
-
 // 북마크 상태 관리
 const isBookmark = ref(false);
 function clickBookmark() {
@@ -316,44 +310,113 @@ function clickNotification() {
   isNotification.value = !isNotification.value;
 }
 
+// 카카오맵 초기화
+function initKakaoMap() {
+  console.log('카카오맵 초기화 시작')
+  const container = document.getElementById('kakao-map');
 
-// function makeClone() {
-//   slides.value.forEach((slide) => {
-//     const cloneSlide = slide.cloneNode(true);
-//     cloneSlide.classList.add('clone');
-//     slideContainer.value.appendChild(cloneSlide);
-//   });
+  if(!container) {
+    console.error('kakao-map 요소를 찾을 수 없습니다.');
+    return;
+  }
+  
+  try {
+    // 지도 생성할 때 필요한 기본 옵션
+    const options = {
+      // center: new kakao.maps.LatLng(37.5297, 126.9647), // 지도의 중심 좌표
+      center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심 좌표
+      level: 3 // 지도의 레벨(확대, 축소 정도)
+    };
 
-//   slides.value.reverse().forEach((slide) => {
-//     const cloneSlide = slide.cloneNode(true);
-//     cloneSlide.classList.add('clone');
-//     slideContainer.value.prepend(cloneSlide);
-//   });
+    kakaoMap = new kakao.maps.Map(container, options); // 지도 생성 및 객체 리턴
 
-//   slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
-// }
+    // 마커 생성
+    kakaoMarker = new kakao.maps.Marker({
+      position: options.center,
+      map: kakaoMap
+    });
 
+    // 팝업 데이터가 있으면 주소로 좌표 검색
+    if (popup.value && popup.value.address) {
+      updateMapLocation(popup.value.address);
+    }
+  } catch(e) {
+    console.error('카카오맵 초기화 오류: ', e);
+  }
+};
+
+// 지도 위치 업데이트 함수
+function updateMapLocation(address) {
+  if (!kakaoMap || !address) return;
+
+  console.log('주소로 지도 위치 업데이트:', address);
+
+  try {
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch(address, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        
+        // 마커 위치 변경
+        kakaoMarker.setPosition(coords);
+        
+        // 지도 중심 이동
+        kakaoMap.setCenter(coords);
+        console.log('지도 위치 업데이트 완료', coords);
+      } else {
+        console.error('주소 검색 실패: ', status);
+      }
+    });
+  } catch(e) {
+    console.error('지도 위치 업데이트 오류: ', e);
+  }
+};
+
+// 카카오맵 스크립트 로드
+function loadKakaoMapScript() {
+  console.log('카카오맵 스크립트 로드 시작, API키:', kakaoMapApiKey);
+
+
+  // 이미 로드된 경우 중복 로드 방지
+  if(window.kakao && window.kakao.maps) {
+    console.log('카카오맵 스크립트가 이미 로드되어 있습니다.');
+    initKakaoMap();
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapApiKey}&libraries=services&autoload=false`;
+  script.onload = () => {
+    console.log('카카오맵 스크립트 로드 완료');
+    window.kakao.maps.load(() => {
+      console.log('카카오맵 API 로드 완료')
+      initKakaoMap();
+    });
+  };
+  script.onerror = (e) => {
+    console.error('카카오맵 스크립트 로드 오류: ', e);
+  };
+
+  document.head.appendChild(script);
+}
 
 
 onMounted(async () => {
+  console.log('컴포넌트 마운트 완료');
+
   nextTick(() => {
     if (popup.value && popup.value.saveImageNames && popup.value.saveImageNames.length > 0) {
       checkImagesLoaded();
+
     } else {
       console.log('팝업 데이터가 없거나 이미지가 없습니다.');
     }
   });
+
+  // 카카오맵 스크립트 로드
+  loadKakaoMapScript();
 });
 
-
-// 클라이언트에서만 실행되도록 지도를 초기화
-onMounted(() => {
-  const mapScript = document.createElement('script');
-  mapScript.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder';
-  mapScript.async = true;
-  mapScript.onload = initMap;
-  document.head.appendChild(mapScript);
-});
 </script>
 
 
