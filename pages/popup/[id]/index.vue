@@ -65,7 +65,7 @@
 
       <div class="popup__location-box">
         <div class="popup__location-address">
-          <span>{{ popup?.address }} {{ popup?.addressDetail }}</span>
+          <span>{{ popup?.addressDetail }}</span>
           <button class="copy-btn" @click="copyAddress">주소복사</button>
         </div>
 
@@ -102,7 +102,6 @@ const kakaoMapApiKey = config.public.kakaoMapApiKey; // 환경변수에서 API_K
 // 카카오맵 관련
 let kakaoMap;
 let kakaoMarker;
-// const map = new window.kakao.Map(container, options);
 
 // 슬라이드 인덱스 & 상태 관리
 const currentIdx = ref(0);
