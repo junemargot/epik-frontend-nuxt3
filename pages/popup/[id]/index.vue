@@ -3,54 +3,56 @@
   <main class="popup__wrap">
     <section class="popup__infomation">
       <div class="popup__information-inner">
-      <ClientOnly>
-      <div class="popup-info__slider">
-        <div class="popup-info__slides" ref="slideContainer">
-          <img class="popup-info__slide" 
-            v-for="(imageName, index) in popup?.saveImageNames" 
-            :key="index"
-            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" 
-            :alt="`이미지 #${index + 1}`" 
-            @load="onImageLoad(index)"  
-          />
-        </div>
-        <a class="popup-info__prev" :class="{ disabled: !canGoPrev }" @click="prevSlide">
-          <i class='bx bx-chevron-left'></i>
-        </a>
-        <a class="popup-info__next" :class="{ disabled: !canGoNext }" @click="nextSlide">
-          <i class='bx bx-chevron-right'></i>
-        </a>
-      </div>
-      </ClientOnly>
-
-      <div class="popup__details">
-        <div class="">
-          <h1 class="popup__title">{{ popup?.title }}</h1>
-          <div class="popup__address">
-            <i class='bx bx-map'></i>
-            <span>{{ popup?.address }}</span>
+        <ClientOnly>
+        <div class="popup-info__slider">
+          <div class="popup-info__slides" ref="slideContainer">
+            <img class="popup-info__slide" 
+              v-for="(imageName, index) in popup?.saveImageNames" 
+              :key="index"
+              :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" 
+              :alt="`이미지 #${index + 1}`" 
+              @load="onImageLoad(index)"  
+            />
           </div>
-          <div class="popup__date">
-            <i class='bx bx-calendar'></i>
-            <span name="startDate">{{ formatDate(popup?.startDate) }}</span>
-            <span>~</span>
-            <span name="endDate">{{ formatDate(popup?.endDate) }}</span>
-          </div>
-          <div class="popup__tags">
-            <span v-for="(tag, index) in popup?.tags" :key="index" class="popup__tag">
-              {{ tag }}
-            </span>
-          </div>
-        </div>
-
-        <!-- <div class="popup__links">
-          <a href="#" class="popup__icon-link" @click.prevent="clickBookmark">
-            <i :class="['icon', isBookmark ? 'bx bxs-bookmark' : 'bx bx-bookmark', { bookmarkCheck: isBookmark }]"></i>
-            <span>북마크</span>
+          <a class="popup-info__prev" :class="{ disabled: !canGoPrev }" @click="prevSlide">
+            <i class='bx bx-chevron-left'></i>
           </a>
-        </div> -->
+          <a class="popup-info__next" :class="{ disabled: !canGoNext }" @click="nextSlide">
+            <i class='bx bx-chevron-right'></i>
+          </a>
+        </div>
+        </ClientOnly>
+        <!-- POPUP DETAILS -->
+        <div class="popup__details">
+          <div class="">
+            <h1 class="popup__title">{{ popup?.title }}</h1>
+            <div class="popup__address">
+              <i class='bx bx-map'></i>
+              <span>{{ popup?.address }}</span>
+            </div>
+            <div class="popup__date">
+              <i class='bx bx-calendar'></i>
+              <span name="startDate">{{ formatDate(popup?.startDate) }}</span>
+              <span>~</span>
+              <span name="endDate">{{ formatDate(popup?.endDate) }}</span>
+            </div>
+            <div class="popup__tags">
+              <span v-for="(tag, index) in popup?.tags" :key="index" class="popup__tag">
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+
+          <!-- <div class="popup__links">
+            <a href="#" class="popup__icon-link" @click.prevent="clickBookmark">
+              <i :class="['icon', isBookmark ? 'bx bxs-bookmark' : 'bx bx-bookmark', { bookmarkCheck: isBookmark }]"></i>
+              <span>북마크</span>
+            </a>
+          </div> -->
+        </div>
+        <!-- END POPUP DETAILS -->
       </div>
-      </div>
+      <!-- END POPUP INFORMATION INNER -->
     </section>
 
     <!-- section 2 -->
@@ -58,22 +60,18 @@
 
     <!-- section 3 -->
     <section class="popup__addinfo popup__information-inner">
-      <!-- 지도 영역 -->
       <div id="map" style="width:100%;height:400px;"></div>
-      <!-- 상세 주소 박스 -->
       <div class="popup__location-box">
         <div class="popup__location-address">
           <span>{{ popup?.address }} {{ popup?.addressDetail }}</span>
           <button class="copy-btn" @click="copyAddress">주소복사</button>
         </div>
-        
         <div class="popup__location-link" @click="openLink(popup?.snsLink)">
           <a :href="popup?.snsLink" class="popup__sns-link" target="_blank">
             <span>SNS 바로가기</span>
           </a>
           <i class='bx bx-chevron-right'></i>
         </div>
-
         <div class="popup__location-link" @click="openLink(popup?.webLink)">
           <a :href="popup?.webLink" class="popup__sns-link" target="_blank">
             <span>브랜드 홈페이지 바로가기</span>
@@ -95,18 +93,6 @@ const route = useRoute();
 const popupId = route.params.id;
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
-
-// 북마크 상태 관리
-const isBookmark = ref(false);
-function clickBookmark() {
-  isBookmark.value = !isBookmark.value;
-}
-
-// 알림 상태 관리
-const isNotification = ref(false);
-function clickNotification() {
-  isNotification.value = !isNotification.value;
-}
 
 // 슬라이드 인덱스 & 상태 관리
 const currentIdx = ref(0);
@@ -141,8 +127,6 @@ function updateSlideControls() {
 
   canGoPrev.value = currentIdx.value > 0;
   canGoNext.value = currentIdx.value < maxSlideIdx;
-  // canGoPrev.value = currentIdx.value > 0; // 0보다 큰 경우에만 이전 버튼 활성화
-  // canGoNext.value = currentIdx.value < total - 1; // 마지막 슬라이드가 아닌 경우에만 다음 버튼 활성화
 
   console.log(`슬라이드 상태 업데이트: 현재=${currentIdx.value}, 전체=${total}, 이전=${canGoPrev.value}, 다음=${canGoNext.value}`);
 }
@@ -224,36 +208,8 @@ function initializeSlider() {
     // setInitialPos();
     // updateSlideControls();
 
-    console.log(`슬라이더 초기화 완료: ${slides.value.length}개 슬라이드, 총 너비: ${totalWidth}px`);  });
-}
-// function makeClone() {
-//   slides.value.forEach((slide) => {
-//     const cloneSlide = slide.cloneNode(true);
-//     cloneSlide.classList.add('clone');
-//     slideContainer.value.appendChild(cloneSlide);
-//   });
-
-//   slides.value.reverse().forEach((slide) => {
-//     const cloneSlide = slide.cloneNode(true);
-//     cloneSlide.classList.add('clone');
-//     slideContainer.value.prepend(cloneSlide);
-//   });
-
-//   slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
-// }
-
-// 전체 컨테이너 폭 설정(슬라이드 개수만큼)
-function updateWidth() {
-  if(!slideContainer.value || slides.value.length === 0) return;
-
-  const totalWidth = slideWidth.value * slides.value.length;
-  slideContainer.value.style.width = `${totalWidth}px`;
-}
-
-// 초기 위치 (현재 인덱스가 0이면 0px가 맞음)
-function setInitialPos() {
-  if(!slideContainer.value) return;
-  slideContainer.value.style.transform = `translateX(-${slideWidth.value * currentIdx.value}px)`;
+    console.log(`슬라이더 초기화 완료: ${slides.value.length}개 슬라이드, 총 너비: ${totalWidth}px`);  
+  });
 }
 
 // 슬라이드 이동 함수
@@ -348,12 +304,38 @@ function initMap() {
 }
 
 
-// onMounted
+// 북마크 상태 관리
+const isBookmark = ref(false);
+function clickBookmark() {
+  isBookmark.value = !isBookmark.value;
+}
+
+// 알림 상태 관리
+const isNotification = ref(false);
+function clickNotification() {
+  isNotification.value = !isNotification.value;
+}
+
+
+// function makeClone() {
+//   slides.value.forEach((slide) => {
+//     const cloneSlide = slide.cloneNode(true);
+//     cloneSlide.classList.add('clone');
+//     slideContainer.value.appendChild(cloneSlide);
+//   });
+
+//   slides.value.reverse().forEach((slide) => {
+//     const cloneSlide = slide.cloneNode(true);
+//     cloneSlide.classList.add('clone');
+//     slideContainer.value.prepend(cloneSlide);
+//   });
+
+//   slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
+// }
+
+
+
 onMounted(async () => {
-  // slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
-  // slideContainer.value = document.querySelector('.popup-info__slides');
-  // slideWidth.value = slides.value[0]?.clientWidth || 0;
-  // 이미지가 로드된 후에 슬라이더 초기화
   nextTick(() => {
     if (popup.value && popup.value.saveImageNames && popup.value.saveImageNames.length > 0) {
       checkImagesLoaded();
