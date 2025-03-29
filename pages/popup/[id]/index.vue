@@ -3,18 +3,25 @@
   <main class="popup__wrap">
     <section class="popup__infomation">
       <div class="popup__information-inner">
+      <ClientOnly>
       <div class="popup-info__slider">
-        <div class="popup-info__slides">
-          <img class="popup-info__slide" v-for="(imageName, index) in popup?.saveImageNames" :key="index"
-            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" :alt="`이미지 #${index + 1}`" />
+        <div class="popup-info__slides" ref="slideContainer">
+          <img class="popup-info__slide" 
+            v-for="(imageName, index) in popup?.saveImageNames" 
+            :key="index"
+            :src="`http://localhost:8081/api/v1/uploads/images/popup/${imageName}`" 
+            :alt="`이미지 #${index + 1}`" 
+            @load="onImageLoad(index)"  
+          />
         </div>
-        <a class="popup-info__prev" @click="prevSlide">
+        <a class="popup-info__prev" :class="{ disabled: !canGoPrev }" @click="prevSlide">
           <i class='bx bx-chevron-left'></i>
         </a>
-        <a class="popup-info__next" @click="nextSlide">
+        <a class="popup-info__next" :class="{ disabled: !canGoNext }" @click="nextSlide">
           <i class='bx bx-chevron-right'></i>
         </a>
       </div>
+      </ClientOnly>
 
       <div class="popup__details">
         <div class="">
@@ -31,7 +38,7 @@
           </div>
           <div class="popup__tags">
             <span v-for="(tag, index) in popup?.tags" :key="index" class="popup__tag">
-              {{ tag }} <!-- tag 객체에서 tag 필드만 출력 -->
+              {{ tag }}
             </span>
           </div>
         </div>
@@ -68,7 +75,7 @@
         </div>
 
         <div class="popup__location-link" @click="openLink(popup?.webLink)">
-          <a :href="popup?.snsLink" class="popup__sns-link">
+          <a :href="popup?.webLink" class="popup__sns-link" target="_blank">
             <span>브랜드 홈페이지 바로가기</span>
           </a>
           <i class='bx bx-chevron-right'></i>
@@ -101,22 +108,74 @@ function clickNotification() {
   isNotification.value = !isNotification.value;
 }
 
-// 슬라이더 상태 관리
+// 슬라이드 인덱스 & 상태 관리
 const currentIdx = ref(0);
 const slideWidth = ref(0);
 const slideContainer = ref(null);
 const slides = ref([]);
 const imagesLoaded = ref(false);
+const canGoPrev = ref(false);
+const canGoNext = ref(false);
 
+const totalImages = ref(0);
+const loadedImages = ref(0);
+
+// 한 화면에 보여질 슬라이드 개수
+const slidesPerView = 2;
+
+function onImageLoad(index) {
+  loadedImages.value++;
+  console.log(`Image ${index} loaded. ${loadedImages.value}/${totalImages.value}`);
+
+  if(loadedImages.value === totalImages.value && totalImages.value > 0) {
+    initializeSlider();
+  }
+}
+
+// 슬라이드 버튼 활성화 로직
+function updateSlideControls() {
+  if(!slides.value.length) return;
+
+  const total = slides.value.length;
+  const maxSlideIdx = Math.max(0, total - slidesPerView);
+
+  canGoPrev.value = currentIdx.value > 0;
+  canGoNext.value = currentIdx.value < maxSlideIdx;
+  // canGoPrev.value = currentIdx.value > 0; // 0보다 큰 경우에만 이전 버튼 활성화
+  // canGoNext.value = currentIdx.value < total - 1; // 마지막 슬라이드가 아닌 경우에만 다음 버튼 활성화
+
+  console.log(`슬라이드 상태 업데이트: 현재=${currentIdx.value}, 전체=${total}, 이전=${canGoPrev.value}, 다음=${canGoNext.value}`);
+}
 
 // 이미지 로드 확인
 function checkImagesLoaded() {
-  const images = Array.from(document.querySelectorAll('.popup-info__slide img'));
-  let loadedCount = 0;
+  const images = Array.from(document.querySelectorAll('.popup-info__slide'));
+  console.log('슬라이드 이미지 개수: ', images.length);
+  
+  if (!images.length) {
+    // 이미지가 0개면, imagesLoaded 바로 true로 세팅 (혹은 그대로 false로 두고 빈슬라이더 표시)
+    imagesLoaded.value = false;
+    console.log('이미지가 없습니다.');
 
+    return;
+  }
+
+  // 이미지가 이미 모두 로드되었는지 확인
+  const allLoaded = images.every(img => img.complete);
+  if(allLoaded) {
+    console.log('모든 이미지가 이미 로드되었습니다.');
+    imagesLoaded.value = true;
+    initializeSlider();
+    return;
+  }
+
+  // 이미지 로드 이벤트 처리
+  let loadedCount = 0;
   const imageLoaded = () => {
     loadedCount++;
+    console.log('로딩완료', loadedCount, '/', images.length);
     if (loadedCount === images.length) {
+      console.log('모든 이미지 로드 완료')
       imagesLoaded.value = true;
       initializeSlider();
     }
@@ -135,40 +194,84 @@ function checkImagesLoaded() {
 // 슬라이더 초기화
 function initializeSlider() {
   nextTick(() => {
-    makeClone();
-    updateWidth();
-    setInitialPos();
-  });
+    slideContainer.value = document.querySelector('.popup-info__slides');
+    slides.value = Array.from(document.querySelectorAll('.popup-info__slide')); // 원본 슬라이드만 추출
+
+    // 슬라이드가 없으면 좋료
+    if(slides.value.length === 0) {
+      console.log('슬라이드가 없습니다.');
+      return;
+    }
+    
+    // 단일 슬라이드의 너비
+    slideWidth.value = 450;
+
+    // 슬라이드 컨테이너 너비 설정 (슬라이드 개수 * 슬라이드 너비)
+    const totalWidth = slideWidth.value * slides.value.length;
+    if(slideContainer.value) {
+      slideContainer.value.style.width = `${totalWidth}px`;
+    }
+
+    // 초기 위치 설정
+    currentIdx.value = 0;
+    if(slideContainer.value) {
+      slideContainer.value.style.transform = `translateX(0px)`;
+    }
+
+    // 상태 업데이트
+    updateSlideControls();
+    // updateWidth();
+    // setInitialPos();
+    // updateSlideControls();
+
+    console.log(`슬라이더 초기화 완료: ${slides.value.length}개 슬라이드, 총 너비: ${totalWidth}px`);  });
 }
+// function makeClone() {
+//   slides.value.forEach((slide) => {
+//     const cloneSlide = slide.cloneNode(true);
+//     cloneSlide.classList.add('clone');
+//     slideContainer.value.appendChild(cloneSlide);
+//   });
 
-function makeClone() {
-  slides.value.forEach((slide) => {
-    const cloneSlide = slide.cloneNode(true);
-    cloneSlide.classList.add('clone');
-    slideContainer.value.appendChild(cloneSlide);
-  });
+//   slides.value.reverse().forEach((slide) => {
+//     const cloneSlide = slide.cloneNode(true);
+//     cloneSlide.classList.add('clone');
+//     slideContainer.value.prepend(cloneSlide);
+//   });
 
-  slides.value.reverse().forEach((slide) => {
-    const cloneSlide = slide.cloneNode(true);
-    cloneSlide.classList.add('clone');
-    slideContainer.value.prepend(cloneSlide);
-  });
+//   slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
+// }
 
-  slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
-}
-
+// 전체 컨테이너 폭 설정(슬라이드 개수만큼)
 function updateWidth() {
-  const totalSlides = document.querySelectorAll('.popup-info__slide').length;
-  slideContainer.value.style.width = `${slideWidth.value * totalSlides}px`;
+  if(!slideContainer.value || slides.value.length === 0) return;
+
+  const totalWidth = slideWidth.value * slides.value.length;
+  slideContainer.value.style.width = `${totalWidth}px`;
 }
 
+// 초기 위치 (현재 인덱스가 0이면 0px가 맞음)
 function setInitialPos() {
-  slideContainer.value.style.transform = `translateX(-${slideWidth.value * slides.value.length}px)`;
+  if(!slideContainer.value) return;
+  slideContainer.value.style.transform = `translateX(-${slideWidth.value * currentIdx.value}px)`;
 }
 
+// 슬라이드 이동 함수
 function moveSlide(num) {
-  currentIdx.value = (num + slides.value.length) % slides.value.length;
-  slideContainer.value.style.transform = `translateX(${-currentIdx.value * slideWidth.value}px)`;
+  if (!slideContainer.value || !slides.value.length) return;
+  
+  // 인덱스 범위 제한
+  const maxIndex = Math.max(0, slides.value.length - slidesPerView);
+  currentIdx.value = Math.max(0, Math.min(num, maxIndex));
+  
+  // 실제 이동
+  const translateX = currentIdx.value * slideWidth.value;
+  slideContainer.value.style.transform = `translateX(-${translateX}px)`;
+  
+  console.log(`슬라이드 이동: ${currentIdx.value}/${maxIndex}, 변환: -${translateX}px`);
+  
+  // 상태 업데이트
+  updateSlideControls();
 }
 
 function prevSlide() {
@@ -188,20 +291,20 @@ const { data, error } = await useFetch(`/admin/popup/${popupId}`, {
   lazy: false    // 바로 fetch
 });
 
+// fetch 성공 시 이미지 로드 감지 -> 슬라이더 셋업
 watchEffect(() => {
-  if (data.value) {
+  if (data.value && data.value.saveImageNames) {
     popup.value = data.value;
-    nextTick(checkImagesLoaded);
+    totalImages.value = popup.value.saveImageNames?.length || 0;
+    loadedImages.value = 0; // reset counter
+
+    nextTick(() => {
+      checkImagesLoaded(); // 이미지 로드 이후에 슬라이더 초기화
+    });
+
   } else if (error.value) {
     console.error('Failed to fetch popup data:', error.value);
   }
-});
-
-// onMounted
-onMounted(async () => {
-  slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
-  slideContainer.value = document.querySelector('.popup-info__slides');
-  slideWidth.value = slides.value[0]?.clientWidth || 0;
 });
 
 // 날짜 포맷
@@ -215,28 +318,7 @@ function formatDate(dateString) {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 }
 
-// 지도 관련 변수 및 함수
-let map;
-let marker;
-let infowindow;
-
-function initMap() {
-  const mapOptions = {
-    center: new naver.maps.LatLng(37.5297, 126.9647), // 초기 중심 좌표 (서울시청)
-    zoom: 15
-  };
-
-  map = new naver.maps.Map('map', mapOptions);
-
-  marker = new naver.maps.Marker({
-    position: mapOptions.center,
-    map: map
-  });
-
-  infowindow = new naver.maps.InfoWindow();
-}
-
-// 복사 
+// 주소 복사 
 function copyAddress() {
   const fullAddress = `${popup.value?.address} ${popup.value?.addressDetail || ''}`.trim();
   navigator.clipboard.writeText(fullAddress).then(() => {
@@ -244,11 +326,48 @@ function copyAddress() {
   });
 }
 
+// 외부 링크 열기
+function openLink(url) {
+  if (!url) return;
+  window.open(url, '_blank');
+}
+
+// 지도 초기화 (CSR 전용) 관련 변수 및 함수
+let map;
+let marker;
+let infowindow;
+
+function initMap() {
+  const mapOptions = {
+    center: new naver.maps.LatLng(37.5297, 126.9647),
+    zoom: 15
+  };
+  map = new naver.maps.Map('map', mapOptions);
+  marker = new naver.maps.Marker({ position: mapOptions.center, map });
+  infowindow = new naver.maps.InfoWindow();
+}
+
+
+// onMounted
+onMounted(async () => {
+  // slides.value = Array.from(document.querySelectorAll('.popup-info__slide'));
+  // slideContainer.value = document.querySelector('.popup-info__slides');
+  // slideWidth.value = slides.value[0]?.clientWidth || 0;
+  // 이미지가 로드된 후에 슬라이더 초기화
+  nextTick(() => {
+    if (popup.value && popup.value.saveImageNames && popup.value.saveImageNames.length > 0) {
+      checkImagesLoaded();
+    } else {
+      console.log('팝업 데이터가 없거나 이미지가 없습니다.');
+    }
+  });
+});
+
 
 // 클라이언트에서만 실행되도록 지도를 초기화
 onMounted(() => {
   const mapScript = document.createElement('script');
-  mapScript.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder`;
+  mapScript.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yvwezi7lts&submodules=geocoder';
   mapScript.async = true;
   mapScript.onload = initMap;
   document.head.appendChild(mapScript);

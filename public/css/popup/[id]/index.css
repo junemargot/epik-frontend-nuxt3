@@ -20,17 +20,6 @@
   border: 1px solid var(--black);
 }
 
-.popup-info__slides {
-  display: flex;
-  transition: transform .5s ease;
-}
-
-.popup-info__slide {
-  width: 450px;
-  height: 450px;
-  object-fit: cover;
-}
-
 /* 팝업 슬라이더 아이콘 */
 .popup-info__slider a {
   position: absolute;
@@ -42,6 +31,25 @@
   color: var(--black);
   border: none;
   cursor: pointer;
+}
+
+.popup-info__slider a.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: default;
+}
+
+.popup-info__slides {
+  display: flex;
+  transition: transform .5s ease;
+  width: max-content;
+}
+
+.popup-info__slide {
+  flex: 0 0 450px;
+  width: 450px;
+  height: 450px;
+  object-fit: cover;
 }
 
 .popup-info__prev {
