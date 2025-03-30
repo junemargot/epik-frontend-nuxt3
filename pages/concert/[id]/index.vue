@@ -62,8 +62,6 @@ const apiBase = config.public.apiBase;
 
 // 상태 관리 위한 ref 선언
 const concert = ref(null);
-const error = ref(null);
-const images = ref([]);
 
 // 데이터 가져오기
 watchEffect(async () => {
