@@ -20,8 +20,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
+import { useKakaoMap } from '~/composables/useKakaoMap';
 
 const props = defineProps({
   isOpen: Boolean,
@@ -31,95 +32,130 @@ const props = defineProps({
 
 defineEmits(['close']);
 
-// 환경 변수에서 API 키 가져오기
 const config = useRuntimeConfig();
 const kakaoMapApiKey = config.public.kakaoMapApiKey;
+const { loadKakaoMapScript, initKakaoMap } = useKakaoMap();
 
-// 카카오맵 관련 함수
-let kakaoMap;
-let kakaoMarker;
 
-// 카카오맵 초기화
-function initKakaoMap() {
-  const container = document.getElementById('kakao-map');
-  
-  if(!container) {
-    console.error('kakao-map 요소를 찾을 수 없습니다.');
-    return;
-  }
-  
-  try {
-    // 지도 생성 옵션
-    const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667), // 기본 중심 좌표
-      level: 3 // 지도 확대 레벨
-    };
-
-    // 지도 생성
-    kakaoMap = new kakao.maps.Map(container, options);
-
-    // 마커 생성
-    kakaoMarker = new kakao.maps.Marker({
-      position: options.center,
-      map: kakaoMap
+watch(() => props.isOpen, (newValue) => {
+  if(newValue) {
+    // 모달이 열릴 때 지도 초기화
+    nextTick(() => {
+      initializeMap();
     });
+  }
+});
 
-    // 주소가 있으면 해당 위치로 지도 이동
-    if (props.address) { // props의 address 사용
-      updateMapLocation(props.address);
+function initializeMap() {
+  loadKakaoMapScript(kakaoMapApiKey, () => {
+    const container = document.getElementById('kakao-map');
+    if(container) {
+      initKakaoMap(container, kakaoMapApiKey, props.address);
+    } else {
+      console.error('지도 컨테이너를 찾을 수 없습니다.');
     }
-  } catch(e) {
-    console.error('카카오맵 초기화 오류: ', e);
-  }
-}
-
-// 주소로 지도 위치 업데이트
-function updateMapLocation(address) {
-  if (!kakaoMap || !address) return;
-
-  try {
-    const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(address, (result, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        
-        // 마커 위치 변경
-        kakaoMarker.setPosition(coords);
-        
-        // 지도 중심 이동
-        kakaoMap.setCenter(coords);
-      }
-    });
-  } catch(e) {
-    console.error('지도 위치 업데이트 오류: ', e);
-  }
-}
-
-// 카카오맵 스크립트 로드
-function loadKakaoMapScript() {
-  // 이미 로드된 경우 중복 로드 방지
-  if(window.kakao && window.kakao.maps) {
-    initKakaoMap();
-    return;
-  }
-
-  const script = document.createElement('script');
-  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapApiKey}&libraries=services&autoload=false`;
-  script.onload = () => {
-    kakao.maps.load(() => {
-      initKakaoMap();
-    });
-  };
-  
-  document.head.appendChild(script);
+  });
 }
 
 onMounted(() => {
-  // 모달이 열릴 때 지도 초기화
-  nextTick(() => {
-    loadKakaoMapScript();
-  })
+  if(props.isOpen) {
+    nextTick(() => {
+      initializeMap();
+    });
+  }
 });
+
+
+
+// // 환경 변수에서 API 키 가져오기
+// const config = useRuntimeConfig();
+// const kakaoMapApiKey = config.public.kakaoMapApiKey;
+
+// // 카카오맵 관련 함수
+// let kakaoMap;
+// let kakaoMarker;
+
+// // 카카오맵 초기화
+// function initKakaoMap() {
+//   const container = document.getElementById('kakao-map');
+  
+//   if(!container) {
+//     console.error('kakao-map 요소를 찾을 수 없습니다.');
+//     return;
+//   }
+  
+//   try {
+//     // 지도 생성 옵션
+//     const options = {
+//       center: new kakao.maps.LatLng(33.450701, 126.570667), // 기본 중심 좌표
+//       level: 3 // 지도 확대 레벨
+//     };
+
+//     // 지도 생성
+//     kakaoMap = new kakao.maps.Map(container, options);
+
+//     // 마커 생성
+//     kakaoMarker = new kakao.maps.Marker({
+//       position: options.center,
+//       map: kakaoMap
+//     });
+
+//     // 주소가 있으면 해당 위치로 지도 이동
+//     if (props.address) { // props의 address 사용
+//       updateMapLocation(props.address);
+//     }
+//   } catch(e) {
+//     console.error('카카오맵 초기화 오류: ', e);
+//   }
+// }
+
+// // 주소로 지도 위치 업데이트
+// function updateMapLocation(address) {
+//   if (!kakaoMap || !address) return;
+
+//   try {
+//     const geocoder = new kakao.maps.services.Geocoder();
+//     geocoder.addressSearch(address, (result, status) => {
+//       if (status === kakao.maps.services.Status.OK) {
+//         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        
+//         // 마커 위치 변경
+//         kakaoMarker.setPosition(coords);
+        
+//         // 지도 중심 이동
+//         kakaoMap.setCenter(coords);
+//       }
+//     });
+//   } catch(e) {
+//     console.error('지도 위치 업데이트 오류: ', e);
+//   }
+// }
+
+// // 카카오맵 스크립트 로드
+// function loadKakaoMapScript() {
+//   // 이미 로드된 경우 중복 로드 방지
+//   if(window.kakao && window.kakao.maps) {
+//     initKakaoMap();
+//     return;
+//   }
+
+//   const script = document.createElement('script');
+//   script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapApiKey}&libraries=services&autoload=false`;
+//   script.onload = () => {
+//     kakao.maps.load(() => {
+//       initKakaoMap();
+//     });
+//   };
+  
+//   document.head.appendChild(script);
+// }
+
+// onMounted(() => {
+//   // 모달이 열릴 때 지도 초기화
+//   nextTick(() => {
+//     loadKakaoMapScript();
+//   })
+// });
 
 </script>
 

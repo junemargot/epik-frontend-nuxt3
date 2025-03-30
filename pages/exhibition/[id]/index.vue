@@ -27,48 +27,6 @@
           :ticket-offices="exhibition.ticketOffices"
           :address="exhibition.address"
         />
-        <!-- <div class="musical__content">
-          <img :src="`http://localhost:8081/api/v1/uploads/images/exhibition/${exhibition.saveImageName}`"
-            :alt="exhibition.title + ' 포스터'">
-          <div class="musical__info">
-            <div class="musical__info-row">
-              <p class="musical__info-label">장소</p>
-              <p class="musical__info-value">{{ exhibition.venue }}</p>
-            </div>
-            <div class="musical__info-row">
-              <p class="musical__info-label">공연시간</p>
-              <p class="musical__info-value">{{ exhibition.runningTime }}</p>
-            </div>
-            <div class="musical__info-row">
-              <p class="musical__info-label">공연기간</p>
-              <p class="musical__info-value">1
-                {{ formatDate(exhibition.startDate) }} ~ {{ formatDate(exhibition.endDate) }}
-              </p>
-            </div>
-            <div class="musical__info-row">
-              <p class="musical__info-label">관람연령</p>
-              <p class="musical__info-value">{{ exhibition.ageRestriction }}</p>
-            </div>
-            <div class="musical__info-row">
-              <p class="musical__info-label">가격</p>
-              <ul class="musical__price-list">
-                <li v-for="price in exhibition.ticketPrices" :key="price.id">
-                  <span class="musical__seat">{{ price.type }}</span>
-                  <span class="musical__price">{{ price.price }}</span>
-                </li>
-              </ul>
-            </div>
-            <div class="musical__info-row">
-              <p class="musical__info-label">예매처</p>
-              <div class="musical__booking-links">
-                <a :href="office.link" target="_blank" name="link" v-for="office in exhibition.ticketOffices"
-                  :key="office.id">
-                  {{ office.name }}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div> -->
 
         <!-- section 3 -->
         <EventIntro 
