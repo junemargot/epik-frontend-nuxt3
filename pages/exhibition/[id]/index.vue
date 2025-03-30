@@ -30,17 +30,17 @@
 
         <!-- section 3 -->
         <EventIntro 
-          title="뮤지컬"
+          title="전시회"
           :content="exhibition.content"
           :youtube-url="exhibition.youtubeUrl"
           :images="exhibition.exhibitionImages"
         />
 
         <!-- section 4 -->
-        <EventLocation 
+        <!-- <EventLocation 
           :address="exhibition.address"
-
-        />
+          :venue-name="exhibition.venue"
+        /> -->
       </main>
     </div>
   </div>
