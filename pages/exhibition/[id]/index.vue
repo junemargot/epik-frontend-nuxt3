@@ -49,6 +49,10 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
+import EventHeader from '~/components/event/EventHeader.vue';
+import EventInfo from '~/components/event/EventInfo.vue';
+import EventIntro from '~/components/event/EventIntro.vue';
+import EventLocation from '~/components/event/EventLocation.vue';
 
 const route = useRoute();
 const exhibitionId = route.params.id;
@@ -74,5 +78,5 @@ watchEffect(async () => {
 </script>
 
 <style scoped>
-@import url('/public/css/musical/[id]/index.css');
-</style>
+@import url('/public/css/components/event.css');
+</style>ㄴ

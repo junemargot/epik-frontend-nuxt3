@@ -91,6 +91,5 @@ function handleBookmark() {
 </script>
 
 <style scoped>
-/* @import url('/public/css/concert/[id]/index.css');
-@import url('/public/css/components/event.css'); */
+@import url('/public/css/components/event.css');
 </style>

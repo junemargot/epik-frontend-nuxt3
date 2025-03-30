@@ -1,7 +1,7 @@
 <template>
 <div class="wrap" v-if="musical">
     <!-- section 1 -->
-    <div class="musical">
+    <div class="event">
       <EventHeader 
         :title="musical.title"
         @notification-click="handleNotification"
@@ -49,6 +49,10 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
+import EventHeader from '~/components/event/EventHeader.vue';
+import EventInfo from '~/components/event/EventInfo.vue';
+import EventIntro from '~/components/event/EventIntro.vue';
+import EventLocation from '~/components/event/EventLocation.vue';
 
 // 라우터 및 환경 변수 설정
 const route = useRoute();
@@ -77,5 +81,5 @@ watchEffect(async () => {
 
 
 <style lang="css" scoped>
-@import url('/public/css/musical/[id]/index.css');
+@import url('/public/css/components/event.css');
 </style>
