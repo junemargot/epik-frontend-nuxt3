@@ -1,12 +1,6 @@
 import { ref } from 'vue';
-// import { useRuntimeConfig } from 'nuxt/app';
 
 export function useKakaoMap() {
-  // 환경변수에서 API KEY 가져오기
-  // const config = useRuntimeConfig();
-  // const kakaoMapApiKey = config.public.kakaoMapApiKey;
-
-  // 카카오맵 관련 함수
   const kakaoMap = ref(null);
   const kakaoMarker = ref(null);
 
@@ -21,7 +15,7 @@ export function useKakaoMap() {
       // 지도 생성 옵션
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 기본 중심 좌표
-        level: 3                                              // 지도 확대 레벨
+        level: 3 // 지도 확대 레벨
       };
 
       // 지도 생성
@@ -88,9 +82,4 @@ export function useKakaoMap() {
     updateMapLocation,
     loadKakaoMapScript
   };
-  
-  // onMounted(() => {
-  //   // 모달이 열릴 때 지도 초기화
-  //   loadKakaoMapScript();
-  // });
 }
