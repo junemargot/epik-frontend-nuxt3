@@ -40,36 +40,36 @@
         <!-- END BOARD CONTAINER -->
 
         <!-- PAGINATION -->
-      <div class="pagination-wrapper">
-        <div class="pagination">
-          <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(1)">
-            <i class="bx bx-chevrons-left"></i>
-          </button>
-          <button type="button" class="page-btn prev-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(currentPage - 1)">
-            <i class="bx bx-chevron-left"></i>
-          </button>
-          <button v-for="page in pages" :key="page" type="button" class="page-btn"
-            :class="{ active: currentPage === page }" @click.prevent.stop="changePage(page)">
-            {{ page }}
-          </button>
-          <button type="button" class="page-btn next-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(currentPage + 1)">
-            <i class="bx bx-chevron-right"></i>
-          </button>
-          <button type="button" class="page-btn end-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(totalPages)">
-            <i class="bx bx-chevrons-right"></i>
-          </button>
+        <div class="pagination-wrapper">
+          <div class="pagination">
+            <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
+              @click.prevent.stop="changePage(1)">
+              <i class="bx bx-chevrons-left"></i>
+            </button>
+            <button type="button" class="page-btn prev-page" :disabled="!hasPrevPage"
+              @click.prevent.stop="changePage(currentPage - 1)">
+              <i class="bx bx-chevron-left"></i>
+            </button>
+            <button v-for="page in pages" :key="page" type="button" class="page-btn"
+              :class="{ active: currentPage === page }" @click.prevent.stop="changePage(page)">
+              {{ page }}
+            </button>
+            <button type="button" class="page-btn next-page" :disabled="!hasNextPage"
+              @click.prevent.stop="changePage(currentPage + 1)">
+              <i class="bx bx-chevron-right"></i>
+            </button>
+            <button type="button" class="page-btn end-page" :disabled="!hasNextPage"
+              @click.prevent.stop="changePage(totalPages)">
+              <i class="bx bx-chevrons-right"></i>
+            </button>
+          </div>
+          <!-- END PAGINATION -->
+          <div class="registration">
+            <RouterLink to="/admin/contents/popup/new">
+              <button type="button" class="registration__button">등록</button>
+            </RouterLink>
+          </div>
         </div>
-        <div class="registration">
-          <RouterLink to="/admin/contents/popup/new">
-            <button type="button" class="registration__button">등록</button>
-          </RouterLink>
-        </div>
-      </div>
-      <!-- END PAGINATION -->
       </section>
     </div> <!-- END MAIN WRAP -->
 
@@ -89,8 +89,14 @@
           </ul>
         </div>
         <div class="search__box">
-          <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery" />
-          <i class='bx bx-search'></i>
+          <input 
+            type="text" 
+            id="search-input" 
+            :placeholder="inputPlaceholder" 
+            v-model="searchQuery" 
+            @keyup.enter="performSearch" 
+          />
+          <i class='bx bx-search' @click="performSearch"></i>
         </div>
       </div>
     </section>
@@ -98,129 +104,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-// const popups = ref([
-//   {
-//     id: 15,
-//     no: 15,
-//     title: "주술회전 0 전시회 팝업스토어",
-//     writer: "관리자2",
-//     regDate: "2024-08-25",
-//     viewCnt: 15,
-//   },
-//   {
-//     id: 14,
-//     no: 14,
-//     title: "산리오 러버스 클럽 홍대점",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 20,
-//   },
-//   {
-//     id: 13,
-//     no: 13,
-//     title: "마루는 강쥐 팝업스토어 <기적의 별>",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 22,
-//   },
-//   {
-//     id: 12,
-//     no: 12,
-//     title: "딥디크 <해도니스틱 썸머>",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 32,
-//   },
-//   {
-//     id: 11,
-//     no: 11,
-//     title: "올리브영 서울뷰티 팝업 in 홍대",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 21,
-//   },
-//   {
-//     id: 10,
-//     no: 10,
-//     title: "쿼카 앤 보보 인 더 우드 팝업스토어",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 18,
-//   },
-//   {
-//     id: 9,
-//     no: 9,
-//     title: "보노보노 조개를 찾아줘 팝업",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 15,
-//   },
-//   {
-//     id: 8,
-//     no: 8,
-//     title: "백년서점 원모어백 팝업스토어",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 10,
-//   },
-//   {
-//     id: 7,
-//     no: 7,
-//     title: "<인생작을 찾아서> 팝업",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 20,
-//   },
-//   {
-//     id: 6,
-//     no: 6,
-//     title: "샤넬 뷰티 팝업 스토어",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 17,
-//   },
-//   {
-//     id: 5,
-//     no: 5,
-//     title: "어뮤즈 X 헬로키티 콜라보 팝업스토어",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 20,
-//   },
-//   {
-//     id: 4,
-//     no: 4,
-//     title: "메디힐 X Kiaf SEOUL 2024 팝업",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 12,
-//   },
-//   {
-//     id: 3,
-//     no: 3,
-//     title: "무신사 뷰티 페스타 IN 성수",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 10,
-//   },
-//   {
-//     id: 2,
-//     no: 2,
-//     title: "포플리 타임스퀘어 팝업스토어",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 7,
-//   },
-//   {
-//     id: 1,
-//     no: 1,
-//     title: "시야쥬 더현대 판교 팝업",
-//     writer: "관리자",
-//     regDate: "2024-08-25",
-//     viewCnt: 11,
-//   }
-// ]);
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 // 상태 관리를 위한 ref 선언
 const popups = ref([]);
@@ -247,6 +132,7 @@ const categoryMapping = {
   '작성자': 'WRITER'
 };
 
+// 라우터 및 라우트 설정
 const router = useRouter();
 const route = useRoute();
 const config = useRuntimeConfig();
@@ -256,6 +142,7 @@ const apiBase = config.public.apiBase;
 const fetchPopups = async (page = 1) => {
   try {
     const pageNumber = page;
+    console.log("fetching page: ", pageNumber);
 
     const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/popup`;
     const params = {
@@ -266,7 +153,6 @@ const fetchPopups = async (page = 1) => {
         : {})
     };
 
-    // url 쿼리 문자열 생성
     // url 쿼리 문자열 생성
     const queryString = Object.entries(params)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
@@ -281,6 +167,7 @@ const fetchPopups = async (page = 1) => {
 
     // 응답데이터 처리
     popups.value = responseData.popupList || [];
+    // popups.value = [...(responseData.popupList || [])];
     totalCount.value = responseData.totalCount || 0;
     totalPages.value = responseData.totalPages || 0;
     hasPrevPage.value = responseData.hasPrev || false;
@@ -292,6 +179,12 @@ const fetchPopups = async (page = 1) => {
     pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
 
     currentPage.value = page;
+
+    console.log("totalPages:", totalPages.value);
+    console.log("hasPrevPage:", hasPrevPage.value);
+    console.log("hasNextPage:", hasNextPage.value);
+    console.log("pages:", pages.value);
+
   } catch(error) {
     console.error("ERROR FETCHING POPUP LIST: ", error);
   }
@@ -352,7 +245,7 @@ const performSearch = async () => {
     query: {
       page: 1,
       ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
+      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
         ? { s: categoryMapping[selectedCategory.value] }
         : {})
     }
