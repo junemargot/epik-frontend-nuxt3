@@ -62,10 +62,10 @@ import { useFetch } from '#app';
 
 const searchQuery = ref('');
 const regions = ref([
-  { id: 1, name: '더현대 서울', image: '/images/더현대.jpg', link: '' },
-  { id: 2, name: '성수', image: '/images/성수 디올.jpg', link: '' },
-  { id: 3, name: '마포/ 서대문/ 홍대', image: '/images/홍대 무신사.jpg', link: '' },
-  { id: 4, name: '강남/ 송파', image: '/images/강남역.jpg', link: '' },
+  { id: 1, name: '더현대서울', image: '/images/popup/더현대.png', link: '' },
+  { id: 2, name: '성수', image: '/images/popup/성수2.jpg', link: '' },
+  { id: 3, name: '홍대 / 합정', image: '/images/popup/마포.jpg', link: '' },
+  { id: 4, name: '강남 / 송파', image: '/images/popup/코엑스.jpg', link: '' },
   { id: 5, name: '그 외 지역', image: '/images/부산.jpg', link: '' }
 ]);
 
