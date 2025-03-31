@@ -94,6 +94,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useFetch, useRuntimeConfig } from '#imports';
+import { useDateRangePicker } from '~/composables/useDateRangePicker';
 
 // 환경 변수 설정
 const config = useRuntimeConfig();
@@ -105,14 +106,17 @@ const title = ref('');
 const titleInput = ref(null);
 const address = ref('');
 const addressDetail = ref('');
-const startDate = ref('');
-const endDate = ref('');
+// const startDate = ref('');
+// const endDate = ref('');
 const operationTime = ref('');
 const snsLink = ref('');
 const webLink = ref('');
 const editor = ref(null);
 const images = ref([]);
 const fileNames = ref([]);
+
+// DateRangePicker 관련 함수
+const { startDate, endDate, initializeDateRangePicker } = useDateRangePicker();
 
 // 컴포넌트 마운트 시 초기화 작업
 onMounted(() => {
@@ -159,6 +163,8 @@ onMounted(() => {
   setTimeout(() => {
     titleInput.value.focus();
   }, 1);
+
+  initializeDateRangePicker('startDateInput', 'endDateInput');
 });
 
 // 태그 관련 기능
@@ -215,42 +221,42 @@ const regionOptions = ref([
 
 // daterangepicker 초기화
 // 참고: onMounted 내에서 DOM 요소 접근 및 외부 라이브러리 초기화는 적절한 패턴임
-onMounted(() => {
-  const $ = window.jQuery;
+// onMounted(() => {
+//   const $ = window.jQuery;
 
-  // 시작일 선택 초기화
-  $('#startDateInput').daterangepicker({
-    singleDatePicker: true,
-    autoUpdateInput: false,
-    locale: {
-      format: 'YYYY-MM-DD',
-      cancelLabel: 'Clear'
-    }
-  }, (start) => {
-    startDate.value = start.format('YYYY-MM-DD');
-  });
+//   // 시작일 선택 초기화
+//   $('#startDateInput').daterangepicker({
+//     singleDatePicker: true,
+//     autoUpdateInput: false,
+//     locale: {
+//       format: 'YYYY-MM-DD',
+//       cancelLabel: 'Clear'
+//     }
+//   }, (start) => {
+//     startDate.value = start.format('YYYY-MM-DD');
+//   });
 
-  // 종료일 선택 초기화
-  $('#endDateInput').daterangepicker({
-    singleDatePicker: true,
-    autoUpdateInput: false,
-    locale: {
-      format: 'YYYY-MM-DD',
-      cancelLabel: 'Clear'
-    }
-  }, (end) => {
-    endDate.value = end.format('YYYY-MM-DD');
-  });
+//   // 종료일 선택 초기화
+//   $('#endDateInput').daterangepicker({
+//     singleDatePicker: true,
+//     autoUpdateInput: false,
+//     locale: {
+//       format: 'YYYY-MM-DD',
+//       cancelLabel: 'Clear'
+//     }
+//   }, (end) => {
+//     endDate.value = end.format('YYYY-MM-DD');
+//   });
 
-  // 입력 필드에 초기값 설정
-  $('#startDateInput').val(startDate.value);
-  $('#endDateInput').val(endDate.value);
+//   // 입력 필드에 초기값 설정
+//   $('#startDateInput').val(startDate.value);
+//   $('#endDateInput').val(endDate.value);
 
-  // 날짜 선택 취소 시 입력 필드 초기화
-  $('#startDateInput, #endDateInput').on('cancel.daterangepicker', function () {
-    $(this).val('');
-  });
-});
+//   // 날짜 선택 취소 시 입력 필드 초기화
+//   $('#startDateInput, #endDateInput').on('cancel.daterangepicker', function () {
+//     $(this).val('');
+//   });
+// });
 
 // 선택 옵션 상태 관리
 const selectedCategory = ref(Array(categoryOptions.value.length).fill(''));
