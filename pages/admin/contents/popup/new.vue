@@ -95,9 +95,11 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useFetch, useRuntimeConfig } from '#imports';
 
+// 환경 변수 설정
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
 
+// 라우터 및 상태 변수 초기화
 const router = useRouter();
 const title = ref('');
 const titleInput = ref(null);
@@ -112,8 +114,9 @@ const editor = ref(null);
 const images = ref([]);
 const fileNames = ref([]);
 
+// 컴포넌트 마운트 시 초기화 작업
 onMounted(() => {
-  // TOAST EDITOR RESET
+  // Toast UI 에디터 초기화
   editor.value = new toastui.Editor({
     el: document.querySelector('#contsEditor'),
     previewStyle: 'vertical',
@@ -122,23 +125,29 @@ onMounted(() => {
     placeholder: '내용을 입력해주세요',
     hideModeSwitch: true,
     hooks: {
+      // 이미지 업로드 처리 훅
       async addImageBlobHook(blob, callback) {
         try {
           console.log(blob);
 
+          // 이미지 업로드를 위한 FormData 생성
           const formData = new FormData();
           formData.append('fileName', blob);
           formData.append('domain', "popup");
 
+          // 임시 이미지 업로드 API 호출
           const response = await fetch(`${apiBase}/editor-image/upload-temp`, {
             method: "POST",
             body: formData,
           });
 
+          // 업로드된 파일명 받기
           const fileName = await response.text();
           console.log(fileName)
 
+          // 콜백으로 이미지 URL 전달
           callback(`http://localhost:8081/api/v1/uploads/temp/popup/${fileName}`);
+        
         } catch (error) {
           console.log("업로드 실패 : ", error);
         }
@@ -146,17 +155,17 @@ onMounted(() => {
     } // hooks end
   }); // new toastui.Editor end
 
-  // 제목 입력 요소에 포커스 추가
+  // 제목 입력 필드에 자동 포커스 처리
   setTimeout(() => {
     titleInput.value.focus();
   }, 1);
 });
 
-// 태그
-const tag = ref('');
-const tags = ref([]); // 여기에 입력한 tag값이 담기게 됨.******
+// 태그 관련 기능
+const tag = ref('');  // 현재 입력 중인 태그
+const tags = ref([]); // 추가된 태그 배열
 
-// 태그 추가 함수 -> 중복 텍스트도 입력 가능하게 구현 
+// 태그 추가 함수 - 중복되지 않은 태그만 추가 가능
 const addTag = () => {
   const tagText = tag.value.trim();
 
@@ -168,6 +177,7 @@ const addTag = () => {
 };
 
 // 태그 삭제 함수
+// @param {string} tagText - 삭제할 태그 텍스트
 const removeTag = (tagText) => {
   const tagIndex = tags.value.indexOf(tagText);
 
@@ -176,7 +186,7 @@ const removeTag = (tagText) => {
   }
 };
 
-
+// 카테고리 옵션 정의
 const categoryOptions = ref([
   {
     items: [
@@ -189,6 +199,7 @@ const categoryOptions = ref([
   }
 ]);
 
+// 지역 옵션 정의
 const regionOptions = ref([
   {
     items: [
@@ -203,10 +214,11 @@ const regionOptions = ref([
 
 
 // daterangepicker 초기화
+// 참고: onMounted 내에서 DOM 요소 접근 및 외부 라이브러리 초기화는 적절한 패턴임
 onMounted(() => {
   const $ = window.jQuery;
 
-  // 시작일 선택
+  // 시작일 선택 초기화
   $('#startDateInput').daterangepicker({
     singleDatePicker: true,
     autoUpdateInput: false,
@@ -218,7 +230,7 @@ onMounted(() => {
     startDate.value = start.format('YYYY-MM-DD');
   });
 
-  // 종료일 선택
+  // 종료일 선택 초기화
   $('#endDateInput').daterangepicker({
     singleDatePicker: true,
     autoUpdateInput: false,
@@ -230,20 +242,25 @@ onMounted(() => {
     endDate.value = end.format('YYYY-MM-DD');
   });
 
-  // input 요소에 초기값 설정
+  // 입력 필드에 초기값 설정
   $('#startDateInput').val(startDate.value);
   $('#endDateInput').val(endDate.value);
 
-  // clear 기능
+  // 날짜 선택 취소 시 입력 필드 초기화
   $('#startDateInput, #endDateInput').on('cancel.daterangepicker', function () {
     $(this).val('');
   });
 });
 
-// select 옵션
+// 선택 옵션 상태 관리
 const selectedCategory = ref(Array(categoryOptions.value.length).fill(''));
 const selectedRegion = ref(Array(regionOptions.value.length).fill(''));
 
+/**
+ * 선택 옵션의 텍스트 색상 결정
+ * @param {string} value - 선택된 값
+ * @return {string} - css 색상 값
+ */
 const getColor = (value) => {
   return value === '' ? 'var(--color-grey-6)' : 'var(--black)';
 };
@@ -253,26 +270,35 @@ const getColor = (value) => {
 const fileList = ref([]);
 const imgUploadHandler = (event) => {
   const files = event.target.files;
-  images.value = []; // 기존 이미지 초기화
-  fileList.value.push(...event.target.files); // fileList에 사진을 차례대로 담고
+  images.value = []; // 기존 이미지 미리보기 초기화
+  fileList.value.push(...event.target.files); // fileList에 파일 객체 추가
 
+  // 각 파일의 미리보기 생성
   Array.from(files).forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      images.value.push(e.target.result); // 미리보기 이미지 추가
+      images.value.push(e.target.result); // 미리보기 이미지 URL 추가
     };
     reader.readAsDataURL(file);
   });
 };
 
-// 이미지 삭제 핸들러
+/**
+ * 이미지 삭제 처리 함수
+ * @param {number} index - 삭제할 이미지 인덱스
+ */
 const removeImage = (index) => {
-  images.value.splice(index, 1); // 선택 인덱스의 이미지 삭제
+  images.value.splice(index, 1);   // 선택 인덱스의 미리보기 이미지 삭제
+  fileList.value.splice(index, 1); // 파일 객체도 삭제
 };
 
 
-/// 취소 핸들러
+/**
+ * 취소 처리 함수
+ * 입력 데이터가 있을 경우 확인 메시지 표시
+ */
 const cancelHandler = () => {
+  // 입력된 데이터 확인
   const titleValue = title.value.trim();
   const addressValue = address.value.trim();
   const addressDetailValue = addressDetail.value.trim();
@@ -281,10 +307,6 @@ const cancelHandler = () => {
   const operationTimeValue = operationTime.value.trim();
   const hasImages = images.value.length > 0;
   const hasTags = tags.value.length > 0;
-  if (editor.value) {
-    const editorContent = editor.value.getHTML().trim();
-    const isEditorEmpty = editorContent === '<p><br></p>' || editorContent === '';
-  }
 
   // 필드들이 모두 비어있는지 여부 확인
   const isDataEmpty = !titleValue &&
@@ -305,53 +327,53 @@ const cancelHandler = () => {
     isEditorEmpty = editorContent === '<p><br></p>' || editorContent === '';
   }
 
-  // 취소 확인 창
+  // 취소 확인 창 표시 조건
   if (!isDataEmpty || !isEditorEmpty) {
     const userConfirmed = window.confirm("수정 중인 글쓰기를 종료하시겠습니까?");
     if (userConfirmed) {
       router.push('/admin/contents/popup');
     }
   } else {
+    // 입력 데이터가 없으면 바로 목록으로 이동
     router.push('/admin/contents/popup');
   }
 };
 
-// 제출 처리 함수
+/**
+ * 폼 제출 처리 함수
+ * 데이터를 FormData로 구성하여 API 요청
+ *  */
 const submitHandler = async () => {
+  // FormData 객체 생성 및 데이터 추가
   const formDatas = new FormData();
-  formDatas.append('title', title.value); // 제목
-  formDatas.append('address', address.value); // 주소
+  formDatas.append('title', title.value);
+  formDatas.append('address', address.value);
   formDatas.append('addressDetail', addressDetail.value);
-  formDatas.append('startDate', startDate.value); // 시작일
-  formDatas.append('endDate', endDate.value); // 종료일
-  formDatas.append('operationTime', operationTime.value); // 영업시간
-  formDatas.append('snsLink', snsLink.value); // sns
-  formDatas.append('webLink', webLink.value); // 홈페이지
-  // 카테고리
+  formDatas.append('startDate', startDate.value);
+  formDatas.append('endDate', endDate.value);
+  formDatas.append('operationTime', operationTime.value);
+  formDatas.append('snsLink', snsLink.value);
+  formDatas.append('webLink', webLink.value);
+  
+  // 카테고리 및 지역 정보 추가
   formDatas.append('popupCategory', selectedCategory.value);
-  // 지역
   formDatas.append('popupRegion', selectedRegion.value);
-  //태그
+
+  // 태그 추가
   tags.value.forEach((tag) => {
     formDatas.append('tags', tag)
   });
-  // 에디터
+
+  // 에디터 내용 추가
   formDatas.append('content', editor.value ? editor.value.getHTML() : '');
 
-  // 에디터로 업로드한 파일명 
-  // fileNames.value.forEach((fileName) => {
-  //   // 파일 이름을 'fileNames'라는 이름으로 폼데이터에 추가
-  //   formDatas.append('fileNames', fileName);
-  // });
-
-  // 파일첨부한 파일 객체
+  // 파일 객체 추가
   fileList.value.forEach((file) => {
-    // 파일을 'files'라는 이름으로 폼데이터에 추가
     formDatas.append('files', file);
   });
 
 
-  // API 요청
+  // API 요청 실행
   try {
     const { data, error, status } = await useFetch(`${apiBase}/admin/popup`, {
       method: 'POST',
@@ -366,6 +388,7 @@ const submitHandler = async () => {
 
         // 응답 데이터에 id 있는지 확인 후 리다이렉트
         if(data.value.id) {
+          // 상세페이지로 이동
           router.push(`/admin/contents/popup/${data.value.id}`);
         } else {
         // id가 없으면 목록페이지로 이동
