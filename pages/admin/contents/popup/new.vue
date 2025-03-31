@@ -192,10 +192,10 @@ const categoryOptions = ref([
 const regionOptions = ref([
   {
     items: [
-      { value: 1, label: '더현대 서울' },
+      { value: 1, label: '더현대서울' },
       { value: 2, label: '성수' },
       { value: 3, label: '마포 / 서대문 / 홍대' },
-      { value: 4, label: '강남/송파' },
+      { value: 4, label: '강남 / 송파' },
       { value: 5, label: '그 외 지역' },
     ]
   }
@@ -318,31 +318,6 @@ const cancelHandler = () => {
 
 // 제출 처리 함수
 const submitHandler = async () => {
-
-  // //const fileNames = ref([]); // 파일명 모아서 넘기기
-  // // 에디터에 담긴 img 태그 src를 뽑아내기
-  // const editorContent = editor.value.getHTML();
-
-  // // img 태그들을 추출하는 정규 표현식
-  // const imgTags = editorContent.match(/<img[^>]*src="([^"]+)"/g);
-
-  // // img 태그에서 src 속성만 추출
-  // const imagePaths = imgTags.map(tag => {
-  //   const match = tag.match(/src="([^"]+)"/);
-  //   return match ? match[1] : '';
-  // });
-
-
-
-  // // src에서 도메인 이후의 경로만 추출
-  // const pathsWithoutDomain = imagePaths.map(src => {
-  //   return src.replace('http://localhost:8081/api/v1/uploads/temp/popup/', '');
-  // });
-
-
-  // fileNames.value = pathsWithoutDomain;
-  // console.log(pathsWithoutDomain);
-
   const formDatas = new FormData();
   formDatas.append('title', title.value); // 제목
   formDatas.append('address', address.value); // 주소
@@ -388,12 +363,20 @@ const submitHandler = async () => {
 
     if (status.value === 'success') {
       console.log('등록 성공');
-      router.push({
-        path: '/admin/contents/popup/' + data.value.id
-      });
+
+        // 응답 데이터에 id 있는지 확인 후 리다이렉트
+        if(data.value.id) {
+          router.push(`/admin/contents/popup/${data.value.id}`);
+        } else {
+        // id가 없으면 목록페이지로 이동
+        router.push('/admin/contents/popup');
+        } 
+
     } else {
       console.log('등록실패 : ', error.value);
+      alert('게시물 등록에 실패했습니다.');
     }
+
   } catch (error) {
     console.error('등록 오류:', error);
     alert('서버와의 연결 오류입니다.');
@@ -402,6 +385,5 @@ const submitHandler = async () => {
 </script>
 
 <style lang="css">
-/* @import "@/assets/css/admin/contents/popup/new.css"; */
 @import url('/public/css/admin/contents/popup/new.css');
 </style>
