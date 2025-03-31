@@ -82,8 +82,8 @@
           </div>
 
           <div class="btn-bottom">
-            <button type="button" class="btn cancel" @click="cancelHandler">취소</button>
-            <button type="submit" class="btn submit" @click.prevent="submitHandler">등록</button>
+            <button type="button" class="btn_cancel" @click="cancelHandler">취소</button>
+            <button type="submit" class="btn_submit" @click.prevent="submitHandler">등록</button>
           </div>
         </section>
       </form>
@@ -217,46 +217,6 @@ const regionOptions = ref([
     ]
   }
 ]);
-
-
-// daterangepicker 초기화
-// 참고: onMounted 내에서 DOM 요소 접근 및 외부 라이브러리 초기화는 적절한 패턴임
-// onMounted(() => {
-//   const $ = window.jQuery;
-
-//   // 시작일 선택 초기화
-//   $('#startDateInput').daterangepicker({
-//     singleDatePicker: true,
-//     autoUpdateInput: false,
-//     locale: {
-//       format: 'YYYY-MM-DD',
-//       cancelLabel: 'Clear'
-//     }
-//   }, (start) => {
-//     startDate.value = start.format('YYYY-MM-DD');
-//   });
-
-//   // 종료일 선택 초기화
-//   $('#endDateInput').daterangepicker({
-//     singleDatePicker: true,
-//     autoUpdateInput: false,
-//     locale: {
-//       format: 'YYYY-MM-DD',
-//       cancelLabel: 'Clear'
-//     }
-//   }, (end) => {
-//     endDate.value = end.format('YYYY-MM-DD');
-//   });
-
-//   // 입력 필드에 초기값 설정
-//   $('#startDateInput').val(startDate.value);
-//   $('#endDateInput').val(endDate.value);
-
-//   // 날짜 선택 취소 시 입력 필드 초기화
-//   $('#startDateInput, #endDateInput').on('cancel.daterangepicker', function () {
-//     $(this).val('');
-//   });
-// });
 
 // 선택 옵션 상태 관리
 const selectedCategory = ref(Array(categoryOptions.value.length).fill(''));
@@ -393,9 +353,9 @@ const submitHandler = async () => {
       console.log('등록 성공');
 
         // 응답 데이터에 id 있는지 확인 후 리다이렉트
-        if(data.value.id) {
+        if(data.value) {
           // 상세페이지로 이동
-          router.push(`/admin/contents/popup/${data.value.id}`);
+          router.push(`/admin/contents/popup/${data.value}`);
         } else {
         // id가 없으면 목록페이지로 이동
         router.push('/admin/contents/popup');

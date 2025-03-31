@@ -6,13 +6,15 @@
   margin: 0;
   padding: 40px 0 40px 260px;
   box-sizing: border-box;
-  background-color: #f5f5f5;
+  background-color: var(--background--1);
+  font-family: 'pretendard';
 }
 
 .contents-wrap .product-registration {
-  width: 900px;
+  width: 100%;
+  max-width: 900px;
   padding: 40px 60px 60px 60px;
-  border-radius: var(--border-1);
+  border-radius: var(--radius-1);
   background-color: var(--white);
   box-shadow: var(--shadow-2);
   box-sizing: border-box;
@@ -20,6 +22,7 @@
 
 .contents-wrap .product-registration h1 {
   color: var(--black);
+  font-weight: 700;
   margin: 0 0 20px 4px;
 }
 
@@ -27,7 +30,7 @@
   display: flex;
   margin-bottom: 10px;
   border: 1px solid var(--color-grey-4);
-  border-radius: var(--border-1);
+  border-radius: var(--radius-1);
   overflow: hidden;
 }
 
@@ -37,6 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 15px;
   color: var(--black);
   border-right: 1px solid var(--color-grey-4);
 }
@@ -53,7 +57,7 @@ select {
 
 select {
   -webkit-appearance: none; /* for chrome */
-  -moz-appearance: none; /* for firefox */
+  -moz-appearance: none;    /* for firefox */
   appearance: none;
   display: inline-block;
   color: var(--color-grey-6);
@@ -104,7 +108,7 @@ input[type="file"] {
 }
 
 .tags-container.has-tags {
-  border: 1px solid var(--color-grey-4); /* 태그가 있을 때 보이는 border */
+  border: 1px solid var(--color-grey-4);
   padding: 10px;
   margin-bottom: 10px;
 }
@@ -122,7 +126,7 @@ input[type="file"] {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 14px;
+  font-size: var(--font-size-6);
 }
 
 .tag-item .remove-tag {
@@ -130,7 +134,7 @@ input[type="file"] {
   border: none;
   color: var(--white);
   cursor: pointer;
-  font-size: 16px;
+  font-size: var(--font-size-7);
   line-height: 1;
 }
 
@@ -150,7 +154,7 @@ input[type="file"] {
   gap: 10px;
   width: 100%;
   padding: 10px;
-  border-radius: var(--border-1);
+  border-radius: var(--radius-1);
   transition: border .3s ease;
 }
 
@@ -162,7 +166,7 @@ input[type="file"] {
   width: 100px;
   height: 100px;
   border: 1px solid var(--color-grey-4);
-  border-radius: var(--border-1);
+  border-radius: var(--radius-1);
   overflow: hidden;
   position: relative;
 }
@@ -178,39 +182,35 @@ input[type="file"] {
   top: 5px;
   right: 5px;
   background: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: var(--white);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   padding: 2px 5px;
-  font-size: 12px;
+  font-size: var(--font-size-5);
 }
 
 
 /* TOAST UI */
 #contsEditor {
-  margin: 0 auto 10px auto; 
+  margin: 0 auto 10px auto;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .toastui-editor-main-container {
   border-bottom: 1px solid var(--color-grey-2);
-  border-radius: var(--border-2);
+  border-radius: var(--radius-2);
 }
 
 .toastui-editor-defaultUI {
-  /* padding: 10px; */
   background: var(--white);
-  /* border: 1px solid var(--color-grey-4); */
   border: 1px solid var(--color-grey-4);
-  /* border-radius: var(--border-1); */
+  max-width: 100%;
 }
 
 .toastui-editor-defaultUI-toolbar {
-  /* border-top-left-radius: var(--border-1); */
-  /* border-top-right-radius: var(--border-1); */
-  /* background: var(--color-grey-1); 툴바 배경색 */
   background: var(--white);
-  /* border-radius: var(--border-1); */
 }
 
 .toastui-editor-contents {
@@ -233,45 +233,43 @@ input[type="file"] {
   margin-top: 20px;
 }
 
-.btn {
-  padding: 10px 30px;
-  border: none;
+.btn_submit {
   cursor: pointer;
-  border-radius: var(--border-1);
-  font-size: 16px;
-  transition: all .3s ease;
-}
-
-.btn.submit {
+  padding: 10px 30px;
   background-color: var(--color-point-4);
   border: 1px solid var(--color-point-4);
+  border-radius: var(--radius-1);
   color: var(--white);
 }
 
-.btn.submit:hover {
+.btn_submit:hover {
   border: 1px solid var(--color-point-4);
   background-color: var(--white);
   color: var(--black);
   box-shadow: var(--shadow-2);
+  transition: all .3s ease;
 }
 
-.btn.cancel {
+.btn_cancel {
+  cursor: pointer;
+  padding: 10px 30px;
   background-color: var(--color-grey-5);
   border: 1px solid var(--color-grey-5);
+  border-radius: var(--radius-1);
   color: var(--black);
 }
 
-.btn.cancel:hover {
+.btn_cancel:hover {
   background-color: var(--white);
   border: 1px solid var(--color-point-4);
   color: var(--black);
   box-shadow: var(--shadow-2);
+  transition: all .3s ease;
 }
 
 /* Date Range Picker 스타일 오버라이드 */
 .daterangepicker td.in-range {
-  /* background-color: #ebf4f8; */
-  background-color: var(--color-grey-2);
+  background-color: #ebf4f8;
 }
 
 .daterangepicker td.active, .daterangepicker td.active:hover {
@@ -282,4 +280,18 @@ input[type="file"] {
 .daterangepicker .calendar-table th, 
 .daterangepicker .calendar-table td {
   text-align: center;
+}
+
+.daterangepicker .drp-buttons .btn {
+  height: 15px;
+  height: 30px;
+  padding: 4px 8px !important;
+  color: var(--black);
+  border: none;
+  border-radius: var(--radius-1);
+  cursor: pointer;
+}
+
+.daterangepicker .drp-buttons .btn:hover {
+  border: 1px solid var(--black);
 }
