@@ -318,6 +318,43 @@ onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside);
 });
 
+// 삭제 처리
+const deleteHandler = async (id) => {
+  // 사용자 확인 요청
+  if(!confirm('해당 게시물을 삭제하시겠습니까?')) {
+    return; // 사용자가 취소한 경우
+  }
+
+  try {
+    // DELETE 요청 보내기
+    const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/popup/${id}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if(!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `서버 응답 오류: ${response.status}`);
+    }
+
+    // 삭제 성공 시 목록 새로고침
+    alert('게시물이 삭제되었습니다.');
+
+    // 현재 페이지에 항목이 하나만 있고, 첫 페이지가 아닌 경우 이전 페이지로 이동
+    if(popups.value.length === 1 && currentPage.value > 1) {
+      await changePage(currentPage.value - 1);
+    } else {
+      await fetchPopups(currentPage.value);
+    }
+  }catch(error) {
+    console.error('팝업 삭제 중 오류 발생: ', error);
+    alert(`팝업 삭제 중 오류 발생: ${error.message}`);
+  }
+};
+
 
 </script>
 
