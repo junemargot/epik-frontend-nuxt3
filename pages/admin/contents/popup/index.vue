@@ -29,7 +29,12 @@
                 <div class="board__regDate">{{ formatDate(popup.writeDate) }}</div>
                 <div class="board__viewCnt">{{ popup.viewCount }}</div>
                 <div class="board__management">
-                  <button class="hiddenBtn" @click="hiddenHandler(popup.id)">비공개</button>
+                  <button 
+                    class="hiddenBtn"
+                    :class="{ 'activeBtn' : !popup.isPrivate }"
+                    @click="hiddenHandler(popup.id)">
+                      {{ popup.isPrivate ? '공개' : '비공개' }}
+                  </button>
                   <button class="modifyBtn" @click="goToEditPage(popup.id)">수정</button>
                   <button class="deleteBtn" @click="deleteHandler(popup.id)">삭제</button>
                 </div>
@@ -166,8 +171,8 @@ const fetchPopups = async (page = 1) => {
     console.log("SERVER RESPONSE DATA: ", responseData);
 
     // 응답데이터 처리
-    popups.value = responseData.popupList || [];
-    // popups.value = [...(responseData.popupList || [])];
+    // popups.value = responseData.popupList || [];
+    popups.value = [...(responseData.popupList || [])];
     totalCount.value = responseData.totalCount || 0;
     totalPages.value = responseData.totalPages || 0;
     hasPrevPage.value = responseData.hasPrev || false;
@@ -352,6 +357,39 @@ const deleteHandler = async (id) => {
   }catch(error) {
     console.error('팝업 삭제 중 오류 발생: ', error);
     alert(`팝업 삭제 중 오류 발생: ${error.message}`);
+  }
+};
+
+// 비공개 처리
+const hiddenHandler = async (id) => {
+  try {
+    if(!confirm('해당 게시물의 공개 상태를 변경하시겠습니까?')) {
+      return;
+    }
+
+    const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/popup/${id}/change-status`;
+
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if(!response.ok) {
+      throw new Error(`서버 응답 오류: ${response.status}`);
+    }
+
+    // 성공 메시지 표시
+    alert('게시물의 공개 상태가 변경되었습니다.');
+
+    // 목록 새로고침
+    await fetchPopups(currentPage.value);
+    await nextTick();
+
+  } catch(error) {
+    console.error('팝업 공개 상태 변경 중 오류 발생: ', error);
+    alert(`팝업 공개 상태 변경 중 오류 발생: ${error.message}`);
   }
 };
 

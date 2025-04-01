@@ -118,6 +118,16 @@
   color: var(--accent-1);
 }
 
+/* 비공개 상태 (기본 상태) */
+.board__body .board__management .hiddenBtn {
+  background-color: var(--white);
+  color: var(--black);
+}
+
+
+
+/* 비공개 상태 게시물 스타일 */
+
 .board__list .board__body .board__title {
   text-align: left;
 }
