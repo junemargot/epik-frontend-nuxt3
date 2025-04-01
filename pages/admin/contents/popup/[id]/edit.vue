@@ -10,11 +10,11 @@
           </div>
           <div class="input__item">
             <div class="input__title">장소</div>
-            <input type="text" v-model="venue" name="venue" placeholder="장소를 입력해주세요" autocomplete="off" />
+            <input type="text" v-model="address" name="address" placeholder="장소를 입력해주세요" autocomplete="off" />
           </div>
           <div class="input__item">
               <div class="input__title">주소</div>
-              <input type="text" v-model="address" name="address" placeholder="주소를 입력해주세요" autocomplete="off" />
+              <input type="text" v-model="addressDetail" name="addressDetail" placeholder="주소를 입력해주세요" autocomplete="off" />
           </div>
           <div class="input__item split">
             <div class="input__title">팝업시작일</div>
@@ -75,7 +75,9 @@
           </div>
           <div class="btn-bottom">
             <button type="button" class="btn cancel" @click="cancelHandler">취소</button>
-            <button type="submit" class="btn submit">등록</button>
+            <button type="submit" class="btn submit" @click="submitHandler" :disabled="isLoading">
+              {{ isLoading ? '처리 중...' : '수정' }}
+            </button>
           </div>
         </section>
       </form>
@@ -84,21 +86,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { Editor } from '@toast-ui/editor';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { useRuntimeConfig } from 'nuxt/app';
+import { markRaw } from 'vue';
 
 const router = useRouter();
+const route = useRoute();
+const popupId = route.params.id;
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase;
 
-const title = ref('SENNOK BATH HOUSE POPUP STORE');
-const venue = ref('서울 송파구 올림픽로 300 롯데월드몰 1층');
-const address = ref('서울 송파구 올림픽로 300 롯데월드몰');
-const startDate = ref('2024-09-03');
-const endDate = ref('2024-11-14');
-const operationTime = ref('매일 10:30-22:00');
-const snsLink = ref('https://www.instagram.com/sennok_bathhouse');
-const webLink = ref('https://sennok.co.kr/');
+// 상태 변수 초기화
+const title = ref('');
+// const venue = ref('');
+const address = ref('');
+const addressDetail = ref('');
+const startDate = ref('');
+const endDate = ref('');
+const operationTime = ref('');
+const snsLink = ref('');
+const webLink = ref('');
 const editor = ref(null);
+const images = ref([]);
+const tag = ref('');
+const tags = ref([]);
+const isLoading = ref(false);
+
 
 const categoryOptions = ref([
   { 
@@ -118,7 +133,7 @@ const regionOptions = ref([
       { value: 'hyundai', label: '더현대 서울' },
       { value: 'seongsu', label: '성수' },
       { value: 'mapo', label: '마포 / 서대문 / 홍대' },
-      { value: 'gangnam', label: '강남/송파' },
+      { value: 'gangnam', label: '강남 / 송파' },
       { value: 'others', label: '그 외 지역' },
     ]
   }
@@ -127,15 +142,116 @@ const regionOptions = ref([
 const selectedCategory = ref(Array(categoryOptions.value.length).fill('media'));
 const selectedRegion = ref(Array(regionOptions.value.length).fill('hyundai'));
 
+// 팝업 데이터 가져오기
+const fetchPopupData = async () => {
+  try {
+    isLoading.value = true;
+    const { data } = await useFetch(`${apiBase}/admin/popup/${popupId}`, {
+      method: 'GET'
+    });
+
+    if(data.value) {
+      // console.log('팝업 데이터 로드: ', data.value);
+      console.log('팝업 데이터 로드 전체: ', JSON.stringify(data.value, null, 2));
+
+      // 각 필드 개별 확인
+      console.log('address 필드: ', data.value.address);
+      console.log('addressDetail 필드: ', data.value.addressDetail);
+      console.log('operaitionTime 필드: ', data.value.operationTime);
+      console.log('snsLink 필드: ', data.value.snsLink);
+      console.log('webLink 필드:', data.value.webLink);
+      console.log('popupImages 필드: ', data.value.saveImageNames);
+
+      // 데이터 매핑 - setTimeout으로 지연 처리
+      setTimeout(() => {
+        title.value = data.value.title || '';
+        // venue.value = data.value.venue || '';
+        address.value = data.value.address || '';
+        addressDetail.value = data.value.addressDetail || '';
+        startDate.value = data.value.startDate || '';
+        endDate.value = data.value.endDate || '';
+        operationTime.value = data.value.operationTime || '';
+        snsLink.value = data.value.snsLink || '';
+        webLink.value = data.value.webLink || '';
+
+        // 태그 설정
+        if(data.value.tags && Array.isArray(data.value.tags)) {
+          tags.value = data.value.tags;
+        }
+
+        // 카테고리 및 지역 설정
+        if(data.value.popupCategory) {
+          selectedCategory.value = Array(categoryOptions.value.length).fill(data.value.popupCategory);
+        }
+
+        if(data.value.popupRegion) {
+          selectedRegion.value = Array(regionOptions.value.length).fill(data.value.popupRegion);
+        }
+
+        // 이미지 설정
+        if(data.value.saveImageNames && Array.isArray(data.value.saveImageNames)) {
+          console.log('이미지 매핑 전:', data.value.saveImageNames);
+          images.value = data.value.saveImageNames.map(img => {
+            const imgPath = `${apiBase}/uploads/images/popup/${img}`;
+            console.log('생성된 이미지 경로:', imgPath);
+            return imgPath;
+          });
+          console.log('매핑된 이미지:', images.value);
+        }
+
+        // 날짜 입력 필드 업데이트
+        updateDateInputs()
+      }, 100);
+
+      // 에디터 내용 설정
+      nextTick(() => {
+        if(editor.value && data.value.content) {
+          try {
+            // 직접 상태 업데이트 방식으로 변경
+            editor.value.setMarkdown(data.value.content);
+            // editor.value.setHTML(data.value.content);
+          } catch(e) {
+            console.error('데이터 내용 설정 오류', e);
+          }
+        }
+      });
+    }
+
+  } catch(error) {
+    console.error('팝업 데이터 로드 오류: ', error);
+
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// 날짜 입력 필드 업데이트
+const updateDateInputs = () => {
+  const $ = window.jQuery;
+  if(startDate.value) {
+    $('#startDateInput').val(startDate.value);
+  }
+
+  if(endDate.value) {
+    $('#endDateInput').val(endDate.value);
+  }
+};
+
 const getColor = (value) => {
   return value === '' ? 'var(--color-grey-6)' : 'var(--black)';
 };
 
 
-
-
-// daterangepicker 초기화
 onMounted(() => {
+  editor.value = markRaw(new Editor({
+    el: document.querySelector('#contsEditor'),
+    previewStyle: 'vertical',
+    initialEditType: 'wysiwyg',
+    height: '700px',
+    placeholder: '내용을 입력해주세요',
+    hideModeSwitch: true
+  }));
+
   const $ = window.jQuery;
 
   // 시작일 선택
@@ -173,69 +289,113 @@ onMounted(() => {
       endDate.value = ''; // Vue 변수도 clear
     }
   });
-});
 
-// ToastUI Editor
-const fetchData = () => {
-  return {
-    content: `
-      센녹 SENNOK POPUP STORE <br />
-      <br />
-      잠실 롯데월드몰에서 센녹을 만나보세요! <br />
-      9월 3일 센녹 팝업스토어가 오픈됩니다. 다양한 구매혜택부터 선착순 이벤트까지! <br />
-      오직 잠실 롯데월드몰에서만 받을 수 있는 센녹 특별 제작 키링까지 만나볼 수 있는 기회! <br />
-      <br />
-      💙 SENNOK BATH HOUSE POPUP STORE <br />
-      - 팝업 운영 기간 : 24.09.03(Tue) - 24.11.14(Thu) <br />
-      - 운영 시간 : AM 10:30 - PM 10:00 <br />
-      - 위치 : 잠실 롯데월드몰 1F, 블루보틀 매장 맞은 편 <br />
-      <br />
-      💙 EVENT PERIOD <br />
-      - 구매 혜택 & 이벤트 기간 : 24.09.03(Tue) - 24.09.08(Sun) <br />
-      - 선착순 증정 이벤트 : 24.09.04(Wed) PM 6:00 <br />
-      <br />
-      💙 롯데월드 몰 특별 구매혜택! <br />
-      오직 팝업 현장에서만 만나볼 수 있는 센녹 특별 구매 혜택! <br />
-      - 방문 고객 전원 : 샤쉐 2종 증정 <br />
-      - 7만원 이상 구매 고객 풋 풋크림 50ml 증정 <br />
-      - 15만원 이상 구매 고객 삐약이 괄사 증정 <br />
-      - 한정 수량으로 소진 시 종료될 수 있습니다. <br />
-      - 사은품은 교환 & 환불이 불가합니다. <br />
-      - 롯데월드몰 팝업 한정 이벤트입니다. <br />
-      <br />
-      💙 전품목 UP TO 10% OFF <br />
-      센녹 BEST 제품부터 NEW 제품까지 특별한 금액으로 만나보세요. <br />
-      <br />
-      💙 핸드크림 구매 시 키링 증정 EVENT! <br />
-      - 센녹 핸드크림 구매하고 나만의 귀여운 키링을 만들어보세요🍀 <br />
-      <br />
-      💙 9월 4일 단 하루, 오후 6시! 선착순 Event! <br />
-      - 센녹 카톡 플친을 추가해주시면 센녹 핸드크림 50ml + 키링을 선물로 드립니다🥁 <br />
-      - 1인 1개로 수량 한정됩니다. <br />
-      - 센녹 카톡 플친 추가 시 제공됩니다. <br />
-      - 한정 수량 소진 시 종료됩니다. <br />
-    `
-  };
-};
-
-onMounted(() => {
-  const editor = new Editor({
-    el: document.querySelector('#contsEditor'),
-    previewStyle: 'vertical',
-    initialEditType: 'wysiwyg',
-    height: '700px',
-    placeholder: '내용을 입력해주세요',
-    hideModeSwitch: true
-  });
-
-  // 데이터 가져오기
-  const data = fetchData();
-  // title.value = data.title;
+  // 데이터 가져오기 - 에디터 초기화 후에 실행
+  // const data = fetchData();
+  fetchPopupData();
 
   // 에디터에 컨텐츠 로드
-  editor.setHTML(data.content);
+  // editor.setHTML(data.content);
 });
 
+
+// 태그 추가 함수 -> 중복 텍스트도 입력 가능하게 구현 
+const addTag = () => {
+  const tagText = tag.value.trim();
+  
+  if(tagText && !tags.value.includes(tagText)) {
+    tags.value.push(tagText);
+    tag.value = ''; // 입력 필드 초기화
+  }
+};
+
+// 태그 삭제 함수
+const removeTag = (tagText) => {
+  const tagIndex = tags.value.indexOf(tagText);
+
+  if(tagIndex > -1) {
+    tags.value.splice(tagIndex, 1);
+  }
+};
+
+
+// 이미지 업로드 핸들러
+const fileList = ref([]);
+const imgUploadHandler = (event) => {
+  const files = event.target.files;
+  images.value = []; // 기존 이미지 초기화
+
+  // 기존 이미지는 유지하고 새 이미지만 추가
+  Array.from(files).forEach((file) => {
+    fileList.value.push(file);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      images.value.push(e.target.result); // 미리보기 이미지 추가
+    };
+    reader.readAsDataURL(file);
+    });
+};
+
+// 이미지 삭제 핸들러
+const removeImage = (index) => {
+  images.value.splice(index, 1); // 선택 인덱스의 이미지 삭제
+};
+
+
+// 폼 제출 핸들러
+const submitHandler = async () => {
+  try {
+    isLoading.value = true;
+
+    const formData = new FormData();
+    formData.append('title', title.value);
+    formData.append('venue', venue.value);
+    formData.append('address', address.value);
+    formData.append('startDate', startDate.value);
+    formData.append('endDate', endDate.value);
+    formData.append('operationTime', operationTime.value);
+    formData.append('snsLink', snsLink.value);
+    formData.append('webLink', webLink.value);
+    
+    // 카테고리
+    formData.append('popupCategory', selectedCategory.value[0]);
+    
+    // 지역
+    formData.append('popupRegion', selectedRegion.value[0]);
+    
+    // 태그
+    tags.value.forEach(tag => {
+      formData.append('tags', tag);
+    });
+    
+    // 에디터 내용
+    formData.append('content', editor.value ? editor.value.getHTML() : '');
+    
+    // 새로 추가된 파일
+    fileList.value.forEach(file => {
+      formData.append('files', file);
+    });
+    
+    const { data, error } = await useFetch(`${apiBase}/admin/popup/${popupId}`, {
+      method: 'PUT',
+      body: formData
+    });
+    
+    if (data.value) {
+      alert('팝업이 성공적으로 수정되었습니다.');
+      router.push(`/admin/contents/popup/${popupId}`);
+    } else {
+      console.error('수정 실패:', error.value);
+      alert('팝업 수정에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('수정 오류:', error);
+    alert('서버와의 연결 오류입니다.');
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 // 취소 핸들러
 const cancelHandler = () => {
@@ -281,55 +441,6 @@ const cancelHandler = () => {
     router.push('/admin/contents/popup');
   }
 };
-
-
-// 태그
-const tag = ref('');
-const tags = ref(['뷰티', '한정이벤트', '잠실']);
-
-// 태그 추가 함수 -> 중복 텍스트도 입력 가능하게 구현 
-const addTag = () => {
-  const tagText = tag.value.trim();
-  
-  if(tagText && !tags.value.includes(tagText)) {
-    tags.value.push(tagText);
-    tag.value = ''; // 입력 필드 초기화
-  }
-};
-
-// 태그 삭제 함수
-const removeTag = (tagText) => {
-  const tagIndex = tags.value.indexOf(tagText);
-
-  if(tagIndex > -1) {
-    tags.value.splice(tagIndex, 1);
-  }
-};
-
-
-// 이미지 업로드 핸들러
-const images = ref([
-  '/images/sen_1.jpeg',
-  '/images/sen_2.jpeg'
-]);
-const imgUploadHandler = (event) => {
-  const files = event.target.files;
-  images.value = []; // 기존 이미지 초기화
-
-  Array.from(files).forEach((file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      images.value.push(e.target.result); // 미리보기 이미지 추가
-    };
-    reader.readAsDataURL(file);
-  });
-};
-
-// 이미지 삭제 핸들러
-const removeImage = (index) => {
-  images.value.splice(index, 1); // 선택 인덱스의 이미지 삭제
-};
-
 
 </script>
 
