@@ -83,11 +83,19 @@
     </ul>
     <div class="sidebar__profile">
       <div class="profile" ref="profile">
-        <img src="/images/profile3.jpg" alt="프로필사진" ref="imgProfile" />
-        <div class="profile__name" ref="nameProfile" @click="profileToggleDropdown">관리자1
-          <ul class="profile__link" ref="dropdownProfile" :class="{ show: profileDropdownVisible }">
+        <!-- <img src="/images/profile3.jpg" alt="프로필사진" ref="imgProfile" /> -->
+        <img :src="getFullImageUrl(currentUser.profileImg)" alt="프로필이미지" />
+        <div class="profile__name" ref="nameProfile" @click="profileToggleDropdown">
+          {{ currentUser.nickname }}
+          <ul 
+            class="profile__link" 
+            ref="dropdownProfile" 
+            :class="{ show: profileDropdownVisible }">
             <li>
-              <a @click="logoutHandler" href="#"><i class='bx bx-log-out'></i>로그아웃</a>
+              <a @click="logoutHandler" href="#">
+                <i class='bx bx-log-out'></i>
+                로그아웃
+              </a>
             </li>
           </ul>
         </div>
@@ -99,7 +107,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const route = useRoute();
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase;
+
+// 상태 관리 변수
+const currentUser = ref({});
+
 
 // SIDEBAR DROPDOWN ===========================
 // dropdown status
@@ -130,41 +148,41 @@ const contentsMenuItems = [
   },
 ];
 
-const feedMenuItems = [
-  {
-    name: 'feed',
-    label: '피드 관리',
-    icon: ['fat', 'list-alt'],
-    subItems: [
-      { label: '피드 관리', link: '/admin/feed' },
-      { label: '댓글 관리', link: '/admin/feed/comment' }
-    ],
-  },
-];
+// const feedMenuItems = [
+//   {
+//     name: 'feed',
+//     label: '피드 관리',
+//     icon: ['fat', 'list-alt'],
+//     subItems: [
+//       { label: '피드 관리', link: '/admin/feed' },
+//       { label: '댓글 관리', link: '/admin/feed/comment' }
+//     ],
+//   },
+// ];
 
-const reportMenuItems = [
-  {
-    name: 'report',
-    label: '신고 관리',
-    icon: ['fas', 'exclamation-triangle'],
-    subItems: [
-      { label: '피드 신고 내역', link: '/admin/reports/feed' },
-      { label: '댓글 신고 내역', link: '/admin/reports/comment' }
-    ],
-  },
-];
+// const reportMenuItems = [
+//   {
+//     name: 'report',
+//     label: '신고 관리',
+//     icon: ['fas', 'exclamation-triangle'],
+//     subItems: [
+//       { label: '피드 신고 내역', link: '/admin/reports/feed' },
+//       { label: '댓글 신고 내역', link: '/admin/reports/comment' }
+//     ],
+//   },
+// ];
 
-const inquiryMenuItems = [
-  {
-    name: 'inquiry',
-    label: '문의 관리',
-    icon: ['far', 'edit'],
-    subItems: [
-      { label: '1:1 문의 내역', link: '/admin/inquiries/personal' },
-      { label: '비즈니스 문의 내역', link: '/admin/inquiries/business' }
-    ],
-  },
-];
+// const inquiryMenuItems = [
+//   {
+//     name: 'inquiry',
+//     label: '문의 관리',
+//     icon: ['far', 'edit'],
+//     subItems: [
+//       { label: '1:1 문의 내역', link: '/admin/inquiries/personal' },
+//       { label: '비즈니스 문의 내역', link: '/admin/inquiries/business' }
+//     ],
+//   },
+// ];
 
 const noticeMenuItems = [
   {
@@ -225,11 +243,48 @@ onBeforeUnmount(() => {
 
 //로그아웃
 const userDetails = useUserDetails(); 
-const logoutHandler =()=>{
-  userDetails.logout();
-  localStorage.clear();
-  location.href = 'http://localhost:3001'
+// const currentUser = computed(() => userDetails.user || { name: '관리자' }); // 기본값 설정
+
+const fetchCurrentUser = async () => {
+  try {
+    const { data } = await useFetch('/admin/user/current', {
+      baseURL: apiBase || 'http://localhost:8081/api/v1',
+      headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}`}
+    });
+
+    if(data.value) {
+      currentUser.value = data.value;
+      console.log('현재 사용자 정보: ', currentUser.value);
+    }
+
+  } catch(error) {
+    console.error('관리자 정보 가져오기 실패: ', error);
+  }
+};
+
+// 프로필 이미지 url 생성 함수
+const getFullImageUrl = (imagePath) => {
+  return imagePath
+    ? `${apiBase}/images/${imagePath}`
+    : '/images/basic.png';
 }
+
+// 로그아웃 처리
+const logoutHandler = () => {
+  localStorage.removeItem('authToken');
+  router.push('http://localhost:3000/login');
+}
+
+// const logoutHandler =()=>{
+//   userDetails.logout();
+//   localStorage.clear();
+//   location.href = 'http://localhost:3000'
+// }
+
+onMounted(() => {
+  fetchCurrentUser(); // 컴포넌트 마운트 시 사용자 정보 가져오기
+  window.addEventListener('click', handleClickOutside);
+});
 
 
 </script>

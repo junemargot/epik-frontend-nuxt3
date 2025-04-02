@@ -24,7 +24,8 @@
               <div class="board__no">{{ member.id }}</div>
               <!-- <div class="board__type">{{ getLoginTypeLabel(member.loginType) }}</div> -->
               <div class="board__thumb">
-                <img :src="member.profileImage" alt="">
+                <!-- <img :src="member.profileImage" alt=""> -->
+                <img :src="getFullImageUrl(member.profileImg)" alt="프로필이미지" />
               </div>
               <div class="board__id">{{ member.username }}</div><!-- 아이디 -->
               <div class="board__nickname">{{ member.nickname }}</div>
@@ -141,14 +142,13 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useDataFetch } from '~/composables/useDataFetch';
 
+// API 기본 URL 설정
 const config = useRuntimeConfig();
-const apiBase = config.public.apiBase; // runtimeConfig.public에서 api를 가져옴 `${config.public.apiBase}`
+const apiBase = config.public.apiBase;
 
-// 회원 및 페이지네이션 상태 관리
+// 회원 데이터 및 페이지네이션 상태 관리
 const members = ref([]);
 const totalCount = ref(0);
-
-// 페이지네이션 상태 관리
 const totalPages = ref(0);
 const currentPage = ref(1);
 const hasPrevPage = ref(false);
@@ -189,7 +189,7 @@ const formatDate = (dateString) => {
   return formattedDate.replace(/\s/g, '').replace(/\.$/, '')
 };
 
-
+// 회원 목록 조회
 const fetchMembers = async (page = 1) => {
   const pageNumber = page;
 
@@ -265,7 +265,16 @@ const deleteAccount = async (id) => {
 };
 
 onMounted(() => {
-  fetchMembers();
+  const storeMembers = localStorage.getItem('cachedMembers');
+  if(storeMembers) {
+    // 캐시된 데이터가 있으면 복원
+    const cachedData = JSON.parse(storeMembers);
+    members.value = cachedData.member;
+    totalCount.value = cachedData.totalCount;
+  
+  } else {
+    fetchMembers();    
+  }
 });
 
 
@@ -336,6 +345,12 @@ const handleClickOutside = (e) => {
     isOpen.value = false;
   }
 };
+
+// 프로필 이미지 url 생성 함수
+const getFullImageUrl = (imagePath) => {
+  if(!imagePath) return '/basic.png';
+  return `${apiBase}/images/${imagePath}`;
+}
 
 onMounted(() => {
   window.addEventListener('click', handleClickOutside);
