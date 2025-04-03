@@ -1,83 +1,3 @@
-<script setup>
-import { useRouter } from 'vue-router'
-
-import { ref, onMounted } from 'vue';
-const memberCheck = ref("");
-import { jwtDecode } from 'jwt-decode';
-
-const userDetails = useUserDetails();  // 사용자 정보를 가져오는 함수
-
-//로컬호스트 유지
-onMounted(() => {
-  let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
-
-  if (token) {
-    // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
-    const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
-    userDetails.setAuthentication({
-      id: userInfo.id,
-      username: userInfo.username,
-      email: userInfo.email,
-      role: userInfo.role.map(role => role.authority),
-      token: token
-    });
-    console.log("로컬에 있던 토큰 사용했당")
-  }
-
-})
-
-//로그인 화면 이동 핸들러
-const goToLoginPageHandler = () => {
-  // 현재 페이지의 URL을 sessionStorage에 저장
-  const currentUrl = window.location.href;
-  console.log("이동할 페이지 저장했다-" + currentUrl)
-  sessionStorage.setItem('redirectUrl', currentUrl);  // 로그인 후 리디렉션할 URL 저장
-  // 로그인 페이지로 이동
-  location.href = 'http://localhost:3000/login/'
-
-};
-
-//로그아웃 핸들러
-const logoutHandler = () => {
-  userDetails.logout();
-  localStorage.clear();
-  location.reload();
-
-}
-
-// 사이드바 상태
-const isSidebarOpen = ref(false);
-
-// 사이드바 열기/닫기 토글 함수
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
-};
-
-// 사이드바 닫기 함수
-const closeSidebar = () => {
-  isSidebarOpen.value = false;
-};
-
-// 검색어 삭제 함수
-const clearSearch = (event) => {
-  const input = event.currentTarget.parentNode.querySelector('input');
-  input.value = ""; // 검색어 삭제
-};
-
-const router = useRouter()
-
-router.afterEach(() => {
-  isSidebarOpen.value = false;
-})
-
-
-// 사이드바 외부 영역 드롭다운 처리
-const closeSidebarOnNav = () => {
-  isSidebarOpen.value = false;
-};
-
-</script>
-
 <template>
   <div class="header-box">
     <header>
@@ -179,8 +99,88 @@ const closeSidebarOnNav = () => {
   </div>
 </template>
 
+<script setup>
+import { useRouter } from 'vue-router'
+
+import { ref, onMounted } from 'vue';
+const memberCheck = ref("");
+import { jwtDecode } from 'jwt-decode';
+
+const userDetails = useUserDetails();  // 사용자 정보를 가져오는 함수
+
+//로컬호스트 유지
+onMounted(() => {
+  let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
+
+  if (token) {
+    // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
+    const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
+    userDetails.setAuthentication({
+      id: userInfo.id,
+      username: userInfo.username,
+      email: userInfo.email,
+      role: userInfo.role.map(role => role.authority),
+      token: token
+    });
+    console.log("로컬에 있던 토큰 사용했당")
+  }
+
+})
+
+//로그인 화면 이동 핸들러
+const goToLoginPageHandler = () => {
+  // 현재 페이지의 URL을 sessionStorage에 저장
+  const currentUrl = window.location.href;
+  console.log("이동할 페이지 저장했다-" + currentUrl)
+  sessionStorage.setItem('redirectUrl', currentUrl);  // 로그인 후 리디렉션할 URL 저장
+  // 로그인 페이지로 이동
+  location.href = 'http://localhost:3000/login/'
+
+};
+
+//로그아웃 핸들러
+const logoutHandler = () => {
+  userDetails.logout();
+  localStorage.clear();
+  location.reload();
+
+}
+
+// 사이드바 상태
+const isSidebarOpen = ref(false);
+
+// 사이드바 열기/닫기 토글 함수
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+// 사이드바 닫기 함수
+const closeSidebar = () => {
+  isSidebarOpen.value = false;
+};
+
+// 검색어 삭제 함수
+const clearSearch = (event) => {
+  const input = event.currentTarget.parentNode.querySelector('input');
+  input.value = ""; // 검색어 삭제
+};
+
+const router = useRouter()
+
+router.afterEach(() => {
+  isSidebarOpen.value = false;
+})
+
+
+// 사이드바 외부 영역 드롭다운 처리
+const closeSidebarOnNav = () => {
+  isSidebarOpen.value = false;
+};
+
+</script>
+
 
 <style lang="css" scoped>
-@import url('/public/css/fonts.css');
+/* @import url('/public/css/fonts.css'); */
 @import url('/public/css/header.css');
 </style>

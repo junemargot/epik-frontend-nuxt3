@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>EPIK ADMIN</Title>
+    <Title>EPIK</Title>
     <Link rel="stylesheet" href="/css/global.css" />
     <Link rel="stylesheet" href="/css/admin/index.css" />
     <Link rel="stylesheet" href="/css/admin/aside.css" />

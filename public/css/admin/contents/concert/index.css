@@ -108,7 +108,7 @@
 }
 
 /* PAGINATION */
-.pagination-wrapper {
+/* .pagination-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -122,7 +122,7 @@
   justify-content: center;
   box-sizing: border-box;
   gap: 4px;
-  flex-grow: 1; /* 가운데 배치를 위해 공간 확장 */
+  flex-grow: 1;
 }
 
 .pagination button {
@@ -169,7 +169,7 @@
 
 .page-btn[disabled] {
   opacity: 0.3;
-}
+} */
 
 /* REGISTRATION BUTTON */
 .registration {

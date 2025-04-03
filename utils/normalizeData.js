@@ -13,15 +13,6 @@ export function normalizeImageField(items, type) {
         normalizedItem.imageFileName = item.fileSavedName;
       }
 
-    // 이미지 필드 정규화
-    // if (type === 'exhibition') {
-    //   normalizedItem.imageFileName = item.fileSaveName || 'default-image.jpg';
-    // } else if (type === 'popup') {
-    //   normalizedItem.imageFileName = item.imgSavedName || item.saveImageNames || 'default-image.jpg';
-    // } else {
-    //   normalizedItem.imageFileName = item.fileSavedName || 'default-image.jpg';
-    // }
-
       return normalizedItem;
     });
 }

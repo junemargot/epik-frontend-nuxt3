@@ -39,7 +39,7 @@
       <!-- END BOARD CONTAINER -->
        
       <!-- PAGINATION -->
-      <div class="pagination-wrapper">
+      <!-- <div class="pagination-wrapper">
         <div class="pagination">
           <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
             @click.prevent.stop="changePage(1)">
@@ -67,9 +67,20 @@
             <button type="button" class="registration__button">등록</button>
           </RouterLink>
         </div>
-      </div>
+      </div> -->
       <!-- END PAGINATION -->
+      <Pagination 
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :has-prev-page="hasPrevPage"
+        :has-next-page="hasNextPage"
+        @page-changed="changePage"
+      />
     </section>
+
+    <RouterLink to="/admin/contents/concert/new">
+      <button type="button" class="registration__button">등록</button>
+    </RouterLink>
   </div>
   <!-- END MAIN WRAP -->
 
@@ -99,6 +110,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
+import Pagination from '~/components/admin/Pagination.vue';
 
 // 싱테 관리를 위한 ref 선언
 const concerts = ref([]);
