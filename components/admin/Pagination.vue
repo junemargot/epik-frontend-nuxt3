@@ -4,42 +4,51 @@
       <button 
         type="button" 
         class="page-btn start-page" 
+        @click.prevent="handlePageChange(1)"
         :disabled="!hasPrevPage"
-        @click="$emit('page-changed', 1)"
       >
         <i class="bx bx-chevrons-left"></i>
       </button>
       <button 
         type="button" 
         class="page-btn prev-page" 
+        @click.prevent="handlePageChange(currentPage - 1)"
         :disabled="!hasPrevPage"
-        @click="$emit('page-changed', currentPage - 1)"
       >
         <i class="bx bx-chevron-left"></i>
       </button>
       <button 
         v-for="page in visiblePages" 
         :key="page" 
-        type="button" 
+        type="button"
         class="page-btn"
         :class="{ active: currentPage === page }" 
-        @click="$emit('page-changed', page)"
+        @click.prevent="handlePageChange(page)"
       >
         {{ page }}
       </button>
+      <!-- <button 
+        v-for="page in visiblePages" 
+        :key="page" 
+        type="button"
+        class="page-btn"
+        @click="handlePageChange(page)"
+      >
+        {{ page }}
+      </button> -->
       <button 
         type="button" 
         class="page-btn next-page" 
+        @click.prevent="handlePageChange(currentPage + 1)"
         :disabled="!hasNextPage"
-        @click="$emit('page-changed', currentPage + 1)"
       >
         <i class="bx bx-chevron-right"></i>
       </button>
       <button 
         type="button"
         class="page-btn end-page" 
+        @click.prevent="handlePageChange(totalPages)"
         :disabled="!hasNextPage"
-        @click="$emit('page-changed', totalPages)"
       >
         <i class="bx bx-chevrons-right"></i>
       </button>
@@ -53,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   currentPage: {
@@ -74,15 +83,20 @@ const props = defineProps({
   hasNextPage: {
     type: Boolean,
     required: true
+  },
+
+  visiblePages: {
+    type: Array,
+    required: true
   }
 });
 
-const visiblePages = computed(() => {
-  const rangeStart = Math.max(1, props.currentPage - 2);
-  const rangeEnd = Math.min(props.totalPages, props.currentPage + 2);
+const emit = defineEmits(['page-change']);
 
-  return Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
-});
+const handlePageChange = (page) => {
+  emit('page-change', page);
+};
+
 </script>
 
 <style scoped>

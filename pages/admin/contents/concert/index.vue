@@ -10,7 +10,7 @@
         <div class="board__list">
           <div class="board__head">
             <div class="board__no">번호</div>
-            <div class="board₩__title">제목</div>
+            <div class="board__title">제목</div>
             <div class="board__writer">작성자</div>
             <div class="board__regDate">작성일</div>
             <div class="board__viewCnt">조회수</div>
@@ -74,6 +74,7 @@
         :total-pages="totalPages"
         :has-prev-page="hasPrevPage"
         :has-next-page="hasNextPage"
+        :visible-pages="pages"
         @page-changed="changePage"
       />
     </section>
@@ -109,19 +110,38 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import Pagination from '~/components/admin/Pagination.vue';
+import { usePaginationStore } from '~/stores/pagination';
+
+const paginationStore = usePaginationStore();
+
+// ✅ Pinia 상태 참조
+const totalPages = computed(() => paginationStore.totalPages);
+const currentPage = computed(() => paginationStore.currentPage);
+const hasPrevPage = computed(() => paginationStore.hasPrevPage);
+const hasNextPage = computed(() => paginationStore.hasNextPage);
+const pages = computed(() => paginationStore.visiblePages);
+
+// 콘솔 로그
+console.log("currentPage:", currentPage.value);
+console.log("totalPages:", totalPages.value); // ✅ 정상 출력
 
 // 싱테 관리를 위한 ref 선언
 const concerts = ref([]);
 const totalCount = ref(0);
 
 // 페이지네이션 상태 관리
-const totalPages = ref(0);
-const currentPage = ref(1);
-const hasPrevPage = ref(false);
-const hasNextPage = ref(false);
-const pages = ref([]);
+// const totalPages = ref(1);
+// const currentPage = ref(1);
+// const hasPrevPage = ref(false);
+// const hasNextPage = ref(false);
+// const pages = ref([1]);
+
+console.log("currentPage:", paginationStore.currentPage);
+console.log("totalPages:", paginationStore.totalPages);
+console.log("pages:", paginationStore.visiblePages);
+
 
 // 검색 기능
 const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
@@ -143,63 +163,105 @@ const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
 
 // 데이터 가져오기 함수
+// const fetchConcerts = async (page = 1) => {
+//   try {
+//     const pageNumber = page; // 0-based index
+
+//     // url 및 파라미터 구성
+//     const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/concert`;
+//     const params = {
+//       p: pageNumber,
+//       ...(searchQuery.value ? { k: searchQuery.value } : {}),
+//       ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
+//         ? { s: categoryMapping[selectedCategory.value] }
+//         : {})
+//     };
+
+//     // url 쿼리 문자열 생성
+//     const queryString = Object.entries(params)
+//       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+//       .join('&');
+
+//     // api 요청 실행
+//     const fullUrl = `${url}?${queryString}`;
+//     console.log("REQUEST SENT TO: ", fullUrl);
+
+//     const responseData = await $fetch(fullUrl);
+//     console.log("SERVER RESPONSE DATA: ", responseData);
+
+//     // 응답데이터 처리
+//     concerts.value = responseData.concertList || [];
+//     totalCount.value = responseData.totalCount || 0;
+//     totalPages.value = responseData.totalPages || 0;
+//     hasPrevPage.value = responseData.hasPrev || false;
+//     hasNextPage.value = responseData.hasNext || false;
+
+//     // 페이지 번호 계산
+//     const rangeStart = Math.max(1, page - 2);
+//     const rangeEnd = Math.min(totalPages.value, page + 2);
+//     pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
+
+//     currentPage.value = page;
+
+//   } catch(error) {
+//     console.error("ERROR FETCHING CONCERT LIST: ", error);
+//   }
+// };
+
+// 22
 const fetchConcerts = async (page = 1) => {
   try {
-    const pageNumber = page; // 0-based index
-
-    // url 및 파라미터 구성
-    const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/concert`;
+    const url = `${apiBase}/admin/concert`;
     const params = {
-      p: pageNumber,
-      ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-        ? { s: categoryMapping[selectedCategory.value] }
-        : {})
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(categoryMapping[selectedCategory.value] && { s: categoryMapping[selectedCategory.value] })
     };
 
-    // url 쿼리 문자열 생성
-    const queryString = Object.entries(params)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join('&');
-
-    // api 요청 실행
+    const queryString = new URLSearchParams(params).toString();
     const fullUrl = `${url}?${queryString}`;
-    console.log("REQUEST SENT TO: ", fullUrl);
+
+    console.log("[REQUEST URL]:", fullUrl); // ✅ 요청 URL 확인
 
     const responseData = await $fetch(fullUrl);
-    console.log("SERVER RESPONSE DATA: ", responseData);
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: responseData.totalPages || 1, // ✅ 기본값 보장
+      hasPrevPage: responseData.hasPrev || false,
+      hasNextPage: responseData.hasNext || false
+    });
 
-    // 응답데이터 처리
-    concerts.value = responseData.concertList || [];
-    totalCount.value = responseData.totalCount || 0;
-    totalPages.value = responseData.totalPages || 0;
-    hasPrevPage.value = responseData.hasPrev || false;
-    hasNextPage.value = responseData.hasNext || false;
+    console.log("[API 응답] totalPages: ", responseData.totalPages); // ✅ 응답 데이터 확인
 
-    // 페이지 번호 계산
-    const rangeStart = Math.max(1, page - 2);
-    const rangeEnd = Math.min(totalPages.value, page + 2);
-    pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
+    // concerts.value = responseData.concertList || [];
+    // totalCount.value = responseData.totalCount || 0;
 
-    currentPage.value = page;
+  } catch (error) {
+    console.error("Error Fetching Concert List:", error);
 
-  } catch(error) {
-    console.error("ERROR FETCHING CONCERT LIST: ", error);
+    // 최소한의 fallback
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: 1,
+      hasPrevPage: false,
+      hasNextPage: false
+    });
   }
 };
 
+
+
+
 // 페이지 이동 핸들러
 const changePage = async (page) => {
-  if (page < 1 || page > totalPages.value) return;
+  if (page < 1 || page > paginationStore.totalPages) return;
 
   // URL 쿼리 파라미터 업데이트
   router.push({
     query: {
-      page,
-      ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-        ? { s: categoryMapping[selectedCategory.value] }
-        : {})
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(categoryMapping[selectedCategory.value] && { s: categoryMapping[selectedCategory.value] })
     }
   });
 
@@ -287,11 +349,11 @@ const formatDate = (dateString) => {
 
 // URL 쿼리 파라미터 변경 감지
 const watchRouteQuery = () => {
-  const newPage = parseInt(route.query.page) || 1;
+  const newPage = parseInt(route.query.p) || 1;
   const newSearchQuery = route.query.k || '';
   const newSearchType = route.query.s || '';
 
-  currentPage.value = newPage;
+  paginationStore.value = newPage;
   searchQuery.value = newSearchQuery;
 
   if(newSearchType) {

@@ -107,8 +107,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useRuntimeConfig } from '#app';
 
 const router = useRouter();
 const route = useRoute();
@@ -221,13 +222,31 @@ const profileToggleDropdown = () => {
 };
 
 // click outside handler
+// const handleClickOutside = (e) => {
+//   if (dropdownProfile.value && 
+//       !dropdownProfile.value.contains(e.target) && 
+//       !imgProfile.value.contains(e.target) && 
+//       !nameProfile.value.contains(e.target)) {
+//     profileDropdownVisible.value = false;
+//   }
+// }
+
 const handleClickOutside = (e) => {
-  if (dropdownProfile.value && 
-      !dropdownProfile.value.contains(e.target) && 
-      !imgProfile.value.contains(e.target) && 
-      !nameProfile.value.contains(e.target)) {
-    profileDropdownVisible.value = false;
+  const dropdownEl = dropdownProfile.value;
+  const imgEl = imgProfile.value;
+  const nameEl = nameProfile.value;
+
+  if(!profileDropdownVisible.value) return;
+
+  if(
+    dropdownProfile.value?.contains(e.target) ||
+    imgProfile.value?.contains(e.target) ||
+    nameProfile.value?.containes(e.target)
+  ) {
+    return;
   }
+
+  profileDropdownVisible.value = false;
 }
 
 onMounted(() => {
