@@ -37,45 +37,14 @@
         </div> <!-- END BOARD LIST-->
       </div>
       <!-- END BOARD CONTAINER -->
-       
-      <!-- PAGINATION -->
-      <!-- <div class="pagination-wrapper">
-        <div class="pagination">
-          <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(1)">
-            <i class="bx bx-chevrons-left"></i>
-          </button>
-          <button type="button" class="page-btn prev-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(currentPage - 1)">
-            <i class="bx bx-chevron-left"></i>
-          </button>
-          <button v-for="page in pages" :key="page" type="button" class="page-btn"
-            :class="{ active: currentPage === page }" @click.prevent.stop="changePage(page)">
-            {{ page }}
-          </button>
-          <button type="button" class="page-btn next-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(currentPage + 1)">
-            <i class="bx bx-chevron-right"></i>
-          </button>
-          <button type="button" class="page-btn end-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(totalPages)">
-            <i class="bx bx-chevrons-right"></i>
-          </button>
-        </div>
-        <div class="registration">
-          <RouterLink to="/admin/contents/concert/new">
-            <button type="button" class="registration__button">등록</button>
-          </RouterLink>
-        </div>
-      </div> -->
-      <!-- END PAGINATION -->
+    
       <Pagination 
         :current-page="currentPage"
         :total-pages="totalPages"
         :has-prev-page="hasPrevPage"
         :has-next-page="hasNextPage"
         :visible-pages="pages"
-        @page-changed="changePage"
+        @page-change="changePage"
       />
     </section>
 
@@ -111,39 +80,26 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
 
+// Pinia 스토어
 const paginationStore = usePaginationStore();
 
-// ✅ Pinia 상태 참조
+// Pagination 관련 컴퓨티드 
 const totalPages = computed(() => paginationStore.totalPages);
 const currentPage = computed(() => paginationStore.currentPage);
 const hasPrevPage = computed(() => paginationStore.hasPrevPage);
 const hasNextPage = computed(() => paginationStore.hasNextPage);
 const pages = computed(() => paginationStore.visiblePages);
 
-// 콘솔 로그
-console.log("currentPage:", currentPage.value);
-console.log("totalPages:", totalPages.value); // ✅ 정상 출력
-
-// 싱테 관리를 위한 ref 선언
+// 콘서트 목록 및 검색 상태
 const concerts = ref([]);
 const totalCount = ref(0);
 
-// 페이지네이션 상태 관리
-// const totalPages = ref(1);
-// const currentPage = ref(1);
-// const hasPrevPage = ref(false);
-// const hasNextPage = ref(false);
-// const pages = ref([1]);
 
-console.log("currentPage:", paginationStore.currentPage);
-console.log("totalPages:", paginationStore.totalPages);
-console.log("pages:", paginationStore.visiblePages);
-
-
-// 검색 기능
+// 검색 관련 상태
 const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
 const selectedCategory = ref('통합검색');
 const inputPlaceholder = ref('검색어를 입력해주세요');
@@ -160,81 +116,39 @@ const categoryMapping = {
 const router = useRouter();
 const route = useRoute();
 const config = useRuntimeConfig();
-const apiBase = config.public.apiBase;
+const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
-// 데이터 가져오기 함수
-// const fetchConcerts = async (page = 1) => {
-//   try {
-//     const pageNumber = page; // 0-based index
-
-//     // url 및 파라미터 구성
-//     const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/concert`;
-//     const params = {
-//       p: pageNumber,
-//       ...(searchQuery.value ? { k: searchQuery.value } : {}),
-//       ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-//         ? { s: categoryMapping[selectedCategory.value] }
-//         : {})
-//     };
-
-//     // url 쿼리 문자열 생성
-//     const queryString = Object.entries(params)
-//       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-//       .join('&');
-
-//     // api 요청 실행
-//     const fullUrl = `${url}?${queryString}`;
-//     console.log("REQUEST SENT TO: ", fullUrl);
-
-//     const responseData = await $fetch(fullUrl);
-//     console.log("SERVER RESPONSE DATA: ", responseData);
-
-//     // 응답데이터 처리
-//     concerts.value = responseData.concertList || [];
-//     totalCount.value = responseData.totalCount || 0;
-//     totalPages.value = responseData.totalPages || 0;
-//     hasPrevPage.value = responseData.hasPrev || false;
-//     hasNextPage.value = responseData.hasNext || false;
-
-//     // 페이지 번호 계산
-//     const rangeStart = Math.max(1, page - 2);
-//     const rangeEnd = Math.min(totalPages.value, page + 2);
-//     pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
-
-//     currentPage.value = page;
-
-//   } catch(error) {
-//     console.error("ERROR FETCHING CONCERT LIST: ", error);
-//   }
-// };
-
-// 22
+// 콘서트 목록 fetch
 const fetchConcerts = async (page = 1) => {
   try {
-    const url = `${apiBase}/admin/concert`;
+    // const url = `${apiBase}/admin/concert`;
     const params = {
       p: page,
       ...(searchQuery.value && { k: searchQuery.value }),
-      ...(categoryMapping[selectedCategory.value] && { s: categoryMapping[selectedCategory.value] })
+      // "통합검색"일 때는 s 파라미터를 전송하지 않음.
+      ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
+          ? { s: categoryMapping[selectedCategory.value] }
+          : {})
     };
 
     const queryString = new URLSearchParams(params).toString();
-    const fullUrl = `${url}?${queryString}`;
-
-    console.log("[REQUEST URL]:", fullUrl); // ✅ 요청 URL 확인
+    const fullUrl = `${apiBase}/admin/concert?${queryString}`;
+    console.log("[REQUEST URL]:", fullUrl); // 요청 URL 확인
 
     const responseData = await $fetch(fullUrl);
+    console.log("[API 응답] totalPages: ", responseData.totalPages); // 응답 데이터 확인
+
+    // 목록 데이터 세팅
+    concerts.value = responseData.concertList || [];
+    totalCount.value = responseData.totalCount || 0;
+
+    // 페이지네이션 스토어 갱신
     paginationStore.setPagination({
       currentPage: page,
       totalPages: responseData.totalPages || 1, // ✅ 기본값 보장
       hasPrevPage: responseData.hasPrev || false,
       hasNextPage: responseData.hasNext || false
     });
-
-    console.log("[API 응답] totalPages: ", responseData.totalPages); // ✅ 응답 데이터 확인
-
-    // concerts.value = responseData.concertList || [];
-    // totalCount.value = responseData.totalCount || 0;
 
   } catch (error) {
     console.error("Error Fetching Concert List:", error);
@@ -249,9 +163,6 @@ const fetchConcerts = async (page = 1) => {
   }
 };
 
-
-
-
 // 페이지 이동 핸들러
 const changePage = async (page) => {
   if (page < 1 || page > paginationStore.totalPages) return;
@@ -261,7 +172,9 @@ const changePage = async (page) => {
     query: {
       p: page,
       ...(searchQuery.value && { k: searchQuery.value }),
-      ...(categoryMapping[selectedCategory.value] && { s: categoryMapping[selectedCategory.value] })
+      ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
+          ? { s: categoryMapping[selectedCategory.value] }
+          : {})
     }
   });
 
@@ -312,16 +225,22 @@ const updatePlaceholder = (category) => {
 
 // 검색 수행
 const performSearch = async () => {
-  currentPage.value = 1;
+  // 페이지ㅣ 초기화
+  paginationStore.setPagination({
+    currentPage: 1,
+    totalPages: paginationStore.totalPages,
+    hasPrevPage: paginationStore.hasPrevPage,
+    hasNextPage: paginationStore.hasNextPage
+  });
 
   // URL 쿼리 파라미터 업데이트
   router.push({
     query: {
-      page: 1,
+      p: 1,
       ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-        ? { s: categoryMapping[selectedCategory.value] }
-        : {})
+      ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
+          ? { s: categoryMapping[selectedCategory.value] }
+          : {})
     }
   });
 
@@ -347,51 +266,43 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
-// URL 쿼리 파라미터 변경 감지
+// 라우트 쿼리 변경 시 처리
 const watchRouteQuery = () => {
   const newPage = parseInt(route.query.p) || 1;
   const newSearchQuery = route.query.k || '';
   const newSearchType = route.query.s || '';
 
-  paginationStore.value = newPage;
+  paginationStore.currentPage = newPage;
   searchQuery.value = newSearchQuery;
 
   if(newSearchType) {
     const category = Object.entries(categoryMapping)
       .find(([key, value]) => value === newSearchType)?.[0];
-
     if(category) {
       selectedCategory.value = category;
       updatePlaceholder(category);
     }
   }
-
-    fetchConcerts(newPage);
+  fetchConcerts(newPage);
 };
 
-// 단일 onMounted 훅으로 통합
+// onMounted 시 초기 데이터 로드
 onMounted(async () => {
-  await watchRouteQuery(); // URL 쿼리 파라미터 기반으로 초기 데이터 로드
-
+  await watchRouteQuery();
   window.addEventListener('click', handleClickOutside);
-
-  // url 변경 감지 
   watch(() => route.query, watchRouteQuery, { deep: true });
 });
 
-// beforeRouteUpdate 가드 추가
-const beforeRouteUpdate = async(to, from, next) => {
+// beforeRouteUpdate 가드
+const beforeRouteUpdate = async (to, from, next) => {
   await watchRouteQuery();
   next();
 };
-
-// defineExpose를 사용해 beforeRouteUpdate를 외부에 노출
 defineExpose({ beforeRouteUpdate });
 
 onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside);
 });
-
 
 </script>
 
