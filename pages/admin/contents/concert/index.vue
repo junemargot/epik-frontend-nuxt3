@@ -38,25 +38,23 @@
       </div>
       <!-- END BOARD CONTAINER -->
     
-      <Pagination 
+      <div class="pagination-registration-container">
+        <Pagination 
         :current-page="currentPage"
         :total-pages="totalPages"
         :has-prev-page="hasPrevPage"
         :has-next-page="hasNextPage"
         :visible-pages="pages"
         @page-change="changePage"
-      />
+        />
+
+        <div class="registration">
+          <RouterLink to="/admin/contents/concert/new">
+            <button type="button">등록</button>
+          </RouterLink>
+        </div>
+      </div>
     </section>
-
-    <RouterLink to="/admin/contents/concert/new">
-      <button type="button" class="registration__button">등록</button>
-    </RouterLink>
-
-    <div class="registration">
-      <RouterLink to="/admin/contents/concert/new">
-        <button type="button" class="registration__button">등록</button>
-      </RouterLink>
-    </div>
   </div>
   <!-- END MAIN WRAP -->
 

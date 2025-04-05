@@ -105,13 +105,17 @@ const handlePageChange = (page) => {
 .pagination .page-btn {
   background: var(--white);
   color: var(--black);
+  width: 36px;
   height: 36px;
   border: 1px solid var(--color-grey-6);
-  border-radius: var(--border-1);
+  border-radius: var(--radius-2);
   padding: 0 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pagination .page-btn:not([class$="-page"]) {

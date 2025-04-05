@@ -107,73 +107,25 @@
   text-align: left;
 }
 
-/* PAGINATION */
-/* .pagination-wrapper {
+/* REGISTRATION BUTTON */
+.pagination-registration-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  width: 100%;
+  margin: 10px 0;
+  position: relative;
 }
 
-.pagination {
-  display: flex;
-  padding: 25px;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  gap: 4px;
+.pagination-registration-container .pagination-wrapper {
   flex-grow: 1;
+  padding-right: 0;
 }
 
-.pagination button {
-  background: none;
-  appearance: none;
-  -webkit-appearance: none;
-  -ms-appearance: none;
-  -moz-appearance: none;
-  border: none;
-  cursor: pointer;
-}
-
-.pagination button i {
-  color: var(--black);
-  font-size: 18px;
-}
-
-.pagination .page-btn {
-  background: var(--white);
-  color: var(--black);
-  height: 36px;
-  border: 1px solid var(--color-grey-6);
-  border-radius: var(--border-1);
-  padding: 0 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: background 0.3s ease;
-}
-
-.pagination .page-btn:not([class$="-page"]) {
-  width: 36px;
-}
-
-.page-btn[class$="-page"] {
-  background-color: var(--white);
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.page-btn.active {
-  background: var(--color-grey-8);
-  color: var(--white);
-}
-
-.page-btn[disabled] {
-  opacity: 0.3;
-} */
-
-/* REGISTRATION BUTTON */
 .registration {
-  margin-left: auto;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .registration button {
@@ -181,11 +133,9 @@
   color: var(--black);
   height: 36px;
   padding: 0 20px;
-  /* padding: 12px 24px; */
-  border-radius: 8px;
+  border-radius: var(--radius-2);
   border: 1px solid var(--color-grey-6);
   cursor: pointer;
-  
 }
 
 .registration button:hover {
