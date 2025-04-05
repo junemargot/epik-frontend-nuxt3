@@ -40,7 +40,7 @@
         </div> <!-- END BOARD LIST-->
       </div>
       <!-- END BOARD CONTAINER -->
-      <div class="pagination-wrapper">
+      <!-- <div class="pagination-wrapper">
         <div class="pagination">
           <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
             @click.prevent.stop="changePage(1)">
@@ -68,8 +68,24 @@
             <button type="button" class="registration__button">등록</button>
           </RouterLink>
         </div>
-      </div>
+      </div> -->
       <!-- END PAGINATION -->
+      <div class="pagination-registration-container">
+        <Pagination 
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :has-prev-page="hasPrevPage"
+        :has-next-page="hasNextPage"
+        :visible-pages="pages"
+        @page-change="changePage"
+        />
+
+        <div class="registration">
+          <RouterLink to="/admin/contents/musical/new">
+            <button type="button">등록</button>
+          </RouterLink>
+        </div>
+      </div>
     </section>
   </div> <!-- END MAIN WRAP -->
 
@@ -99,7 +115,10 @@
 
 <script setup>
 // 이 부분에서 패치를 해주면 되는구나
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import Pagination from '~/components/admin/Pagination.vue';
+import { usePaginationStore } from '~/stores/pagination';
 
 // 데이터 상태 관리
 const musicals = ref([]);
@@ -112,16 +131,12 @@ const hasPrevPage = ref(false);
 const hasNextPage = ref(false);
 const pages = ref([]);
 
+const router = useRouter();
+const route = useRoute();
 const config = useRuntimeConfig();
-const apiBase = config.public.apiBase;
+const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
-// const { data, error } = await useFetch('/admin/musical', {
-//   baseURL: apiBase || 'http://localhost:8081/api/v1',
-//   params: {
-//     page: 1
-//   }, // 기본 페이지
-// });
-
+// 뮤지컬 목록 fetch
 const fetchMusicals = async (page = 1) => {
   const pageNumber = page;
 
@@ -198,7 +213,6 @@ const changePage = async (page) => {
 // ##############################################
 
 // 수정 버튼 이벤트
-const router = useRouter();
 const goToEditPage = (id) => {
   router.push(`/admin/contents/musical/${id}/edit`); // 하드코딩
 };
