@@ -111,6 +111,7 @@ const isOpen = ref(false); // dropdown 상태
 
 const categoryMapping = {
   '통합검색': 'ALL',
+  '제목 + 내용': 'TITLE_CONTENT',
   '제목': 'TITLE',
   '내용': 'CONTENT',
   '작성자': 'WRITER'
@@ -133,6 +134,9 @@ const fetchConcerts = async (page = 1) => {
           ? { s: categoryMapping[selectedCategory.value] }
           : {})
     };
+  
+    // 디버깅 코드
+    console.log('[검색 파라미터]: ', params);
 
     const queryString = new URLSearchParams(params).toString();
     const fullUrl = `${apiBase}/admin/concert?${queryString}`;
@@ -140,6 +144,7 @@ const fetchConcerts = async (page = 1) => {
 
     // API 요청
     const responseData = await $fetch(fullUrl);
+    console.log("[API 응답 전체]: ", responseData);
     console.log("[API 응답] totalPages: ", responseData.totalPages); // 응답 데이터 확인
 
     // 목록 데이터 세팅
@@ -156,6 +161,10 @@ const fetchConcerts = async (page = 1) => {
 
   } catch (error) {
     console.error("Error Fetching Concert List:", error);
+
+    if(error.response) {
+      console.error("Error Response: ", await error.response.text());
+    }
 
     // 최소한의 fallback
     paginationStore.setPagination({
@@ -192,18 +201,29 @@ const goToEditPage = (id) => {
 };
 
 // 삭제 핸들러
-// const deleteHandler = async (id) => {
-//   if(confirm("선택하신 게시물을 삭제하시겠습니까?")) {
-//     try {
-//       await fetchNoticeDelete(id);
-//       alert("공지사항이 정상적으로 삭제되었습니다.");
-//       await fetchNoticeList(); // 목록 새로고침
+const deleteHandler = async (id) => {
+  if(confirm("게시물을 삭제하시겠습니까?")) {
+    try {
+      const response = await fetch(`${apiBase}/admin/concert/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-//     } catch(error) {
-//       alert("공지사항 삭제에 실패했습니다: " + error.message);
-//     }
-//   }
-// };
+      if(!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
+      alert("게시물이 정상적으로 삭제되었습니다.");
+      await fetchConcerts(currentPage.value);
+
+    } catch(error) {
+      console.error('콘서트 삭제 중 오류 발생: ', error);
+      alert("게시물 삭제에 실패했습니다: " + error.message);
+    }
+  }
+};
 
 // 드롭다운 토글
 const toggleDropdown = () => {
@@ -235,6 +255,7 @@ const performSearch = async () => {
     currentPage: 1,
     totalPages: paginationStore.totalPages,
     hasPrevPage: paginationStore.hasPrevPage,
+    // hasPrevPage: false, // 페이지 1로 돌아가면 이전 페이지는 없음
     hasNextPage: paginationStore.hasNextPage
   });
 
@@ -249,7 +270,7 @@ const performSearch = async () => {
     }
   });
 
-  await fetchConcerts();
+  await fetchConcerts(1); // 명시적으로 페이지 1 전달
 }
 
 // 클릭 외부 영역 처리

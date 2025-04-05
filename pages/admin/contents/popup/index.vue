@@ -45,7 +45,7 @@
         <!-- END BOARD CONTAINER -->
 
         <!-- PAGINATION -->
-        <div class="pagination-wrapper">
+        <!-- <div class="pagination-wrapper">
           <div class="pagination">
             <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
               @click.prevent.stop="changePage(1)">
@@ -68,10 +68,25 @@
               <i class="bx bx-chevrons-right"></i>
             </button>
           </div>
-          <!-- END PAGINATION -->
           <div class="registration">
             <RouterLink to="/admin/contents/popup/new">
               <button type="button" class="registration__button">등록</button>
+            </RouterLink>
+          </div>
+        </div> -->
+        <div class="pagination-registration-container">
+          <Pagination 
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          :has-prev-page="hasPrevPage"
+          :has-next-page="hasNextPage"
+          :visible-pages="pages"
+          @page-change="changePage"
+          />
+
+          <div class="registration">
+            <RouterLink to="/admin/contents/popup/new">
+              <button type="button">등록</button>
             </RouterLink>
           </div>
         </div>
@@ -111,6 +126,11 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import Pagination from '~/components/admin/Pagination.vue';
+import { usePaginationStore } from '~/stores/pagination';
+
+// Pinia 스토어 초기화
+const paginationStore = usePaginationStore();
 
 // 상태 관리를 위한 ref 선언
 const popups = ref([]);
