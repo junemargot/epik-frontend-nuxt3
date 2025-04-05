@@ -51,6 +51,12 @@
     <RouterLink to="/admin/contents/concert/new">
       <button type="button" class="registration__button">등록</button>
     </RouterLink>
+
+    <div class="registration">
+      <RouterLink to="/admin/contents/concert/new">
+        <button type="button" class="registration__button">등록</button>
+      </RouterLink>
+    </div>
   </div>
   <!-- END MAIN WRAP -->
 
@@ -84,10 +90,10 @@ import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
 
-// Pinia 스토어
+// Pinia 스토어 초기화
 const paginationStore = usePaginationStore();
 
-// Pagination 관련 컴퓨티드 
+// computed 상태 (Pinia 스토어와 실시간 동기화)
 const totalPages = computed(() => paginationStore.totalPages);
 const currentPage = computed(() => paginationStore.currentPage);
 const hasPrevPage = computed(() => paginationStore.hasPrevPage);
@@ -97,7 +103,6 @@ const pages = computed(() => paginationStore.visiblePages);
 // 콘서트 목록 및 검색 상태
 const concerts = ref([]);
 const totalCount = ref(0);
-
 
 // 검색 관련 상태
 const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
@@ -121,7 +126,7 @@ const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 // 콘서트 목록 fetch
 const fetchConcerts = async (page = 1) => {
   try {
-    // const url = `${apiBase}/admin/concert`;
+    // 쿼리 파라미터 구성
     const params = {
       p: page,
       ...(searchQuery.value && { k: searchQuery.value }),
@@ -135,6 +140,7 @@ const fetchConcerts = async (page = 1) => {
     const fullUrl = `${apiBase}/admin/concert?${queryString}`;
     console.log("[REQUEST URL]:", fullUrl); // 요청 URL 확인
 
+    // API 요청
     const responseData = await $fetch(fullUrl);
     console.log("[API 응답] totalPages: ", responseData.totalPages); // 응답 데이터 확인
 
@@ -142,10 +148,10 @@ const fetchConcerts = async (page = 1) => {
     concerts.value = responseData.concertList || [];
     totalCount.value = responseData.totalCount || 0;
 
-    // 페이지네이션 스토어 갱신
+    // Pinia 스토어 업데이트
     paginationStore.setPagination({
       currentPage: page,
-      totalPages: responseData.totalPages || 1, // ✅ 기본값 보장
+      totalPages: responseData.totalPages || 1, // API 응답 데이터 반영
       hasPrevPage: responseData.hasPrev || false,
       hasNextPage: responseData.hasNext || false
     });
@@ -163,11 +169,11 @@ const fetchConcerts = async (page = 1) => {
   }
 };
 
-// 페이지 이동 핸들러
+// 페이지 변경 핸들러
 const changePage = async (page) => {
   if (page < 1 || page > paginationStore.totalPages) return;
 
-  // URL 쿼리 파라미터 업데이트
+  // URL 쿼리 파라미터 업데이트 (?p=2)
   router.push({
     query: {
       p: page,
@@ -178,6 +184,7 @@ const changePage = async (page) => {
     }
   });
 
+  // 데이터 재요청
   await fetchConcerts(page);
 };
 
@@ -266,13 +273,13 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
-// 라우트 쿼리 변경 시 처리
+// 라우트 변경 감지
 const watchRouteQuery = () => {
   const newPage = parseInt(route.query.p) || 1;
   const newSearchQuery = route.query.k || '';
   const newSearchType = route.query.s || '';
 
-  paginationStore.currentPage = newPage;
+  paginationStore.currentPage = newPage; // Pinia 스토어 동기화
   searchQuery.value = newSearchQuery;
 
   if(newSearchType) {
@@ -283,7 +290,7 @@ const watchRouteQuery = () => {
       updatePlaceholder(category);
     }
   }
-  fetchConcerts(newPage);
+  fetchConcerts(newPage); // 데이터 재요청
 };
 
 // onMounted 시 초기 데이터 로드

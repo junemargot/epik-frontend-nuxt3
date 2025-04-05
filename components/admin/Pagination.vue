@@ -27,15 +27,6 @@
       >
         {{ page }}
       </button>
-      <!-- <button 
-        v-for="page in visiblePages" 
-        :key="page" 
-        type="button"
-        class="page-btn"
-        @click="handlePageChange(page)"
-      >
-        {{ page }}
-      </button> -->
       <button 
         type="button" 
         class="page-btn next-page" 
@@ -53,48 +44,27 @@
         <i class="bx bx-chevrons-right"></i>
       </button>
     </div>
-    <!-- <div class="registration">
-      <RouterLink to="/admin/contents/concert/new">
-        <button type="button" class="registration__button">등록</button>
-      </RouterLink>
-    </div> -->
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 
+// props: 부모로부터 전달받은 데이터
 const props = defineProps({
-  currentPage: {
-    type: Number,
-    required: true
-  },
-
-  totalPages: {
-    type: Number,
-    required: true
-  },
-
-  hasPrevPage: {
-    type: Boolean,
-    required: true
-  },
-
-  hasNextPage: {
-    type: Boolean,
-    required: true
-  },
-
-  visiblePages: {
-    type: Array,
-    required: true
-  }
+  currentPage: { type: Number, required: true },  // 현재 페이지 번호
+  totalPages: {type: Number, required: true },    // 전체 페이지 수
+  hasPrevPage: { type: Boolean, required: true }, // 이전 페이지 존재 여부
+  hasNextPage: { type: Boolean, required: true }, // 다음 페이지 존재 여부
+  visiblePages: { type: Array, required: true }   // 표시할 페이지 번호 배열
 });
 
+// emits: 부모 컴포넌트로 전달할 이벤트
 const emit = defineEmits(['page-change']);
 
+// 페이지 변경 이벤트 핸들러
 const handlePageChange = (page) => {
-  emit('page-change', page);
+  emit('page-change', page); // 부모 컴포넌트에 변경된 페이지 번호 전달
 };
 
 </script>
@@ -162,7 +132,5 @@ const handlePageChange = (page) => {
 .page-btn[disabled] {
   opacity: 0.3;
 }
-
-
 
 </style>
