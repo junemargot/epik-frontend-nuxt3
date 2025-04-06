@@ -146,11 +146,25 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
-onMounted(async () => {
-});
-
 </script>
 
 <style scoped>
 @import url('/public/css/admin/contents/musical/detail.css');
+
+/* :deep 선택자를 사용하여 v-html 내부 요소에 스타일 적용 */
+:deep(.product__content-detail img) {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin-bottom: 30px;
+}
 </style>
+<!-- 
+<style>
+/* 전역 스타일 - scoped 속성 제거 */
+.product__content-detail img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 30px;
+}
+</style> -->

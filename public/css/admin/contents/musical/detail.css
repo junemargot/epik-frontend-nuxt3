@@ -146,8 +146,11 @@
 }
 
 .product__content-detail img {
-  width: 800px;
+  /* width: 800px; */
+  max-width: 100% !important;
+  height: auto !important;
   margin-bottom: 30px;
+  display: block;
 }
 
 .product__content-detail-info {

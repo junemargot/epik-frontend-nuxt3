@@ -141,4 +141,12 @@ onMounted(async () => {
 
 <style lang="css" scoped>
 @import url("/public/css/admin/contents/concert/detail.css");
+
+/* :deep 선택자를 사용하여 v-html 내부 요소에 스타일 적용 */
+:deep(.product__content-detail img) {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin-bottom: 30px;
+}
 </style>

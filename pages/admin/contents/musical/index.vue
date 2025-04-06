@@ -20,9 +20,6 @@
             <div class="board__content" v-for="musical in musicals" :key="musical.id">
               <div class="board__no">{{ musical.id }}</div>
               <div class="board__title">
-                <!-- <Nuxt-link :to="`/admin/contents/musical/${musical.id}`">
-                  {{ musical.title }}
-                </Nuxt-link> -->
                 <NuxtLink :to="`/admin/contents/musical/${musical.id}`">
                   {{ musical.title }}
                 </NuxtLink>
@@ -31,9 +28,9 @@
               <div class="board__regDate">{{ formatDate(musical.writeDate) }}</div>
               <div class="board__viewCnt">{{ musical.viewCount }}</div>
               <div class="board__management">
-                <button class="hiddenBtn" @click="hiddenHandler(concert.id)">비공개</button>
+                <button class="hiddenBtn" @click="hiddenHandler(musical.id)">비공개</button>
                 <button class="modifyBtn" @click="goToEditPage(musical.id)">수정</button>
-                <button class="deleteBtn">삭제</button>
+                <button class="deleteBtn" @click="deleteHandler(musical.id)">삭제</button>
               </div>
             </div>
           </div> <!-- END BOARD BODY -->
@@ -224,6 +221,31 @@ const performSearch = async () => {
 const handleClickOutside = (e) => {
   if (!e.target.closest('.search')) {
     isOpen.value = false;
+  }
+};
+
+// 삭제 핸들러
+const deleteHandler = async (id) => {
+  if(confirm("게시물을 삭제하시겠습니까?")) {
+    try {
+      const response = await fetch(`${apiBase}/admin/musical/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if(!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
+      alert("게시물이 정상적으로 삭제되었습니다.");
+      await fetchMusicals(currentPage.value);
+
+    } catch(error) {
+      console.error('콘서트 삭제 중 오류 발생: ', error);
+      alert("게시물 삭제에 실패했습니다: " + error.message);
+    }
   }
 };
 

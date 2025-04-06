@@ -37,3 +37,13 @@ defineProps({
 <style>
 @import url('/public/css/components/event.css');
 </style>
+
+<style scoped>
+:deep(img) {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto 30px;
+}
+
+</style>
