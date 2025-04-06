@@ -29,7 +29,7 @@
               <div class="board__viewCnt">{{ exhibition.viewCount }}</div>
               <div class="board__management">
                 <button class="modBtn" @click="goToEditPage(exhibition.id)">수정</button>
-                <button class="delBtn">삭제</button>
+                <button class="delBtn" @click="deleteHandler(exhibition.id)">삭제</button>
               </div>
             </div> 
           </div> <!-- END BOARD BODY -->
@@ -218,18 +218,29 @@ const goToEditPage = (id) => {
 };
 
 // 삭제 핸들러
-// const deleteHandler = async (id) => {
-//   if(confirm("선택하신 게시물을 삭제하시겠습니까?")) {
-//     try {
-//       await fetcExhibitionDelete(id);
-//       alert("게시물이 정상적으로 삭제되었습니다.");
-//       await fetchExhibitions(page); // 목록 새로고침
+const deleteHandler = async (id) => {
+  if(confirm("게시물을 삭제하시겠습니까?")) {
+    try {
+      const response = await fetch(`${apiBase}/admin/exhibition/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-//     } catch(error) {
-//       alert("공지사항 삭제에 실패했습니다: " + error.message);
-//     }
-//   }
-// };
+      if(!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
+      alert("게시물이 정상적으로 삭제되었습니다.");
+      await fetchExhibitions(currentPage.value);
+
+    } catch(error) {
+      console.error('전시회 게시물 삭제 중 오류 발생: ', error);
+      alert("게시물 삭제에 실패했습니다: " + error.message);
+    }
+  }
+};
 
 // 드롭다운 토글
 const toggleDropdown = () => {
