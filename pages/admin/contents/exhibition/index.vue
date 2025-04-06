@@ -38,7 +38,7 @@
       <!-- END BOARD CONTAINER -->
       
       <!-- PAGINATION -->
-      <div class="pagination-wrapper">
+      <!-- <div class="pagination-wrapper">
         <div class="pagination">
           <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
             @click.prevent.stop="changePage(1)">
@@ -66,8 +66,24 @@
             <button type="button" class="registration__button">등록</button>
           </RouterLink>
         </div>
-      </div>
+      </div> -->
       <!-- END PAGINATION -->
+      <div class="pagination-registration-container">
+        <Pagination 
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :has-prev-page="hasPrevPage"
+        :has-next-page="hasNextPage"
+        :visible-pages="pages"
+        @page-change="changePage"
+        />
+
+        <div class="registration">
+          <RouterLink to="/admin/contents/exhibition/new">
+            <button type="button">등록</button>
+          </RouterLink>
+        </div>
+      </div>
     </section>
   </div>
   <!-- END MAIN WRAP -->
@@ -97,6 +113,11 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import Pagination from '~/components/admin/Pagination.vue';
+import { usePaginationStore } from '~/stores/pagination';
+
 // 상태 관리를 위한 ref 선언
 const exhibitions = ref([]);
 const totalCount = ref(0);

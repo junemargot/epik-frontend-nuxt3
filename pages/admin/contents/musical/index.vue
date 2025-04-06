@@ -40,36 +40,6 @@
         </div> <!-- END BOARD LIST-->
       </div>
       <!-- END BOARD CONTAINER -->
-      <!-- <div class="pagination-wrapper">
-        <div class="pagination">
-          <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(1)">
-            <i class="bx bx-chevrons-left"></i>
-          </button>
-          <button type="button" class="page-btn prev-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(currentPage - 1)">
-            <i class="bx bx-chevron-left"></i>
-          </button>
-          <button v-for="page in pages" :key="page" type="button" class="page-btn"
-            :class="{ active: currentPage === page }" @click.prevent.stop="changePage(page)">
-            {{ page }}
-          </button>
-          <button type="button" class="page-btn next-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(currentPage + 1)">
-            <i class="bx bx-chevron-right"></i>
-          </button>
-          <button type="button" class="page-btn end-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(totalPages)">
-            <i class="bx bx-chevrons-right"></i>
-          </button>
-        </div>
-        <div class="registration">
-          <RouterLink to="/admin/contents/musical/new">
-            <button type="button" class="registration__button">등록</button>
-          </RouterLink>
-        </div>
-      </div> -->
-      <!-- END PAGINATION -->
       <div class="pagination-registration-container">
         <Pagination 
         :current-page="currentPage"
@@ -114,7 +84,6 @@
 </template>
 
 <script setup>
-// 이 부분에서 패치를 해주면 되는구나
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
