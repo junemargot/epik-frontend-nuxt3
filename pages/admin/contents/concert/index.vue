@@ -59,7 +59,12 @@
   <!-- END MAIN WRAP -->
 
   <!-- SEARCH BAR -->
-  <section class="search">
+  <SearchBar
+    :initial-category="getInitialCategory()"
+    :initial-query="searchQuery"
+    @search="handleSearch"
+  />
+  <!-- <section class="search">
     <div class="search__bar">
       <div class="search__dropdown">
         <div id="drop-text" class="search__text" @click="toggleDropdown">
@@ -79,7 +84,7 @@
         <i class='bx bx-search' @click.prevent.stop='performSearch'></i>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
 <script setup>
@@ -87,6 +92,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
+import SearchBar, { categoryMapping } from '~/components/admin/SearchBar.vue';
 
 // Pinia 스토어 초기화
 const paginationStore = usePaginationStore();

@@ -145,7 +145,7 @@
 
 
 /* SEARCH BAR */
-.search {
+/* .search {
   display: flex;
   height: 100px;
   padding: 25px 0 80px 0;
@@ -173,10 +173,10 @@
   background-color: var(--white);
   box-shadow: var(--shadow);
   cursor: pointer;
-}
+} */
 
 /* SEARCH BAR - 검색 카테고리 */
-.search__text {
+/* .search__text {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -216,10 +216,10 @@
 .search__item:hover {
   margin-left: 5px;
   color: var(--accent-1);
-}
+} */
 
 /* SEARCH BAR - 검색입력창 */
-.search__box {
+/* .search__box {
   display: flex;
   width: 100%;
   align-items: center;
@@ -246,4 +246,4 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--color-grey-6);
-}
+} */

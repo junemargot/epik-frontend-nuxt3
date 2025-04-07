@@ -243,7 +243,7 @@ const deleteHandler = async (id) => {
       await fetchMusicals(currentPage.value);
 
     } catch(error) {
-      console.error('콘서트 삭제 중 오류 발생: ', error);
+      console.error('뮤지컬 게시물 삭제 중 오류 발생: ', error);
       alert("게시물 삭제에 실패했습니다: " + error.message);
     }
   }
