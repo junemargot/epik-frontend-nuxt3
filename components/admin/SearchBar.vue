@@ -24,6 +24,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { categoryMapping } from '~/utils/categoryMapping';
 
 const props = defineProps({
   initialCategory: {
@@ -46,14 +47,14 @@ const inputPlaceholder = ref('검색어를 입력해주세요');
 const searchQuery = ref(props.initialQuery);
 const isOpen = ref(false);
 
-// 카테고리 매핑
-export const categoryMapping = {
-  '통합검색': 'ALL',
-  '제목 + 내용': 'TITLE_CONTENT',
-  '제목': 'TITLE',
-  '내용': 'CONTENT',
-  '작성자': 'WRITER'
-};
+// // 카테고리 매핑
+// const categoryMapping = {
+//   '통합검색': 'ALL',
+//   '제목 + 내용': 'TITLE_CONTENT',
+//   '제목': 'TITLE',
+//   '내용': 'CONTENT',
+//   '작성자': 'WRITER'
+// };
 
 // 드롭다운 토글
 const toggleDropdown = () => {
@@ -79,7 +80,13 @@ const updatePlaceholder = (category) => {
 };
 
 // 검색 수행
-const search = () => {
+const performSearch = () => {
+  console.log('검색 실행: ', {
+    query: searchQuery.value,
+    category: selectedCategory.value,
+    categoryCode: categoryMapping[selectedCategory.value] || 'ALL'
+  });
+  
   emit('search', {
     query: searchQuery.value,
     category: selectedCategory.value,
@@ -118,8 +125,7 @@ watch(() => props.initialCategory, (newVal) => {
 
 // 외부에서 접근할 수 있는 메서드 노출
 defineExpose({
-  search,
-  categoryMapping
+  performSearch
 });
 
 </script>

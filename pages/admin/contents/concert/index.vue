@@ -92,7 +92,8 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
-import SearchBar, { categoryMapping } from '~/components/admin/SearchBar.vue';
+import SearchBar from '~/components/admin/SearchBar.vue';
+import { categoryMapping } from '~/utils/categoryMapping';
 
 // Pinia 스토어 초기화
 const paginationStore = usePaginationStore();
@@ -104,45 +105,50 @@ const hasPrevPage = computed(() => paginationStore.hasPrevPage);
 const hasNextPage = computed(() => paginationStore.hasNextPage);
 const pages = computed(() => paginationStore.visiblePages);
 
-// 콘서트 목록 및 검색 상태
-const concerts = ref([]);
-const totalCount = ref(0);
-
-// 검색 관련 상태
-const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
-const selectedCategory = ref('통합검색');
-const inputPlaceholder = ref('검색어를 입력해주세요');
-const searchQuery = ref('');
-const isOpen = ref(false); // dropdown 상태
-
-const categoryMapping = {
-  '통합검색': 'ALL',
-  '제목 + 내용': 'TITLE_CONTENT',
-  '제목': 'TITLE',
-  '내용': 'CONTENT',
-  '작성자': 'WRITER'
-};
-
 const router = useRouter();
 const route = useRoute();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
+
+// 콘서트 목록 및 검색 상태
+const concerts = ref([]);
+const totalCount = ref(0);
+const searchQuery = ref('');
+
+// 검색 초기 카테고리 값 가져오기
+const getInitialCategory = () => {
+  const searchType = route.query.s;
+  if(!searchType) return '통합검색';
+
+  // searchType 파라미터 값에 따라 적절한 카테고리 반환
+  const category = Object.entries(categoryMapping)
+    .find(([key, value]) => value === searchType)?.[0];
+
+    return category || '통합검색';
+};
 
 // 콘서트 목록 fetch
 const fetchConcerts = async (page = 1) => {
   try {
     // 쿼리 파라미터 구성
     const params = {
+      // p: page,
+      // ...(searchQuery.value && { k: searchQuery.value }),
+      // // "통합검색"일 때는 s 파라미터를 전송하지 않음.
+      // ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
+      //     ? { s: categoryMapping[selectedCategory.value] }
+      //     : {})
       p: page,
       ...(searchQuery.value && { k: searchQuery.value }),
-      // "통합검색"일 때는 s 파라미터를 전송하지 않음.
-      ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
-          ? { s: categoryMapping[selectedCategory.value] }
-          : {})
+      ...(route.query.s && { s: route.query.s })
     };
   
     // 디버깅 코드
-    console.log('[검색 파라미터]: ', params);
+    console.log('[검색 파라미터 상세]: ',{
+      searchQuery: searchQuery.value,
+      routeQueryS: route.query.s,
+      finalParams: params
+    });
 
     const queryString = new URLSearchParams(params).toString();
     const fullUrl = `${apiBase}/admin/concert?${queryString}`;
@@ -183,6 +189,26 @@ const fetchConcerts = async (page = 1) => {
 };
 
 // 페이지 변경 핸들러
+// const changePage = async (page) => {
+//   if (page < 1 || page > paginationStore.totalPages) return;
+
+//   // URL 쿼리 파라미터 업데이트 (?p=2)
+//   router.push({
+//     query: {
+//       p: page,
+//       ...(searchQuery.value && { k: searchQuery.value }),
+//       ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
+//           ? { s: categoryMapping[selectedCategory.value] }
+//           : {})
+//     }
+//   });
+
+//   // 데이터 재요청
+//   await fetchConcerts(page);
+// };
+
+// 페이지 변경 22
+// 페이지 변경 핸들러
 const changePage = async (page) => {
   if (page < 1 || page > paginationStore.totalPages) return;
 
@@ -191,14 +217,38 @@ const changePage = async (page) => {
     query: {
       p: page,
       ...(searchQuery.value && { k: searchQuery.value }),
-      ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
-          ? { s: categoryMapping[selectedCategory.value] }
-          : {})
+      ...(route.query.s && { s: route.query.s }) // selectedCategory 대신 route.query.s 사용
     }
   });
 
   // 데이터 재요청
   await fetchConcerts(page);
+};
+
+
+// 검색 핸들러 (SearchBar 컴포넌트에서 emit된 이벤트 처리)
+const handleSearch = async (searchData) => {
+  searchQuery.value = searchData.query;
+  console.log('검색 데이터: ', searchData);
+
+  // 페이지 초기화
+  paginationStore.setPagination(({
+    currentPage: 1,
+    totalPages: paginationStore.totalPages,
+    hasPrevPage: false,
+    hasNextPage: paginationStore.hasNextPage
+  }));
+
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      p: 1,
+      ...(searchData.query ? { k: searchData.query } : {}),
+      ...(searchData.categoryCode !== 'ALL' ? { s: searchData.categoryCode } : {})
+    }
+  });
+
+  await fetchConcerts(1);
 };
 
 // 수정 버튼 이벤트
@@ -231,60 +281,60 @@ const deleteHandler = async (id) => {
   }
 };
 
-// 드롭다운 토글
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
+// // 드롭다운 토글
+// const toggleDropdown = () => {
+//   isOpen.value = !isOpen.value;
+// };
 
-// 키테고리 선택 함수
-const selectCategory = (category) => {
-  selectedCategory.value = category;
-  updatePlaceholder(category);
-  isOpen.value = false; // 선택 후 드롭다운 클로즈
-};
+// // 키테고리 선택 함수
+// const selectCategory = (category) => {
+//   selectedCategory.value = category;
+//   updatePlaceholder(category);
+//   isOpen.value = false; // 선택 후 드롭다운 클로즈
+// };
 
-// placeholder 업데이트
-const updatePlaceholder = (category) => {
-  if (category === '통합검색') {
-    inputPlaceholder.value = '검색어를 입력해주세요';
-  } else if (category === '작성자') {
-    inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
-  } else {
-    inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
-  }
-};
+// // placeholder 업데이트
+// const updatePlaceholder = (category) => {
+//   if (category === '통합검색') {
+//     inputPlaceholder.value = '검색어를 입력해주세요';
+//   } else if (category === '작성자') {
+//     inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
+//   } else {
+//     inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
+//   }
+// };
 
-// 검색 수행
-const performSearch = async () => {
-  // 페이지ㅣ 초기화
-  paginationStore.setPagination({
-    currentPage: 1,
-    totalPages: paginationStore.totalPages,
-    hasPrevPage: paginationStore.hasPrevPage,
-    // hasPrevPage: false, // 페이지 1로 돌아가면 이전 페이지는 없음
-    hasNextPage: paginationStore.hasNextPage
-  });
+// // 검색 수행
+// const performSearch = async () => {
+//   // 페이지ㅣ 초기화
+//   paginationStore.setPagination({
+//     currentPage: 1,
+//     totalPages: paginationStore.totalPages,
+//     hasPrevPage: paginationStore.hasPrevPage,
+//     // hasPrevPage: false, // 페이지 1로 돌아가면 이전 페이지는 없음
+//     hasNextPage: paginationStore.hasNextPage
+//   });
 
-  // URL 쿼리 파라미터 업데이트
-  router.push({
-    query: {
-      p: 1,
-      ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
-          ? { s: categoryMapping[selectedCategory.value] }
-          : {})
-    }
-  });
+//   // URL 쿼리 파라미터 업데이트
+//   router.push({
+//     query: {
+//       p: 1,
+//       ...(searchQuery.value ? { k: searchQuery.value } : {}),
+//       ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
+//           ? { s: categoryMapping[selectedCategory.value] }
+//           : {})
+//     }
+//   });
 
-  await fetchConcerts(1); // 명시적으로 페이지 1 전달
-}
+//   await fetchConcerts(1); // 명시적으로 페이지 1 전달
+// }
 
-// 클릭 외부 영역 처리
-const handleClickOutside = (e) => {
-  if (!e.target.closest('.search')) {
-    isOpen.value = false;
-  }
-};
+// // 클릭 외부 영역 처리
+// const handleClickOutside = (e) => {
+//   if (!e.target.closest('.search')) {
+//     isOpen.value = false;
+//   }
+// };
 
 // 날짜 포맷팅 함수 추가
 const formatDate = (dateString) => {
@@ -320,9 +370,26 @@ const watchRouteQuery = () => {
 
 // onMounted 시 초기 데이터 로드
 onMounted(async () => {
-  await watchRouteQuery();
-  window.addEventListener('click', handleClickOutside);
-  watch(() => route.query, watchRouteQuery, { deep: true });
+  // 초기 검색어 설정
+  searchQuery.value = route.query.k || '';
+
+  // 페이지 번호 설정
+  const page = parseInt(route.query.p) || 1;
+
+  // 초기 데이터 로드
+  await fetchConcerts(page);
+
+  // await watchRouteQuery();
+  // window.addEventListener('click', handleClickOutside);
+  // watch(() => route.query, watchRouteQuery, { deep: true });
+
+  // 라우트 변경 감지
+  watch(() => route.query, async (newQuery) => {
+    const newPage = parseInt(newQuery.p) || 1;
+    searchQuery.value = newQuery.k || '';
+
+    await fetchConcerts(newPage);
+  }, {deep: true});
 });
 
 // beforeRouteUpdate 가드
@@ -332,9 +399,6 @@ const beforeRouteUpdate = async (to, from, next) => {
 };
 defineExpose({ beforeRouteUpdate });
 
-onUnmounted(() => {
-  window.removeEventListener('click', handleClickOutside);
-});
 
 </script>
 
