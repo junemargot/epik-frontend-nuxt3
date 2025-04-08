@@ -40,12 +40,12 @@
     
       <div class="pagination-registration-container">
         <Pagination 
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :has-prev-page="hasPrevPage"
-        :has-next-page="hasNextPage"
-        :visible-pages="pages"
-        @page-change="changePage"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          :has-prev-page="hasPrevPage"
+          :has-next-page="hasNextPage"
+          :visible-pages="pages"
+          @page-change="changePage"
         />
 
         <div class="registration">

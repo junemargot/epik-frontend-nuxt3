@@ -11,6 +11,7 @@
   transition: all .3s ease;
   overflow: hidden;
   border-right: 1px solid var(--black);
+  z-index: 10;
   /* padding: 3px 7px 0 7px;  */
   /* 로고 패딩값 */
 }

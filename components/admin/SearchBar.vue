@@ -134,7 +134,6 @@ defineExpose({
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  list-style-type: none;
   margin-left: 230px;
 }
 
@@ -142,15 +141,20 @@ defineExpose({
   display: flex;
   align-items: center;
   min-width: 700px;
-  border-radius: var(--border-2);
+  border-radius: var(--radius-2);
   border: 1px solid var(--color-grey-4);
   background-color: var(--white);
+}
+
+.search .search__dropdown {
+  position: relative;
+  z-index: 1;
 }
 
 .search .search__bar .search__dropdown {
   position: relative;
   width: 170px;
-  border-radius: var(--border-2);
+  border-radius: var(--radius-2);
   border-right: 1px solid var(--color-grey-4);
   background-color: var(--white);
   box-shadow: var(--shadow);
@@ -176,7 +180,7 @@ defineExpose({
   top: 46px;
   left: 0;
   width: 100%;
-  border-radius: var(--border-2);
+  border-radius: var(--radius-2);
   max-height: 0;
   overflow: hidden;
   background-color: var(--white);
@@ -185,12 +189,15 @@ defineExpose({
 
 #drop-list.show {
   max-height: 300px;
+  background: var(--white);
+  border: 1px solid var(--color-grey-4);
+  border-radius: var(--radius-2);
 }
 
 .search__item {
   font-size: 14px;
   font-weight: 500;
-  border-radius: var(--border-2);
+  border-radius: var(--radius-2);
   padding: 10px 0 10px 10px;
   transition: margin-left .3s ease, color .2s ease;
 }
@@ -229,4 +236,71 @@ defineExpose({
   font-weight: 500;
   color: var(--color-grey-6);
 }
+
+/* 큰 화면 -> 기본 스타일 유지, 다만 너비 조정 */
+@media (max-width: 1024px) {
+  .search {
+    margin-left: 20px;
+    padding: 20px 10px 60px 10px;
+  }
+  .search .search__bar {
+    min-width: auto;
+    width: 90%;
+  }
+}
+
+/* 태블릿/모바일 작은 화면 -> 세로 배치 */
+@media (max-width: 768px) {
+  .search {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    padding: 20px 10px;
+    height: auto;
+  }
+  .search .search__bar {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .search__dropdown {
+    width: 40%;
+  }
+  .search__text {
+    font-size: 12px;
+    padding: 8px;
+  }
+  .search__box input {
+    padding: 8px;
+    font-size: 12px;
+  }
+  .search__box i {
+    font-size: 16px;
+  }
+}
+
+/* 아주 작은 화면 -> 추가 축소 */
+@media (max-width: 480px) {
+  .search {
+    padding: 10px;
+  }
+  .search__dropdown {
+    width: 45%;
+  }
+  .search__text {
+    font-size: 11px;
+    padding: 6px;
+  }
+  .search__item {
+    font-size: 12px;
+    padding: 6px 0 6px 8px;
+  }
+  .search__box input {
+    padding: 6px;
+    font-size: 11px;
+  }
+  .search__box i {
+    font-size: 14px;
+  }
+}
+
 </style>
