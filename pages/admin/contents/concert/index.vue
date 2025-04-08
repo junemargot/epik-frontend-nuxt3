@@ -64,27 +64,6 @@
     :initial-query="searchQuery"
     @search="handleSearch"
   />
-  <!-- <section class="search">
-    <div class="search__bar">
-      <div class="search__dropdown">
-        <div id="drop-text" class="search__text" @click="toggleDropdown">
-          <span id="span">{{ selectedCategory }}</span>
-          <i id="icon" class='bx bx-chevron-down' :style="{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }">
-          </i>
-        </div>
-        <ul id="drop-list" class="search__list" :class="{ show: isOpen }">
-          <li class="search__item" v-for="item in categories" :key="item" @click="selectCategory(item)">
-            {{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="search__box">
-        <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery"
-          @keyup.enter="performSearch" />
-        <i class='bx bx-search' @click.prevent.stop='performSearch'></i>
-      </div>
-    </div>
-  </section> -->
 </template>
 
 <script setup>
@@ -132,12 +111,6 @@ const fetchConcerts = async (page = 1) => {
   try {
     // 쿼리 파라미터 구성
     const params = {
-      // p: page,
-      // ...(searchQuery.value && { k: searchQuery.value }),
-      // // "통합검색"일 때는 s 파라미터를 전송하지 않음.
-      // ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
-      //     ? { s: categoryMapping[selectedCategory.value] }
-      //     : {})
       p: page,
       ...(searchQuery.value && { k: searchQuery.value }),
       ...(route.query.s && { s: route.query.s })
@@ -189,26 +162,6 @@ const fetchConcerts = async (page = 1) => {
 };
 
 // 페이지 변경 핸들러
-// const changePage = async (page) => {
-//   if (page < 1 || page > paginationStore.totalPages) return;
-
-//   // URL 쿼리 파라미터 업데이트 (?p=2)
-//   router.push({
-//     query: {
-//       p: page,
-//       ...(searchQuery.value && { k: searchQuery.value }),
-//       ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
-//           ? { s: categoryMapping[selectedCategory.value] }
-//           : {})
-//     }
-//   });
-
-//   // 데이터 재요청
-//   await fetchConcerts(page);
-// };
-
-// 페이지 변경 22
-// 페이지 변경 핸들러
 const changePage = async (page) => {
   if (page < 1 || page > paginationStore.totalPages) return;
 
@@ -244,7 +197,7 @@ const handleSearch = async (searchData) => {
     query: {
       p: 1,
       ...(searchData.query ? { k: searchData.query } : {}),
-      ...(searchData.categoryCode !== 'ALL' ? { s: searchData.categoryCode } : {})
+      s: searchData.categoryCode || 'ALL'
     }
   });
 
@@ -268,7 +221,7 @@ const deleteHandler = async (id) => {
       });
 
       if(!response.ok) {
-        throw new Error(`서버 응답 오류: ${response.status}`);
+        throw new Error(`서버 응답 오류: ${response.status}`) ;
       }
 
       alert("게시물이 정상적으로 삭제되었습니다.");
@@ -280,61 +233,6 @@ const deleteHandler = async (id) => {
     }
   }
 };
-
-// // 드롭다운 토글
-// const toggleDropdown = () => {
-//   isOpen.value = !isOpen.value;
-// };
-
-// // 키테고리 선택 함수
-// const selectCategory = (category) => {
-//   selectedCategory.value = category;
-//   updatePlaceholder(category);
-//   isOpen.value = false; // 선택 후 드롭다운 클로즈
-// };
-
-// // placeholder 업데이트
-// const updatePlaceholder = (category) => {
-//   if (category === '통합검색') {
-//     inputPlaceholder.value = '검색어를 입력해주세요';
-//   } else if (category === '작성자') {
-//     inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
-//   } else {
-//     inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
-//   }
-// };
-
-// // 검색 수행
-// const performSearch = async () => {
-//   // 페이지ㅣ 초기화
-//   paginationStore.setPagination({
-//     currentPage: 1,
-//     totalPages: paginationStore.totalPages,
-//     hasPrevPage: paginationStore.hasPrevPage,
-//     // hasPrevPage: false, // 페이지 1로 돌아가면 이전 페이지는 없음
-//     hasNextPage: paginationStore.hasNextPage
-//   });
-
-//   // URL 쿼리 파라미터 업데이트
-//   router.push({
-//     query: {
-//       p: 1,
-//       ...(searchQuery.value ? { k: searchQuery.value } : {}),
-//       ...(selectedCategory.value !== '통합검색' && categoryMapping[selectedCategory.value]
-//           ? { s: categoryMapping[selectedCategory.value] }
-//           : {})
-//     }
-//   });
-
-//   await fetchConcerts(1); // 명시적으로 페이지 1 전달
-// }
-
-// // 클릭 외부 영역 처리
-// const handleClickOutside = (e) => {
-//   if (!e.target.closest('.search')) {
-//     isOpen.value = false;
-//   }
-// };
 
 // 날짜 포맷팅 함수 추가
 const formatDate = (dateString) => {

@@ -14,8 +14,12 @@
         </ul>
       </div>
       <div class="search__box">
-        <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery"
-          @keyup.enter="performSearch" />
+        <input 
+          type="text" id="search-input" 
+          :placeholder="inputPlaceholder" 
+          v-model="searchQuery"
+          @keyup.enter="performSearch"
+        />
         <i class='bx bx-search' @click.prevent.stop='performSearch'></i>
       </div>
     </div>
@@ -46,15 +50,6 @@ const selectedCategory = ref(props.initialCategory);
 const inputPlaceholder = ref('검색어를 입력해주세요');
 const searchQuery = ref(props.initialQuery);
 const isOpen = ref(false);
-
-// // 카테고리 매핑
-// const categoryMapping = {
-//   '통합검색': 'ALL',
-//   '제목 + 내용': 'TITLE_CONTENT',
-//   '제목': 'TITLE',
-//   '내용': 'CONTENT',
-//   '작성자': 'WRITER'
-// };
 
 // 드롭다운 토글
 const toggleDropdown = () => {
