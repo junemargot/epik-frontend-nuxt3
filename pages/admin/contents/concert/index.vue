@@ -38,6 +38,7 @@
       </div>
       <!-- END BOARD CONTAINER -->
     
+      <!-- Pagination -->
       <div class="pagination-registration-container">
         <Pagination 
           :current-page="currentPage"
@@ -276,10 +277,6 @@ onMounted(async () => {
 
   // 초기 데이터 로드
   await fetchConcerts(page);
-
-  // await watchRouteQuery();
-  // window.addEventListener('click', handleClickOutside);
-  // watch(() => route.query, watchRouteQuery, { deep: true });
 
   // 라우트 변경 감지
   watch(() => route.query, async (newQuery) => {
