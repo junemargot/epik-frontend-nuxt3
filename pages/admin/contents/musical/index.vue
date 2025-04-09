@@ -57,27 +57,11 @@
   </div> <!-- END MAIN WRAP -->
 
   <!-- SEARCH BAR -->
-  <section class="search">
-    <div class="search__bar">
-      <div class="search__dropdown">
-        <div id="drop-text" class="search__text" @click="toggleDropdown">
-          <span id="span">{{ selectedCategory }}</span>
-          <i id="icon" class='bx bx-chevron-down' :style="{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }">
-          </i>
-        </div>
-        <ul id="drop-list" class="search__list" :class="{ show: isOpen }">
-          <li class="search__item" v-for="item in categories" :key="item" @click="selectCategory(item)">
-            {{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="search__box">
-        <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery"
-          @keyup.enter="performSearch" />
-        <i class='bx bx-search' @click.prevent.stop='performSearch'></i>
-      </div>
-    </div>
-  </section>
+  <SearchBar
+    :initial-category="getInitialCategory()"
+    :initial-query="searchQuery"
+    @search="handleSearch"
+  />
 </template>
 
 <script setup>
@@ -85,143 +69,131 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
+import SearchBar from '~/components/admin/SearchBar.vue';
+import { categoryMapping } from '~/utils/categoryMapping';
 
-// 데이터 상태 관리
-const musicals = ref([]);
-const totalCount = ref(0);
+// Pinia 스토어 초기화
+const paginationStore = usePaginationStore();
 
-// 페이지네이션 상태 관리
-const totalPages = ref(0);
-const currentPage = ref(1);
-const hasPrevPage = ref(false);
-const hasNextPage = ref(false);
-const pages = ref([]);
+// computed 상태 (Pinia 스토어와 실시간 동기화)
+const totalPages = computed(() => paginationStore.totalPages);
+const currentPage = computed(() => paginationStore.currentPage);
+const hasPrevPage = computed(() => paginationStore.hasPrevPage);
+const hasNextPage = computed(() => paginationStore.hasNextPage);
+const pages = computed(() => paginationStore.visiblePages);
 
 const router = useRouter();
 const route = useRoute();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
+// 뮤지컬 목록 및 검색 상태
+const musicals = ref([]);
+const totalCount = ref(0);
+const searchQuery = ref('');
+
+// 검색 초기 카테고리 값 가져오기
+const getInitialCategory = () => {
+  const searchType = route.query.s;
+  if(!searchType) return '통합검색';
+
+  // searchType 파라미터 값에 따라 적절한 카테고리 반환
+  const category = Object.entries(categoryMapping)
+    .find(([key, value]) => value === searchType)?.[0];
+
+    return category || '통합검색';
+};
+
 // 뮤지컬 목록 fetch
 const fetchMusicals = async (page = 1) => {
-  const pageNumber = page;
+  try {
+    const params = {
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(route.query.s && { s: route.query.s })
+    };
 
-  const { data, error } = await useFetch('/admin/musical', {
-    baseURL: apiBase || 'http://localhost:8081/api/v1',
-    params: {
-      p: pageNumber,
-      k: searchQuery.value,
-      s: categoryMapping[selectedCategory.value] || 'ALL'
-    },
-    cache: false,
-    key: `musicals-page-${page}`,
-    onResponse({ response }) {
-      console.log("SERVER RAW RESPONSE: ", response._data);
+    const queryString = new URLSearchParams(params).toString();
+    const fullUrl = `${apiBase}/admin/musical?${queryString}`;
+    console.log("[REQUEST URL]:", fullUrl); // 요청 URL 확인
+
+    // API 요청
+    const responseData = await $fetch(fullUrl);
+    console.log("[API 응답 전체]: ", responseData);
+
+    // 목록 데이터 세팅
+    musicals.value = responseData.musicalList || [];
+    totalCount.value = responseData.totalCount || 0;
+
+    // Pinia 스토어 업데이트
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: responseData.totalPages || 1, // API 응답 데이터 반영
+      hasPrevPage: responseData.hasPrev || false,
+      hasNextPage: responseData.hasNext || false
+    });
+  
+  } catch(error) {
+    console.error("Error Fetching Musical List: ", error);
+
+    if(error.response) {
+      console.error("Error Response: ", await error.response.text());
+    }
+
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: 1,
+      hasPrevPage: false,
+      hasNextPage: false
+    });
+  }
+};
+
+// 페이지 변경 핸들러
+const changePage = async (page) => {
+  if (page < 1 || page > paginationStore.totalPages) return;
+
+  // URL 쿼리 파라미터 업데이트 (?p=2)
+  router.push({
+    query: {
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(route.query.s && { s: route.query.s }) // selectedCategory 대신 route.query.s 사용
     }
   });
 
-  if (error.value) {
-    console.error("ERROR FETCHING MUSICAL LIST: ", error.value);
-  }
-
-  if (data.value) {
-    const responseData = data.value;
-
-    // 서버 응답 디버깅
-    console.log("SERVER RESPONSE DATAS: ", responseData);
-
-    musicals.value = responseData.musicalList || [];
-    totalCount.value = responseData.totalCount || 0;
-    totalPages.value = responseData.totalPages || 0;
-    hasPrevPage.value = responseData.hasPrev || false;
-    hasNextPage.value = responseData.hasNext || false;
-    pages.value = responseData.pages || [];
-
-    // 페이지 번호 계산
-    const rangeStart = Math.max(1, page - 2);
-    const rangeEnd = Math.min(totalPages.value, page + 2);
-    pages.value = Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
-
-    currentPage.value = page;
-  } else {
-    console.warn("NO DATA RECEIVED");
-  }
-};
-
-const categoryMapping = {
-  '통합검색': 'ALL',
-  '제목': 'TITLE',
-  '내용': 'CONTENT',
-  '작성자': 'WRITER'
-};
-
-onMounted(async () => {
-  await fetchMusicals(1); // 데이터 fetch 후 상태 갱신 - 페이지 로드 시 1 페이지 데이터 가져오기
-  console.log('Concerts: ', musicals.value); // 페이지 데이터
-  console.log('Total Count: ', musicals.value); // 총 게시물수
-});
-
-// 페이지 이동 핸들러
-const changePage = async (page) => {
-  if (page < 1 || page > totalPages.value) {
-    console.warn("INVALID PAGE NUMBER:", page);
-    return;
-  }
-
-  console.log(`Changing to page: ${page}`); // 페이지 디버깅
+  // 데이터 재요청
   await fetchMusicals(page);
-  console.log("Current Page Data: ", musicals.value);
 };
 
+// 검색 핸들러 (SearchBar 컴포넌트에서 emit된 이벤트 처리)
+const handleSearch = async (searchData) => {
+  searchQuery.value = searchData.query;
+  console.log('검색 데이터: ', searchData);
 
+  // 페이지 초기화
+  paginationStore.setPagination(({
+    currentPage: 1,
+    totalPages: paginationStore.totalPages,
+    hasPrevPage: false,
+    hasNextPage: paginationStore.hasNextPage
+  }));
 
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      p: 1,
+      ...(searchData.query ? { k: searchData.query } : {}),
+      s: searchData.categoryCode || 'ALL'
+    }
+  });
 
-// ##############################################
+  await fetchMusicals(1);
+};
 
 // 수정 버튼 이벤트
 const goToEditPage = (id) => {
-  router.push(`/admin/contents/musical/${id}/edit`); // 하드코딩
-};
-
-// 검색 기능
-const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
-const selectedCategory = ref('통합검색');
-const inputPlaceholder = ref('검색어를 입력해주세요');
-const searchQuery = ref('');
-const isOpen = ref(false); // dropdown 상태
-
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
-
-const selectCategory = (category) => {
-  selectedCategory.value = category;
-  updatePlaceholder(category);
-  isOpen.value = false; // 선택 후 드롭다운 클로즈
-};
-
-const updatePlaceholder = (category) => {
-  if (category === '통합검색') {
-    inputPlaceholder.value = '검색어를 입력해주세요';
-  } else if (category === '작성자') {
-    inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
-  } else {
-    inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
-  }
-};
-
-const performSearch = async () => {
-  currentPage.value = 1;
-
-  await fetchMusicals();
-  router.push({ query: { k: searchQuery.value, s: categoryMapping[selectedCategory.value] } });
-}
-
-// 클릭 외부 영역 처리
-const handleClickOutside = (e) => {
-  if (!e.target.closest('.search')) {
-    isOpen.value = false;
-  }
+  router.push(`/admin/contents/musical/${id}/edit`);
 };
 
 // 삭제 핸들러
@@ -249,22 +221,64 @@ const deleteHandler = async (id) => {
   }
 };
 
-onMounted(() => {
-  window.addEventListener('click', handleClickOutside);
-});
-
-
-onUnmounted(() => {
-  window.removeEventListener('click', handleClickOutside);
-});
-
+// 날짜 포맷팅 함수
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-  const formattedDate = new Date(dateString).toLocaleDateString('ko-KR', options);
+  if (!dateString) return '';
 
-  // 공백 제거 및 점 삭제 ("2024. 11. 03." -> "2024.11.03")
-  return formattedDate.replace(/\s/g, '').replace(/\.$/, '')
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).replace(/\. /g, '.').replace(/\.$/, '');
 };
+
+// route 변경 감지
+const watchRouteQuery = () => {
+  const newPage = parseInt(route.query.p) || 1;
+  const newSearchQuery = route.query.k || '';
+  const newSearchType = route.query.s || '';
+
+  paginationStore.currentPage = newPage; // Pinia 스토어 동기화
+  searchQuery.value = newSearchQuery;
+
+  if(newSearchType) {
+    const category = Object.entries(categoryMapping)
+      .find(([key, value]) => value === newSearchType)?.[0];
+    if(category) {
+      selectedCategory.value = category;
+      updatePlaceholder(category);
+    }
+  }
+  fetchMusicals(newPage); // 데이터 재요청
+};
+
+// onMounted 시 초기 데이터 로드
+onMounted(async () => {
+  // 초기 검색어 설정
+  searchQuery.value = route.query.k || '';
+
+  // 페이지 번호 설정
+  const page = parseInt(route.query.p) || 1;
+
+  // 초기 데이터 로드
+  await fetchMusicals(page);
+
+  // 라우드 변경 감지
+  watch(() => route.query, async (newQuery) => {
+    const newPage = parseInt(newQuery.p) || 1;
+    searchQuery.value = newQuery.k || '';
+
+    await fetchMusicals(newPage);
+  }, {deep: true});
+});
+
+// beforeRouteUpdate 가드
+const beforeRouteUpdate = async (to, from, next) => {
+  await watchRouteQuery();
+  next();
+};
+defineExpose({ beforeRouteUpdate });
 
 </script>
 
