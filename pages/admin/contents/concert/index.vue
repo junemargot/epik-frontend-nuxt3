@@ -207,7 +207,7 @@ const handleSearch = async (searchData) => {
 
 // 수정 버튼 이벤트
 const goToEditPage = (id) => {
-  router.push(`/admin/contents/concert/${id}/edit`); // 하드코딩
+  router.push(`/admin/contents/concert/${id}/edit`);
 };
 
 // 삭제 핸들러

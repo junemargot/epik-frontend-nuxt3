@@ -37,45 +37,15 @@
       </div>
       <!-- END BOARD CONTAINER -->
       
-      <!-- PAGINATION -->
-      <!-- <div class="pagination-wrapper">
-        <div class="pagination">
-          <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(1)">
-            <i class="bx bx-chevrons-left"></i>
-          </button>
-          <button type="button" class="page-btn prev-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(currentPage - 1)">
-            <i class="bx bx-chevron-left"></i>
-          </button>
-          <button v-for="page in pages" :key="page" type="button" class="page-btn"
-            :class="{ active: currentPage === page }" @click.prevent.stop="changePage(page)">
-            {{ page }}
-          </button>
-          <button type="button" class="page-btn next-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(currentPage + 1)">
-            <i class="bx bx-chevron-right"></i>
-          </button>
-          <button type="button" class="page-btn end-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(totalPages)">
-            <i class="bx bx-chevrons-right"></i>
-          </button>
-        </div>
-        <div class="registration">
-          <RouterLink to="/admin/contents/exhibition/new">
-            <button type="button" class="registration__button">등록</button>
-          </RouterLink>
-        </div>
-      </div> -->
-      <!-- END PAGINATION -->
+      <!-- Pagination -->
       <div class="pagination-registration-container">
         <Pagination 
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :has-prev-page="hasPrevPage"
-        :has-next-page="hasNextPage"
-        :visible-pages="pages"
-        @page-change="changePage"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          :has-prev-page="hasPrevPage"
+          :has-next-page="hasNextPage"
+          :visible-pages="pages"
+          @page-change="changePage"
         />
 
         <div class="registration">
@@ -89,27 +59,11 @@
   <!-- END MAIN WRAP -->
 
   <!-- SEARCH BAR -->
-  <section class="search">
-    <div class="search__bar">
-      <div class="search__dropdown">
-        <div id="drop-text" class="search__text" @click="toggleDropdown">
-          <span id="span">{{ selectedCategory }}</span>
-          <i id="icon" class='bx bx-chevron-down' :style="{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }">
-          </i>
-        </div>
-        <ul id="drop-list" class="search__list" :class="{ show: isOpen }">
-          <li class="search__item" v-for="item in categories" :key="item" @click="selectCategory(item)">
-            {{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="search__box">
-        <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery"
-          @keyup.enter="performSearch" />
-        <i class='bx bx-search' @click.prevent.stop='performSearch'></i>
-      </div>
-    </div>
-  </section>
+  <SearchBar
+    :initial-category="getInitialCategory()"
+    :initial-query="searchQuery"
+    @search="handleSearch"
+  />
 </template>
 
 <script setup>
@@ -117,104 +71,131 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
+import SearchBar from '~/components/admin/SearchBar.vue';
+import { categoryMapping } from '~/utils/categoryMapping';
 
-// 상태 관리를 위한 ref 선언
-const exhibitions = ref([]);
-const totalCount = ref(0);
+// Pinia 스토어 초기화
+const paginationStore = usePaginationStore();
 
-// 페이지네이션 상태 관리
-const totalPages = ref(0);
-const currentPage = ref(1);
-const hasPrevPage = ref(false);
-const hasNextPage = ref(false);
-const pages = ref([]);
-
-
-// 검색 기능
-const categories = ['통합검색', '제목 + 내용', '제목', '내용', '작성자']; // 검색 카테고리
-const selectedCategory = ref('통합검색');
-const inputPlaceholder = ref('검색어를 입력해주세요');
-const searchQuery = ref('');
-const isOpen = ref(false); // dropdown 상태
-
-const categoryMapping = {
-  '통합검색': 'ALL',
-  '제목': 'TITLE',
-  '내용': 'CONTENT',
-  '작성자': 'WRITER'
-};
+// computed 상태 (Pinia 스토어와 실시간 동기화)
+const totalPages = computed(() => paginationStore.totalPages);
+const currentPage = computed(() => paginationStore.currentPage);
+const hasPrevPage = computed(() => paginationStore.hasPrevPage);
+const hasNextPage = computed(() => paginationStore.hasNextPage);
+const pages = computed(() => paginationStore.visiblePages);
 
 const router = useRouter();
 const route = useRoute();
 const config = useRuntimeConfig();
-const apiBase = config.public.apiBase;
+const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
-// 전시회 데이터 가져오기
+// 전시회 목록 및 검색 상태
+const exhibitions = ref([]);
+const totalCount = ref(0);
+const searchQuery = ref('');
+
+// 검색 초기 카테고리 값 가져오기
+const getInitialCategory = () => {
+  const searchType = route.query.s;
+  if(!searchType) return '통합검색';
+
+  // searchType 파라미터 값에 따라 적절한 카테고리 반환
+  const category = Object.entries(categoryMapping)
+    .find(([key, value]) => value === searchType)?.[0];
+
+    return category || '통합검색';
+};
+
+// 전시회 목록 fetch
 const fetchExhibitions = async (page = 1) => {
   try {
-    const pageNumber = page;
-
-    const url = `${apiBase || 'http://localhost:8081/api/v1'}/admin/exhibition`;
     const params = {
-      p: pageNumber,
-      ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-        ? { s: categoryMapping[selectedCategory.value] }
-        : {})
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(route.query.s && { s: route.query.s })
     };
 
     // url 쿼리 문자열 생성
-    const queryString = Object.entries(params)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join('&');
+    const queryString = new URLSearchParams(params).toString();
+    const fullUrl = `${apiBase}/admin/exhibition?${queryString}`;
+    console.log("[REQUEST URL]:", fullUrl); // 요청 URL 확인
 
-    // api 요청 실행
-    const fullUrl = `${url}?${queryString}`;
-    console.log("REQUEST SENT TO: ", fullUrl);
-
+    // API 요청
     const responseData = await $fetch(fullUrl);
-    console.log("SERVER RESPONSE DATA: ", responseData);
+    console.log("[API 응답 전체]: ", responseData);
 
-    // 응답데이터 처리
+    // 목록 데이터 세팅
     exhibitions.value = responseData.exhibitionList || [];
     totalCount.value = responseData.totalCount || 0;
-    totalPages.value = responseData.totalPages || 0;
-    hasPrevPage.value = responseData.hasPrev || false;
-    hasNextPage.value = responseData.hasNext || false;
 
-    // 페이지 번호 계산
-    const rangeStart = Math.max(1, page - 2);
-    const rangeEnd = Math.min(totalPages.value, page + 2);
-    pages.value = Array.from({ length: rangeEnd - rangeStart + 1}, (_, i) => rangeStart + i);
-
-    currentPage.value = page;
+    // Pinia 스토어 업데이트
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: responseData.totalPages || 1, // API 응답 데이터 반영
+      hasPrevPage: responseData.hasPrev || false,
+      hasNextPage: responseData.hasNext || false
+    });
 
   } catch(error) {
-    console.error("ERROR FETCHING EXHIBITION LIST: ", error);
+    console.error("Error Fetching Concert List:", error);
+
+    if(error.response) {
+      console.error("Error Response: ", await error.response.text());
+    }
+
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: 1,
+      hasPrevPage: false,
+      hasNextPage: false
+    });
   }
 };
 
 // 페이지 이동 핸들러
 const changePage = async (page) => {
-  if(page < 1 || page > totalPages.value) return;
+  if (page < 1 || page > paginationStore.totalPages) return;
 
-  // URL 쿼리 파라미터 업데이트
+  // URL 쿼리 파라미터 업데이트 (?p=2)
   router.push({
     query: {
-      page,
-      ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-        ? { s: categoryMapping[selectedCategory.value] }
-        : {})
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(route.query.s && { s: route.query.s }) // selectedCategory 대신 route.query.s 사용
     }
   });
 
   await fetchExhibitions(page);
 };
 
+// 검색 핸들러 (SearchBar 컴포넌트에서 emit된 이벤트 처리)
+const handleSearch = async (searchData) => {
+  searchQuery.value = searchData.query;
+  console.log('검색 데이터: ', searchData);
+
+  // 페이지 초기화
+  paginationStore.setPagination(({
+    currentPage: 1,
+    totalPages: paginationStore.totalPages,
+    hasPrevPage: false,
+    hasNextPage: paginationStore.hasNextPage
+  }));
+
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      p: 1,
+      ...(searchData.query ? { k: searchData.query } : {}),
+      s: searchData.categoryCode || 'ALL'
+    }
+  });
+
+  await fetchExhibitions(1);
+};
+
 // 수정 버튼 이벤트
 const goToEditPage = (id) => {
-  router.push(`/admin/contents/exhibition/${id}/edit`); // 하드코딩
+  router.push(`/admin/contents/exhibition/${id}/edit`);
 };
 
 // 삭제 핸들러
@@ -242,54 +223,6 @@ const deleteHandler = async (id) => {
   }
 };
 
-// 드롭다운 토글
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
-
-// 검색 카테고리 선택
-const selectCategory = (category) => {
-  selectedCategory.value = category;
-  updatePlaceholder(category);
-  isOpen.value = false; // 선택 후 드롭다운 클로즈
-};
-
-// placeholder 업데이트
-const updatePlaceholder = (category) => {
-  if(category === '통합검색') {
-    inputPlaceholder.value = '검색어를 입력해주세요';
-  } else if(category === '작성자') {
-    inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
-  } else {
-    inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
-  }
-};
-
-// 검색 수행
-const performSearch = async () => {
-  currentPage.value = 1;
-
-  // URL 쿼리 파라미터 업데이트
-  router.push({
-    query: {
-      page: 1,
-      ...(searchQuery.value ? { k: searchQuery.value } : {}),
-      ...(categoryMapping[selectedCategory.value] && categoryMapping[selectedCategory.value] !== 'ALL'
-        ? { s: categoryMapping[selectedCategory.value] }
-        : {})
-    }
-  });
-
-  await fetchExhibitions();
-}
-
-// 클릭 외부 영역 처리
-const handleClickOutside = (e) => {
-  if(!e.target.closest('.search')) {
-    isOpen.value = false;
-  }
-};
-
 // 날짜 포맷팅 함수 추가
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -302,49 +235,52 @@ const formatDate = (dateString) => {
   }).replace(/\. /g, '.').replace(/\.$/, '');
 };
 
-// URL 쿼리 파라미터 변경 감지
+// 라우트 변경 감지
 const watchRouteQuery = () => {
-  const newPage = parseInt(route.query.page) || 1;
+  const newPage = parseInt(route.query.p) || 1;
   const newSearchQuery = route.query.k || '';
   const newSearchType = route.query.s || '';
 
-  currentPage.value = newPage;
+  paginationStore.currentPage = newPage; // Pinia 스토어 동기화
   searchQuery.value = newSearchQuery;
 
   if(newSearchType) {
     const category = Object.entries(categoryMapping)
       .find(([key, value]) => value === newSearchType)?.[0];
-
     if(category) {
       selectedCategory.value = category;
       updatePlaceholder(category);
     }
   }
-
-  fetchExhibitions(newPage);
+  fetchExhibitions(newPage); // 데이터 재요청
 };
 
+// onMounted 시 초기 데이터 로드
 onMounted(async () => {
-  await watchRouteQuery(); // URL 쿼리 파라미터 기반으로 초기 데이터 로드
+  // 초기 검색어 설정
+  searchQuery.value = route.query.k || '';
 
-  window.addEventListener('click', handleClickOutside);
+  // 페이지 번호 설정
+  const page = parseInt(route.query.p) || 1;
 
-  // url 변경 감기
-  watch(() => route.query, watchRouteQuery, { deep: true });
+  // 초기 데이터 로드
+  await fetchExhibitions(page);
+
+  // 라우트 변경 감지
+  watch(() => route.query, async (newQuery) => {
+    const newPage = parseInt(newQuery.p) || 1;
+    searchQuery.value = newQuery.k || '';
+
+    await fetchExhibitions(newPage);
+  }, {deep: true});
 });
 
-// beforeRouteUpdate 가드 추가
-const beforeRouteUpdate = async(to, from, next) => {
+// beforeRouteUpdate 가드
+const beforeRouteUpdate = async (to, from, next) => {
   await watchRouteQuery();
   next();
 };
-
-// defineExpose를 사용해 beforeRouteUpdate를 외부에 노출
 defineExpose({ beforeRouteUpdate });
-
-onUnmounted(() => {
-  window.removeEventListener('click', handleClickOutside);
-});
 
 </script>
 
