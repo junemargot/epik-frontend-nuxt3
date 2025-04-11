@@ -1,4 +1,3 @@
-<!-- CONCERT INDEX PAGE -->
 <template>
   <div class="main-wrap">
     <ContentBoard 

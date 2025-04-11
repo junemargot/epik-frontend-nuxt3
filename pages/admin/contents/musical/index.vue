@@ -1,60 +1,22 @@
 <template>
-  <!-- MAIN -->
   <div class="main-wrap">
-    <section class="board">
-      <div class="board__header">
-        <h1>뮤지컬 Musical</h1>
-        <p>{{ totalCount }} 건</p>
-      </div>
-      <div class="board__container">
-        <div class="board__list">
-          <div class="board__head">
-            <div class="board__no">번호</div>
-            <div class="board__title">제목</div>
-            <div class="board__writer">작성자</div>
-            <div class="board__regDate">작성일</div>
-            <div class="board__viewCnt">조회수</div>
-            <div class="board__management">게시물관리</div>
-          </div>
-          <div class="board__body">
-            <div class="board__content" v-for="musical in musicals" :key="musical.id">
-              <div class="board__no">{{ musical.id }}</div>
-              <div class="board__title">
-                <NuxtLink :to="`/admin/contents/musical/${musical.id}`">
-                  {{ musical.title }}
-                </NuxtLink>
-              </div>
-              <div class="board__writer">{{ musical.writer }}</div>
-              <div class="board__regDate">{{ formatDate(musical.writeDate) }}</div>
-              <div class="board__viewCnt">{{ musical.viewCount }}</div>
-              <div class="board__management">
-                <button class="hiddenBtn" @click="hiddenHandler(musical.id)">비공개</button>
-                <button class="modifyBtn" @click="goToEditPage(musical.id)">수정</button>
-                <button class="deleteBtn" @click="deleteHandler(musical.id)">삭제</button>
-              </div>
-            </div>
-          </div> <!-- END BOARD BODY -->
-        </div> <!-- END BOARD LIST-->
-      </div>
-      <!-- END BOARD CONTAINER -->
-      <div class="pagination-registration-container">
-        <Pagination 
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          :has-prev-page="hasPrevPage"
-          :has-next-page="hasNextPage"
-          :visible-pages="pages"
-          @page-change="changePage"
-        />
-
-        <div class="registration">
-          <RouterLink to="/admin/contents/musical/new">
-            <button type="button">등록</button>
-          </RouterLink>
-        </div>
-      </div>
-    </section>
-  </div> <!-- END MAIN WRAP -->
+    <ContentBoard 
+      title="뮤지컬 Musical"
+      :postCount="totalCount"
+      :items="musicals"
+      contentType="musical"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :has-prev-page="hasPrevPage"
+      :has-next-page="hasNextPage"
+      :visible-pages="pages"
+      @edit="goToEditPage"
+      @delete="deleteHandler"
+      @hidden="hiddenHandler"
+      @page-change="changePage"
+    />
+  </div>
+  <!-- END MAIN WRAP -->
 
   <!-- SEARCH BAR -->
   <SearchBar
@@ -71,6 +33,7 @@ import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
 import SearchBar from '~/components/admin/SearchBar.vue';
 import { categoryMapping } from '~/utils/categoryMapping';
+import ContentBoard from '~/components/admin/ContentBoard.vue';
 
 // Pinia 스토어 초기화
 const paginationStore = usePaginationStore();
@@ -281,7 +244,3 @@ const beforeRouteUpdate = async (to, from, next) => {
 defineExpose({ beforeRouteUpdate });
 
 </script>
-
-<style lang="css" scoped>
-@import url('/public/css/admin/contents/musical/index.css');
-</style>

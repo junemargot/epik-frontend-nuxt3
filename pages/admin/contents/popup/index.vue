@@ -1,65 +1,20 @@
 <template>
   <div class="main-wrap">
-    <section class="board">
-      <div class="board__header">
-        <h1>팝업 Pop-up</h1>
-        <p>전체 게시물수 {{ totalCount }}</p>
-      </div>
-      <div class="board__container">
-        <div class="board__list">
-          <div class="board__head">
-            <div class="board__no">번호</div>
-            <div class="board__title">제목</div>
-            <div class="board__writer">작성자</div>
-            <div class="board__regDate">작성일</div>
-            <div class="board__viewCnt">조회수</div>
-            <div class="board__management">게시물관리</div>
-          </div>
-          <div class="board__body">
-            <div class="board__content" v-for="popup in popups" :key="popup.id">
-              <div class="board__no">{{ popup.id }}</div>
-              <div class="board__title">
-                <RouterLink :to="`/admin/contents/popup/${popup.id}`">
-                  {{ popup.title }}
-                </RouterLink>
-              </div>
-              <div class="board__writer">{{ popup.writer }}</div>
-              <div class="board__regDate">{{ formatDate(popup.writeDate) }}</div>
-              <div class="board__viewCnt">{{ popup.viewCount }}</div>
-              <div class="board__management">
-                <button 
-                  class="hiddenBtn"
-                  :class="{ 'activeBtn' : !popup.isPrivate }"
-                  @click="hiddenHandler(popup.id)">
-                    {{ popup.isPrivate ? '공개' : '비공개' }}
-                </button>
-                <button class="modifyBtn" @click="goToEditPage(popup.id)">수정</button>
-                <button class="deleteBtn" @click="deleteHandler(popup.id)">삭제</button>
-              </div>
-            </div>
-          </div> <!-- END BOARD BODY -->
-        </div> <!-- END BOARD LIST-->
-      </div>
-      <!-- END BOARD CONTAINER -->
-        
-      <!-- Pagination -->
-      <div class="pagination-registration-container">
-        <Pagination 
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          :has-prev-page="hasPrevPage"
-          :has-next-page="hasNextPage"
-          :visible-pages="pages"
-          @page-change="changePage"
-        />
-
-        <div class="registration">
-          <RouterLink to="/admin/contents/popup/new">
-            <button type="button">등록</button>
-          </RouterLink>
-        </div>
-      </div>
-    </section>
+    <ContentBoard 
+      title="팝업 Pop-up"
+      :postCount="totalCount"
+      :items="popups"
+      contentType="popup"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :has-prev-page="hasPrevPage"
+      :has-next-page="hasNextPage"
+      :visible-pages="pages"
+      @edit="goToEditPage"
+      @delete="deleteHandler"
+      @hidden="hiddenHandler"
+      @page-change="changePage"
+    />
   </div>
   <!-- END MAIN WRAP -->
 
@@ -78,6 +33,7 @@ import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
 import SearchBar from '~/components/admin/SearchBar.vue';
 import { categoryMapping } from '~/utils/categoryMapping';
+import ContentBoard from '~/components/admin/ContentBoard.vue';
 
 // Pinia 스토어 초기화
 const paginationStore = usePaginationStore();
@@ -340,9 +296,4 @@ const hiddenHandler = async (id) => {
   }
 };
 
-
 </script>
-
-<style lang="css" scoped>
-@import url('/public/css/admin/contents/popup/index.css');
-</style>

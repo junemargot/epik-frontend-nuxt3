@@ -1,60 +1,20 @@
-<!-- EXHIBITION INDEX PAGE -->
 <template>
   <div class="main-wrap">
-    <section class="board">
-      <div class="board__header">
-        <h1>전시회 Exhibition</h1>
-        <p>전체 게시물수 {{ totalCount }}</p>
-      </div>
-      <div class="board__container">
-        <div class="board__list">
-          <div class="board__head">
-            <div class="board__no">번호</div>
-            <div class="board__title">제목</div>
-            <div class="board__writer">작성자</div>
-            <div class="board__regDate">작성일</div>
-            <div class="board__viewCnt">조회수</div>
-            <div class="board__management">게시물관리</div>
-          </div>
-          <div class="board__body">
-            <div class="board__content" v-for="exhibition in exhibitions" :key="exhibition.id">
-              <div class="board__no">{{ exhibition.id }}</div>
-              <div class="board__title">
-                <RouterLink :to="`/admin/contents/exhibition/${exhibition.id}`">
-                  {{ exhibition.title }}
-                </RouterLink>
-              </div>
-              <div class="board__writer">{{ exhibition.writer }}</div>
-              <div class="board__regDate">{{ formatDate(exhibition.writeDate) }}</div>
-              <div class="board__viewCnt">{{ exhibition.viewCount }}</div>
-              <div class="board__management">
-                <button class="modBtn" @click="goToEditPage(exhibition.id)">수정</button>
-                <button class="delBtn" @click="deleteHandler(exhibition.id)">삭제</button>
-              </div>
-            </div> 
-          </div> <!-- END BOARD BODY -->
-        </div> <!-- END BOARD LIST-->
-      </div>
-      <!-- END BOARD CONTAINER -->
-      
-      <!-- Pagination -->
-      <div class="pagination-registration-container">
-        <Pagination 
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          :has-prev-page="hasPrevPage"
-          :has-next-page="hasNextPage"
-          :visible-pages="pages"
-          @page-change="changePage"
-        />
-
-        <div class="registration">
-          <RouterLink to="/admin/contents/exhibition/new">
-            <button type="button">등록</button>
-          </RouterLink>
-        </div>
-      </div>
-    </section>
+    <ContentBoard 
+      title="전시회 Exhibition"
+      :postCount="totalCount"
+      :items="exhibitions"
+      contentType="exhibition"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :has-prev-page="hasPrevPage"
+      :has-next-page="hasNextPage"
+      :visible-pages="pages"
+      @edit="goToEditPage"
+      @delete="deleteHandler"
+      @hidden="hiddenHandler"
+      @page-change="changePage"
+    />
   </div>
   <!-- END MAIN WRAP -->
 
@@ -73,6 +33,7 @@ import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
 import SearchBar from '~/components/admin/SearchBar.vue';
 import { categoryMapping } from '~/utils/categoryMapping';
+import ContentBoard from '~/components/admin/ContentBoard.vue';
 
 // Pinia 스토어 초기화
 const paginationStore = usePaginationStore();
@@ -283,7 +244,3 @@ const beforeRouteUpdate = async (to, from, next) => {
 defineExpose({ beforeRouteUpdate });
 
 </script>
-
-<style lang="css" scoped>
-@import url(/public/css/admin/contents/exhibition/index.css);
-</style>
