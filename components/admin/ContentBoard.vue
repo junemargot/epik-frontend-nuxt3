@@ -1,8 +1,8 @@
 <template>
   <section class="board">
     <div class="board__header">
-      <h1>콘서트 Concert</h1>
-      <p>전체 게시물수 {{ totalCount }}</p>
+      <h1>{{ title }}</h1>
+      <p>전체 게시물수 {{ postCount }}</p>
     </div>
     <div class="board__container">
       <div class="board__list">
@@ -15,20 +15,20 @@
           <div class="board__management">게시물관리</div>
         </div>
         <div class="board__body">
-          <div class="board__content" v-for="concert in concerts" :key="concert.id">
-            <div class="board__no">{{ concert.id }}</div>
+          <div class="board__content" v-for="item in items" :key="item.id">
+            <div class="board__no">{{ item.id }}</div>
             <div class="board__title">
-              <RouterLink :to="`/admin/contents/concert/${concert.id}`">
-                {{ concert.title }}
+              <RouterLink :to="detailUrl(item.id)">
+                {{ item.title }}
               </RouterLink>
             </div>
-            <div class="board__writer">{{ concert.writer }}</div>
-            <div class="board__regDate">{{ formatDate(concert.writeDate) }}</div>
-            <div class="board__viewCnt">{{ concert.viewCount }}</div>
+            <div class="board__writer">{{ item.writer }}</div>
+            <div class="board__regDate">{{ formatDate(item.writeDate) }}</div>
+            <div class="board__viewCnt">{{ item.viewCount }}</div>
             <div class="board__management">
-              <button class="hiddenBtn" @click="hiddenHandler(concert.id)">비공개</button>
-              <button class="modifyBtn" @click="goToEditPage(concert.id)">수정</button>
-              <button class="deleteBtn" @click="deleteHandler(concert.id)">삭제</button>
+              <button class="hiddenBtn" @click="$emit('hidden', item.id)">비공개</button>
+              <button class="modifyBtn" @click="$emit('edit', item.id)">수정</button>
+              <button class="deleteBtn" @click="$emit('delete', item.id)">삭제</button>
             </div>
           </div>
         </div> <!-- END BOARD BODY -->
@@ -43,8 +43,8 @@
         :total-pages="totalPages"
         :has-prev-page="hasPrevPage"
         :has-next-page="hasNextPage"
-        :visible-pages="pages"
-        @page-change="changePage"
+        :visible-pages="visiblePages"
+        @page-change="handlePageChange"
       />
 
       <div class="registration">
@@ -75,7 +75,12 @@ const props = defineProps({
   title: { type: String, required: true },
   postCount: { type: Number, required: true },
   items: { type: Array, required: true },
-  contentType: { type: String, required: true }
+  contentType: { type: String, required: true },
+  currentPage: { type: Number, required: true },
+  totalPages: { type: Number, required: true },
+  hasPrevPage: { type: Boolean, required: true },
+  hasNextPage: { type: Boolean, required: true },
+  visiblePages: { type: Array, required: true }
 });
 
 // 이벤트 정의
@@ -167,7 +172,11 @@ const handlePageChange = (page) => {
 
 .board__list .board__title {
   width: 45%;
+}
+
+.board__list .board__title a {
   text-align: left;
+  display: block;
 }
 
 .board__list .board__title:hover {

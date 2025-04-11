@@ -1,61 +1,21 @@
 <!-- CONCERT INDEX PAGE -->
 <template>
   <div class="main-wrap">
-    <section class="board">
-      <div class="board__header">
-        <h1>콘서트 Concert</h1>
-        <p>전체 게시물수 {{ totalCount }}</p>
-      </div>
-      <div class="board__container">
-        <div class="board__list">
-          <div class="board__head">
-            <div class="board__no">번호</div>
-            <div class="board__title">제목</div>
-            <div class="board__writer">작성자</div>
-            <div class="board__regDate">작성일</div>
-            <div class="board__viewCnt">조회수</div>
-            <div class="board__management">게시물관리</div>
-          </div>
-          <div class="board__body">
-            <div class="board__content" v-for="concert in concerts" :key="concert.id">
-              <div class="board__no">{{ concert.id }}</div>
-              <div class="board__title">
-                <RouterLink :to="`/admin/contents/concert/${concert.id}`">
-                  {{ concert.title }}
-                </RouterLink>
-              </div>
-              <div class="board__writer">{{ concert.writer }}</div>
-              <div class="board__regDate">{{ formatDate(concert.writeDate) }}</div>
-              <div class="board__viewCnt">{{ concert.viewCount }}</div>
-              <div class="board__management">
-                <button class="hiddenBtn" @click="hiddenHandler(concert.id)">비공개</button>
-                <button class="modifyBtn" @click="goToEditPage(concert.id)">수정</button>
-                <button class="deleteBtn" @click="deleteHandler(concert.id)">삭제</button>
-              </div>
-            </div>
-          </div> <!-- END BOARD BODY -->
-        </div> <!-- END BOARD LIST-->
-      </div>
-      <!-- END BOARD CONTAINER -->
-    
-      <!-- Pagination -->
-      <div class="pagination-registration-container">
-        <Pagination 
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          :has-prev-page="hasPrevPage"
-          :has-next-page="hasNextPage"
-          :visible-pages="pages"
-          @page-change="changePage"
-        />
-
-        <div class="registration">
-          <RouterLink to="/admin/contents/concert/new">
-            <button type="button">등록</button>
-          </RouterLink>
-        </div>
-      </div>
-    </section>
+    <ContentBoard 
+      title="콘서트 Concert"
+      :postCount="totalCount"
+      :items="concerts"
+      contentType="concert"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :has-prev-page="hasPrevPage"
+      :has-next-page="hasNextPage"
+      :visible-pages="pages"
+      @edit="goToEditPage"
+      @delete="deleteHandler"
+      @hidden="hiddenHandler"
+      @page-change="changePage"
+    />
   </div>
   <!-- END MAIN WRAP -->
 
@@ -74,9 +34,15 @@ import Pagination from '~/components/admin/Pagination.vue';
 import { usePaginationStore } from '~/stores/pagination';
 import SearchBar from '~/components/admin/SearchBar.vue';
 import { categoryMapping } from '~/utils/categoryMapping';
+import ContentBoard from '~/components/admin/ContentBoard.vue';
 
 // Pinia 스토어 초기화
 const paginationStore = usePaginationStore();
+
+const router = useRouter();
+const route = useRoute();
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
 // computed 상태 (Pinia 스토어와 실시간 동기화)
 const totalPages = computed(() => paginationStore.totalPages);
@@ -84,11 +50,6 @@ const currentPage = computed(() => paginationStore.currentPage);
 const hasPrevPage = computed(() => paginationStore.hasPrevPage);
 const hasNextPage = computed(() => paginationStore.hasNextPage);
 const pages = computed(() => paginationStore.visiblePages);
-
-const router = useRouter();
-const route = useRoute();
-const config = useRuntimeConfig();
-const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
 // 콘서트 목록 및 검색 상태
 const concerts = ref([]);
@@ -296,7 +257,3 @@ defineExpose({ beforeRouteUpdate });
 
 
 </script>
-
-<style lang="css" scoped>
-@import url("/public/css/admin/contents/concert/index.css");
-</style>
