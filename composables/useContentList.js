@@ -28,7 +28,7 @@ export function useContentList(contentType) {
     if(!searchType) return '통합검색';
 
     const category = Object.entries(categoryMapping)
-      .find(([KeyboardEvent, value]) => value === searchType)?.[0];
+      .find(([key, value]) => value === searchType)?.[0];
 
     return category || '통합검색';
   };
@@ -109,7 +109,7 @@ export function useContentList(contentType) {
 
   // 수정 페이지 이동
   const goToEditPage = (id) => {
-    router.push(`/adming/contents/${contentType}/${id}/edit`);
+    router.push(`/admin/contents/${contentType}/${id}/edit`);
   };
 
   //삭제 핻늘러
