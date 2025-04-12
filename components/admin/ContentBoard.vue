@@ -48,7 +48,7 @@
       />
 
       <div class="registration">
-        <RouterLink to="/admin/contents/concert/new">
+        <RouterLink :to="createUrl()">
           <button type="button">등록</button>
         </RouterLink>
       </div>
@@ -89,6 +89,11 @@ const emit = defineEmits(['edit', 'delete', 'hidden', 'page-change'])
 // 상세 페이지 URL 생성
 const detailUrl = (id) => {
   return `/admin/contents/${props.contentType}/${id}`;
+};
+
+// 작성 페이지 URL 생성
+const createUrl = () => {
+  return `/admin/contents/${props.contentType}/new`;
 };
 
 // 날짜 포맷팅 함수
