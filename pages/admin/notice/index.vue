@@ -68,8 +68,6 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { usePaginationStore } from '~/stores/pagination';
-import { useFetch } from '#app';
-import { useNoticeFetch } from '~/composables/useNoticeFetch';
 import Pagination from '~/components/admin/Pagination.vue';
 import SearchBar from '~/components/admin/SearchBar.vue';
 import { categoryMapping } from '~/utils/categoryMapping';
@@ -86,7 +84,6 @@ const pages = computed(() => paginationStore.visiblePages);
 
 const router = useRouter();
 const route = useRoute();
-const { fetchNoticeDelete } = useNoticeFetch();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
 
