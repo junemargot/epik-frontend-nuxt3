@@ -75,28 +75,29 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { useNoticeFetch } from '~/composables/useNoticeFetch';
 
-const routes = [
-  {
-    path: '/admin/notice/:id',
-    name: 'NoticeDetail', // 여기 수정
-  }
-]
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase || 'http://localhost:8081/api/v1';
+
 const adminNotices = ref([]); // 관리자 메인페이지에 표시할 공지사항
 
 // 데이터 로드 함수
 const loadAdminNotices = async () => {
   try {
-    const { fetchNotices } = useNoticeFetch();
-    const { notices } = await fetchNotices();
-    adminNotices.value = notices.slice(0, 5);
-    // noticeList가 존재하는지 확인 후 처리
-    // if (data && data.notices) {
-    //     adminNotices.value = data.noticeList.slice(0, 5); // 상위 5개 데이터 확인
-    //   } else { D
-    //     console.error('noticeList is undefined');
-    //   }
+    const params = new URLSearchParams({
+      p: 1,
+      size: 5,
+      sort: 'writeDate,desc'
+    })
+    const response = await fetch(`${apiBase}/admin/notice?${params}`);
+    // const response = await fetch(`${apiBase}/admin/notice?p=1&size=5`);
+    if(!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    adminNotices.value = (data.noticeList || []).slice(0, 5);
+    
   } catch (error) {
     console.error('Failed to load notices:', error);
   }
@@ -159,14 +160,12 @@ onMounted(async () => {
     {
       title: '공지사항',
       link: '/admin/notice',
-      // items: adminNotices.value,
-      items: [
-        { id: 75, title: '글로벌 서비스 중단 안내', writer: '관리자1', writeDate: '2024-11-25' },
-        { id: 74, title: '사칭 주의 안내', writer: '관리자1', writeDate: '2024-11-25' },
-        { id: 73, title: '피드 이용 안내', writer: '관리자1', writeDate: '2024-11-25' },
-        { id: 72, title: '채팅 서비스 일시 중단 안내', writer: '관리자1', writeDate: '2024-11-25' },
-        { id: 71, title: '개인정보 처리방침 변경 안내(11/25)', writer: '관리자1', writeDate: '2024-11-25' },
-      ]
+      items: adminNotices.value.map(notice => ({
+        id: notice.id,
+        title: notice.title,
+        writer: notice.writer,
+        writeDate: notice.writeDate
+      }))
     },
     {
       title: '1:1 문의내역',
