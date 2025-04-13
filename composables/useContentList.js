@@ -43,6 +43,7 @@ export function useContentList(contentType) {
       };
 
       const queryString = new URLSearchParams(params).toString();
+      
       const fullUrl = `${apiBase}/admin/${contentType}?${queryString}`;
       const responseData = await $fetch(fullUrl);
 
