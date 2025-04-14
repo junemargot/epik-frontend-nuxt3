@@ -21,7 +21,7 @@
           <h2 hidden>쇼셜 로그인폼</h2>
           <!-- <button class="long_btn"><a @click.prevent="googleLoginHandler" class="log-in__google"> 구글 로그인 </a></button> -->
           <ul class="log-in__icons">
-            <li class="log-in__icon"><a href="#" class="log-in__kakao">카카오<br>로그인</a></li>
+            <li class="log-in__icon"><a @click.prevent="kakaoLoginHandler" class="log-in__kakao">카카오<br>로그인</a></li>
             <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li>
             <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
           </ul>
@@ -43,10 +43,13 @@
 </template>
 
 <script setup>
-//로컬 로그인
-import { jwtDecode } from 'jwt-decode';
 import { ref, onMounted } from 'vue';
+import { jwtDecode } from 'jwt-decode';
 import { decodeCredential, googleTokenLogin } from 'vue3-google-login';
+
+const { $kakao } = useNuxtApp();
+const runtimeConfig = useRuntimeConfig();
+const apiBase = runtimeConfig.public.apiBase;
 
 const userDetails = useUserDetails();
 const query = useRoute();
@@ -55,101 +58,109 @@ const usernameModel = ref('')
 const passwordModel = ref('')
 const memberCheck = ref('');
 
-
-// === callback funtions =========================================
-
-
-
-onMounted(() => {
-  let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
-
-  if (token) {
-    // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
-    const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
-    userDetails.setAuthentication({
-      id: userInfo.id,
-      username: userInfo.username,
-      email: userInfo.email,
-      role: userInfo.role.map(role => role.authority),
-      nickname: userInfo.nickname,
-      token: token
-    });
-
-    console.log("로컬에 있던 토큰 사용했당")
-    console.log(userDetails.nickname)
-
-
-    localStorage.setItem("username", userInfo.username)
-
-  }
-})
-
 //로그인 후 페이지 이동 url 저장
+// const localLoginHandler = async () => {
+//   try {
+//     console.log("전송");
+
+//     //패치
+//     const response = await useDataFetch("auth/login", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: {
+//         username: usernameModel.value,
+//         password: passwordModel.value
+//       },
+//       credentials: 'include'
+//     });
+
+//     //토큰에서 정보 받고 로컬에 저장
+//     localStorage.setItem("access_token", response.token)
+//     console.log("토큰 확인-" + response.token)
+
+//     // await getMemberInfo();
+
+//     console.log("토큰 분해 중 ")
+
+//     let token = localStorage.getItem("access_token")
+//     let userInfo = jwtDecode(token);
+//     console.log("User Info from token:", userInfo);
+//     // 상태에 사용자 정보 설정
+//     userDetails.setAuthentication({
+//       id: userInfo.id,
+//       username: userInfo.username,
+//       email: userInfo.email,
+//       nickname: userInfo.nickname,
+//       role: userInfo.role.map((role) => role.authority),
+//       token: token
+//     });
+//     userInfo.role.map(role => { console.log(role.authority) });
+
+//     const memberRole = userInfo.role.map((role) => role.authority);
+//     console.log(memberRole);
+
+
+//     localStorage.setItem("username",userInfo.username)
+
+
+//     console.log("새로운 토큰 사용했당")
+//     memberCheck.value = null;
+
+//     if (memberRole.includes("ROLE_MEMBER")) {
+//       const redirectUrl = sessionStorage.getItem('redirectUrl') || '/'; // 기본 페이지는 '/'로 설정
+//       sessionStorage.removeItem('redirectUrl'); // 리디렉션 후 URL 삭제
+//       console.log("돌아갈곳 확인-" + redirectUrl)
+//       location.href = redirectUrl;
+//     }
+//     else if (memberRole.includes("ROLE_ADMIN")) {
+//       location.href = 'http://localhost:3000/admin'
+//     }
+//   } catch {
+//     memberCheck.value = false;
+//   }
+// }
+
+// 로컬 로그인 핸들러
 const localLoginHandler = async () => {
   try {
-    console.log("전송");
-
-    //패치
-    const response = await useDataFetch("auth/login", {
-      method: "POST",
+    const response = await fetch(`${apiBase}/auth/login`, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         username: usernameModel.value,
-        password: passwordModel.value
-      },
-      credentials: 'include'
+        password: passwordModel.value,
+      }),
+      credentials: 'include',
     });
 
-    //토큰에서 정보 받고 로컬에 저장
-    localStorage.setItem("access_token", response.token)
-    console.log("토큰 확인-" + response.token)
+    const data = await response.json();
+    localStorage.setItem('access_token', data.token); // JWT 토큰 저장
 
-    
+    const token = localStorage.getItem('access_token');
+    const userInfo = jwtDecode(token); // JWT 디코딩하여 사용자 정보 추출
 
+    console.log('User Info:', userInfo);
 
-    // await getMemberInfo();
-
-    console.log("토큰 분해 중 ")
-
-    let token = localStorage.getItem("access_token")
-    let userInfo = jwtDecode(token);
-    console.log("User Info from token:", userInfo);
-    // 상태에 사용자 정보 설정
-    userDetails.setAuthentication({
-      id: userInfo.id,
-      username: userInfo.username,
-      email: userInfo.email,
-      nickname: userInfo.nickname,
-      role: userInfo.role.map((role) => role.authority),
-      token: token
-    });
-    userInfo.role.map(role => { console.log(role.authority) });
-
-    const memberRole = userInfo.role.map((role) => role.authority);
-    console.log(memberRole);
-
-
-    localStorage.setItem("username",userInfo.username)
-
-
-    console.log("새로운 토큰 사용했당")
     memberCheck.value = null;
 
-    if (memberRole.includes("ROLE_MEMBER")) {
-      const redirectUrl = sessionStorage.getItem('redirectUrl') || '/'; // 기본 페이지는 '/'로 설정
-      sessionStorage.removeItem('redirectUrl'); // 리디렉션 후 URL 삭제
-      console.log("돌아갈곳 확인-" + redirectUrl)
+    const memberRole = userInfo.role.map((role) => role.authority);
+    if (memberRole.includes('ROLE_MEMBER')) {
+      const redirectUrl = sessionStorage.getItem('redirectUrl') || '/';
+      sessionStorage.removeItem('redirectUrl');
       location.href = redirectUrl;
+    } else if (memberRole.includes('ROLE_ADMIN')) {
+      location.href = '/admin';
     }
-    else if (memberRole.includes("ROLE_ADMIN")) {
-      location.href = 'http://localhost:3000/admin'
-    }
-  } catch {
+  } catch (error) {
     memberCheck.value = false;
+    console.error('로그인 실패:', error);
   }
-}
+};
+
 
 const getMemberInfo = async () => {
   console.log("토큰 분해 중 ")
@@ -224,6 +235,64 @@ const googleLoginHandler = async () => {
     location.href = redirectUrl; // 해당 URL로 리디렉션
   }
 }
+
+const kakaoLoginHandler = async () => {
+  try {
+    // 1. 카카오 SDK 초기화
+    // $kakao.init(runtimeConfig.public.kakaoLoginApiKey);
+
+    // 2. 카카오 로그인 실행
+    const authObj = await $kakao.login();
+    const { access_token } = authObj;
+
+    // 3. 백엔드에 인증 코드 전송
+    const response = await fetch(`${apiBase}/auth/login/kakao`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${access_token}`
+      },
+      credentials: "include"
+    });
+
+    // 4. 백엔드 응답 처리
+    const data = await response.json();
+    localStorage.setItem('access_token', data.accessToken);
+    
+    const redirectUrl = sessionStorage.getItem('redirectUrl') || '/';
+    sessionStorage.removeItem('redirectUrl');
+    location.href = redirectUrl;
+
+  } catch(error) {
+    console.error("카카오 로그인 실패: ", error);
+  }
+};
+
+
+onMounted(() => {
+  let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
+
+  if (token) {
+    // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
+    const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
+    userDetails.setAuthentication({
+      id: userInfo.id,
+      username: userInfo.username,
+      email: userInfo.email,
+      role: userInfo.role.map(role => role.authority),
+      nickname: userInfo.nickname,
+      token: token
+    });
+
+    console.log("로컬에 있던 토큰 사용했당")
+    console.log(userDetails.nickname)
+
+
+    localStorage.setItem("username", userInfo.username)
+
+  }
+})
+
 
 
 </script>
