@@ -78,20 +78,20 @@
 } 
 
 .board__list .board__no {
-  width: 10%;
+  width: 7%;
 }
 
-/* .board__list .board__type {
-  width: 7%;
-} */
+.board__list .board__type {
+  width: 10%;
+}
 
 .board__list .board__thumb {
   width: 15%;
 }
 
 .board__list .board__thumb img {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   vertical-align: middle;
 }
@@ -101,7 +101,7 @@
 }
 
 .board__list .board__nickname {
-  width: 20%;
+  width: 13%;
 }
 
 .board__list .board__joinDate {

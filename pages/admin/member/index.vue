@@ -10,7 +10,7 @@
         <div class="board__list">
           <div class="board__head">
             <div class="board__no">회원번호</div>
-            <!-- <div class="board__type">가입유형</div> -->
+            <div class="board__type">가입유형</div>
             <div class="board__thumb">프로필사진</div>
             <div class="board__id">아이디</div>
             <div class="board__nickname">닉네임</div>
@@ -22,7 +22,7 @@
           <div class="board__body">
             <div class="board__content" v-for="(member, index) in members" :key="index" @click="toggleDetails(index)">
               <div class="board__no">{{ member.id }}</div>
-              <!-- <div class="board__type">{{ getLoginTypeLabel(member.loginType) }}</div> -->
+              <div class="board__type">{{ getLoginTypeLabel(member.loginType) }}</div>
               <div class="board__thumb">
                 <!-- <img :src="member.profileImage" alt=""> -->
                 <img :src="getFullImageUrl(member.profileImg)" alt="프로필이미지" />
@@ -56,9 +56,9 @@
                   </div>
                 </div>
                 <div class="board__user-detail-section-right">
-                  <!-- <div class="board__user-type">
+                  <div class="board__user-type">
                     <p><strong>가입 유형:</strong>{{ getLoginTypeLabel(member.loginType) }}</p>
-                  </div> -->
+                  </div>
                   <div class="board__user-feed-count">
                     <p><strong>작성 피드:</strong> {{ member.writtenFeedCount }}</p>
                   </div>
@@ -170,15 +170,21 @@ const categoryMapping = {
 };
 
 
-// const getLoginTypeLabel = (loginType) => {
-//   switch(loginType) {
-//     case 'ID': return '아이디';
-//     case 'NAVER': return '네이버';
-//     case 'KAKAO': return '카카오';
-//     case 'GOOGLE': return '구글';
-//     default: return '알 수 없음';
-//   }
-// }
+const getLoginTypeLabel = (loginType) => {
+  // loginType이 객체인 경우
+  if(typeof loginType === 'object' && loginType !== null) {
+    return loginType.description || loginType.name || '알 수 없음';
+  }
+
+  // loginType이 문자열인 경우 기존 로직 사용
+  switch(loginType) {
+    case 'ID': return '아이디';
+    case 'NAVER': return '네이버';
+    case 'KAKAO': return '카카오';
+    case 'GOOGLE': return '구글';
+    default: return '알 수 없음';
+  }
+}
 
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
@@ -208,12 +214,14 @@ const fetchMembers = async (page = 1) => {
     }
   });
 
+  let responseData;
+
   if (error.value) {
     console.error("페치 에러: ", error.value);
   }
 
   if (data.value) {
-    const responseData = data.value;
+    responseData = data.value;
     console.log('API 응답: ', data.value);
 
     members.value = responseData.memberList || [];
