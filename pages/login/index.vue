@@ -153,9 +153,12 @@ const googleLoginHandler = async () => {
         email: userInfo.email,
         id: userInfo.sub,
         name: userInfo.name,
+        picture: userInfo.picture
       }),
       credentials: 'include'
     });
+
+    console.log("구글 응답 클라이언트 확인: ", response);
 
     // 응답에서 JWT 토큰 추출
     const data = await response.json();

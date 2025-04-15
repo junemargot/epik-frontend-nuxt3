@@ -356,7 +356,15 @@ const handleClickOutside = (e) => {
 
 // 프로필 이미지 url 생성 함수
 const getFullImageUrl = (imagePath) => {
-  if(!imagePath) return '/basic.png';
+  // if(!imagePath) return `${apiBase}/images/basic.png`;
+
+  // URL 형식인지 확인
+  if(typeof imagePath === 'string' && (imagePath.startsWith('http://') || imagePath.startsWith('https://'))) {
+  // if(imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath; // 이미 URL이면 그대로 반환
+  }
+
+  // 아니면 서버 경로와 결합
   return `${apiBase}/images/${imagePath}`;
 }
 
