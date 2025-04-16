@@ -23,6 +23,9 @@
             <li class="log-in__icon"><a @click.prevent="kakaoLoginHandler" class="log-in__kakao">카카오<br>로그인</a></li>
             <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li>
             <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
+            <!-- <li class="log-in__icon"><a @click.prevent="socialLoginHandler('kakao')" class="log-in__kakao">카카오<br>로그인</a></li>
+            <li class="log-in__icon"><a @click.prevent="socialLoginHandler('naver')" class="log-in__naver">네이버<br>로그인 </a></li>
+            <li class="log-in__icon"><a @click.prevent="socialLoginHandler('google')" class="log-in__google">구글<br>로그인 </a></li> -->
           </ul>
         </nav>
 
@@ -123,6 +126,47 @@ const getMemberInfo = async () => {
     console.error('로컬 로그인 실패:', error);
   }
 };
+
+/**
+ * socialLoginHandler - Spring Security OAuth2 방식의 소셜 로그인
+ * 1. 소셜 로그인 제공자(provider)에 따라 적절한 OAuth2 인증 엔드포인트로 리다이렉트
+ * 2. 인증 성공 시 백엔드의 OAuth2AuthenticationSuccessHandler에서 JWT 토큰 발급
+ * 3. 프론트엔드 리다이렉트 페이지에서 토큰을 받아 저장
+ */
+const socialLoginHandler = (provider) => {
+  // 현재 URL을 세션 스토리지에 저장(인증 후 돌아올 위치)
+  const currentPath = window.location.pathname;
+  if(currentPath !== "/login") {
+    sessionStorage.setItem('redirectUrl', currentPath);
+  }
+
+  // Spring Security OAuth2 인증 엔드포인트로 리다이렉트
+  window.location.href = `http://localhost:8081/api/v1/oauth2/authorization/${provider}`;
+};
+
+onMounted(() => {
+  // 기존 토큰 확인
+  const token = localStorage.getItem("access_token");
+
+  try {
+    if(token) {
+      const userInfo = jwtDecode(token);
+      userDetails.setAuthentication({
+        id: userInfo.id,
+        username: userInfo.username,
+        email: userInfo.email,
+        role: userInfo.role.map(role => role.authority),
+        nickname: userInfo.nickname,
+        token: token
+      });
+
+      localStorage.setItem("username", userInfo.username);
+    }
+  
+  } catch(error) {
+    console.error("토큰 디코딩 오류: ", error);
+  }
+});
 
 /**
  * googleLoginHandler 구글 로그인
