@@ -113,14 +113,18 @@ const getMemberInfo = async () => {
 
     memberCheck.value = null;
 
-    const memberRole = userInfo.role.map((role) => role.authority);
+    // const memberRole = userInfo.role.map((role) => role.authority);
+    const memberRole = userInfo.role;
+
     if (memberRole.includes('ROLE_MEMBER')) {
-      const redirectUrl = sessionStorage.getItem('redirectUrl') || '/';
+      // const redirectUrl = sessionStorage.getItem('redirectUrl') || '/';
+      const fullUrl = sessionStorage.getItem('redirectUrl') || '/';
+      const redirectUrl = new URL(fullUrl, window.location.origin).pathname;
       sessionStorage.removeItem('redirectUrl');
-      location.href = redirectUrl;
+      router.push(redirectUrl);
 
     } else if (memberRole.includes('ROLE_ADMIN')) {
-      location.href = '/admin';
+      router.push('/admin');
     }
 
   } catch (error) {

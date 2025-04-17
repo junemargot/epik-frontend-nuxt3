@@ -123,7 +123,11 @@ onMounted(() => {
       token: token
     });
   }
+});
 
+onMounted(() => {
+  // 인증 상태 확인
+  userDetails.checkAuthentication();
 })
 
 //로그인 화면 이동 핸들러
@@ -140,9 +144,10 @@ const goToLoginPageHandler = () => {
 //로그아웃 핸들러
 const logoutHandler = () => {
   userDetails.logout();
-  localStorage.clear();
-  location.reload();
-
+  // userDetails.logout();
+  // localStorage.clear();
+  // location.reload();
+  router.push('/');
 }
 
 // 사이드바 상태
