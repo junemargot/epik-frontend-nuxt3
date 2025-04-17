@@ -20,12 +20,13 @@
         <!-- 소셜 로그인 -->
         <nav class="log-in__social">
           <ul class="log-in__icons">
-            <li class="log-in__icon"><a @click.prevent="kakaoLoginHandler" class="log-in__kakao">카카오<br>로그인</a></li>
+            <!-- <li class="log-in__icon"><a @click.prevent="kakaoLoginHandler" class="log-in__kakao">카카오<br>로그인</a></li>
             <li class="log-in__icon"><a href="#" class="log-in__naver">네이버<br>로그인 </a></li>
-            <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
-            <!-- <li class="log-in__icon"><a @click.prevent="socialLoginHandler('kakao')" class="log-in__kakao">카카오<br>로그인</a></li>
+            <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li> -->
+            <li class="log-in__icon"><a @click.prevent="socialLoginHandler('kakao')" class="log-in__kakao">카카오<br>로그인</a></li>
             <li class="log-in__icon"><a @click.prevent="socialLoginHandler('naver')" class="log-in__naver">네이버<br>로그인 </a></li>
-            <li class="log-in__icon"><a @click.prevent="socialLoginHandler('google')" class="log-in__google">구글<br>로그인 </a></li> -->
+            <!-- <li class="log-in__icon"><a @click.prevent="socialLoginHandler('google')" class="log-in__google">구글<br>로그인 </a></li> -->
+            <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
           </ul>
         </nav>
 
@@ -51,6 +52,7 @@ import { googleTokenLogin } from 'vue3-google-login';
 const { $kakao } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 const apiBase = runtimeConfig.public.apiBase;
+const router = useRouter();
 
 const userDetails = useUserDetails();
 const usernameModel = ref('')
@@ -134,37 +136,65 @@ const getMemberInfo = async () => {
  * 3. 프론트엔드 리다이렉트 페이지에서 토큰을 받아 저장
  */
 const socialLoginHandler = (provider) => {
-  // 현재 URL을 세션 스토리지에 저장(인증 후 돌아올 위치)
-  const currentPath = window.location.pathname;
-  if(currentPath !== "/login") {
-    sessionStorage.setItem('redirectUrl', currentPath);
-  }
+  try {
+    if(!['google', 'kakao', 'naver'].includes(provider)) {
+      
+      console.error('지원하지 않는 소셜 로그인 제공자: ', provider);
+      return;
+    }
 
-  // Spring Security OAuth2 인증 엔드포인트로 리다이렉트
-  window.location.href = `http://localhost:8081/api/v1/oauth2/authorization/${provider}`;
+    // 현재 페이지 경로 저장 (인증 후 다시 돌아오기 위함)
+    const currentPath = window.location.pathname;
+    if(currentPath !== '/login') {
+      sessionStorage.setItem('redirectUrl', currentPath);
+    }
+
+    // Spring Security OAuth2 인증 엔드포인트로 리다이렉트
+    const authorizationUrl = `${apiBase}/oauth2/authorization/${provider}`;    
+    console.log(`소셜 로그인 리다이렉트 경로: ${authorizationUrl}`);
+
+    // 페이지 이동
+    window.location.href = authorizationUrl;
+      
+  } catch(error) {
+    console.error(`소셜 로그인 오류 (${provider}): `, error);
+    alert(`소셜 로그인 요청 중 오류가 발생했습니다: ${error.message}`);
+  }
+  
 };
 
 onMounted(() => {
   // 기존 토큰 확인
   const token = localStorage.getItem("access_token");
 
-  try {
-    if(token) {
+  if(token) {
+    try {
       const userInfo = jwtDecode(token);
-      userDetails.setAuthentication({
+      
+      // 토큰이 유효한지 확인 (만료 시간)
+      const currentTime = Date.now() / 1000;
+      if(userInfo.exp && userInfo.exp > currentTime) {
+        // 전역 사용자 상태 업데이트
+        userDetails.setAuthentication({
         id: userInfo.id,
         username: userInfo.username,
         email: userInfo.email,
-        role: userInfo.role.map(role => role.authority),
+        role: Array.isArray(userInfo.role) ? userInfo.role : [userInfo.role],
         nickname: userInfo.nickname,
         token: token
-      });
+        });
 
-      localStorage.setItem("username", userInfo.username);
+        // 이미 로그인된 경우 홈으로 리다이렉트
+        router.push('/');
+
+      } else {
+        // 만료 토큰 제거
+        localStorage.removeItem('access_token');
+      }
+    } catch(error) {
+      console.error("토큰 디코딩 오류: ", error);
+      localStorage.removeItem('access_token');
     }
-  
-  } catch(error) {
-    console.error("토큰 디코딩 오류: ", error);
   }
 });
 

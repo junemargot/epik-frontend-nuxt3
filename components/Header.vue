@@ -122,7 +122,6 @@ onMounted(() => {
       role: userInfo.role.map(role => role.authority),
       token: token
     });
-    console.log("로컬에 있던 토큰 사용했당")
   }
 
 })

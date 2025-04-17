@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: { 
       apiBase: 'http://localhost:8081/api/v1',
+      backendBaseUrl: 'http://localhost:8081',
       kakaoMapApiKey: process.env.NUXT_PUBLIC_KAKAO_MAP_API_KEY || '',
       kakaoLoginApiKey: process.env.NUXT_PUBLIC_KAKAO_LOGIN_API_KEY || '',
     }
