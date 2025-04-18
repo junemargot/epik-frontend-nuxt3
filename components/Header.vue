@@ -6,13 +6,25 @@
           <span>EXPAND YOUR LEISURE LIFE WITH EPIK.</span>
         </div>
         <div class="top-bar__column">
-          <div v-if="userDetails.isAnonymous()">
+          <!-- <div v-if="userDetails.isAnonymous()"> -->
+          <!-- <div v-if="authStore.isLoggedIn">
             <a href="/signup">회원가입</a>
             <a @click="goToLoginPageHandler">로그인</a>
-          </div>
-          <div v-else="!userDetails.isAnonymous()">
+          </div> -->
+          <!-- <div v-else="!userDetails.isAnonymous()"> -->
+          <!-- <div v-else>
             <a href="/mypage">마이페이지</a>
             <a @click="logoutHandler" href="#">로그아웃</a>
+          </div> -->
+          <!-- 로그인 상태일 때 -->
+          <div v-if="authStore.isLoggedIn">
+            <a href="/mypage">마이페이지</a>
+            <a @click="logoutHandler">로그아웃</a>
+          </div>
+          <!-- 로그아웃 상태일 때 -->
+          <div v-else>
+            <a href="/signup">회원가입</a>
+            <a @click="goToLoginPageHandler">로그인</a>
           </div>
         </div>
       </div>
@@ -101,44 +113,73 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-
 import { ref, onMounted } from 'vue';
-const memberCheck = ref("");
 import { jwtDecode } from 'jwt-decode';
+import { useAuthStore } from '~/stores/auth.js';
+import { storeToRefs } from 'pinia'
 
+const router = useRouter()
 const userDetails = useUserDetails();  // 사용자 정보를 가져오는 함수
+const authStore = useAuthStore();
+const { isLoggedIn } = storeToRefs(authStore);
 
-//로컬호스트 유지
+watch(() => authStore.isLoggedIn, (newValue) => {
+  console.log('로그인 상태 변경: ', newValue);
+}, { immediate: true });
+
 onMounted(() => {
-  let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
-
-  if (token) {
-    // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
-    const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
-    userDetails.setAuthentication({
-      id: userInfo.id,
-      username: userInfo.username,
-      email: userInfo.email,
-      role: userInfo.role.map(role => role.authority),
-      token: token
-    });
+  // 초기 인증 상태 확인
+  authStore.checkAuth();
+  if(authStore.isLoggedIn) {
+    try {
+      const token = localStorage.getItem('access_token');
+      const userInfo = jwtDecode(token);
+      userDetails.setAuthentication({
+        id: userInfo.id,
+        username: userInfo.email,
+        role: Array.isArray(userInfo.role)
+          ? userInfo.role.map(role => role.authority)
+          : [userInfo.role],
+        nickname: userInfo.nickname,
+        token: token
+      });
+    } catch(error) {
+      console.error("토큰 디코딩 오류: ", error);
+      authStore.logout(); // 토큰 오류 시 로그아웃 처리
+    }
   }
 });
 
-onMounted(() => {
-  // 인증 상태 확인
-  userDetails.checkAuthentication();
-})
+// onMounted(() => {
+//   let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
+
+//   if (token) {
+//     // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
+//     const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
+//     userDetails.setAuthentication({
+//       id: userInfo.id,
+//       username: userInfo.username,
+//       email: userInfo.email,
+//       role: userInfo.role.map(role => role.authority),
+//       token: token
+//     });
+//   }
+// });
+
+// onMounted(() => {
+//   // 인증 상태 확인
+//   userDetails.checkAuthentication();
+// })
 
 //로그인 화면 이동 핸들러
 const goToLoginPageHandler = () => {
   // 현재 페이지의 URL을 sessionStorage에 저장
   const currentUrl = window.location.href;
-  console.log("이동할 페이지 저장했다-" + currentUrl)
   sessionStorage.setItem('redirectUrl', currentUrl);  // 로그인 후 리디렉션할 URL 저장
+  
   // 로그인 페이지로 이동
-  location.href = 'http://localhost:3000/login/'
-
+  router.push('/login');
+  // location.href = 'http://localhost:3000/login/'
 };
 
 //로그아웃 핸들러
@@ -162,14 +203,6 @@ const toggleSidebar = () => {
 const closeSidebar = () => {
   isSidebarOpen.value = false;
 };
-
-// 검색어 삭제 함수
-const clearSearch = (event) => {
-  const input = event.currentTarget.parentNode.querySelector('input');
-  input.value = ""; // 검색어 삭제
-};
-
-const router = useRouter()
 
 router.afterEach(() => {
   isSidebarOpen.value = false;

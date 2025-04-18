@@ -12,7 +12,12 @@
           <input class="log-in__id form" v-model="usernameModel" placeholder="아이디를 입력해주세요">
           <input type="password" class="log-in__password form" v-model="passwordModel" placeholder="비밀번호를 입력해주세요">
           <div class="message-container">
-            <div v-if="memberCheck === false" class="small_text_red">아이디와 비밀번호를 확인해주세요</div>
+            <div v-if="memberCheck === false" class="small_text_red">
+              아이디와 비밀번호를 확인해주세요
+            </div>
+            <div v-if="loginError" class="small_text_red">
+              {{ loginErrorMessage }}
+            </div>
           </div>
           <button class="long_btn" type="button" @click="localLoginHandler">로그인</button>
         </div>
@@ -48,6 +53,7 @@
 import { ref, onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
 import { googleTokenLogin } from 'vue3-google-login';
+import { useAuthStore } from '~/stores/auth.js';
 
 const { $kakao } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
@@ -58,6 +64,9 @@ const userDetails = useUserDetails();
 const usernameModel = ref('')
 const passwordModel = ref('')
 const memberCheck = ref('');
+
+const loginError = ref(false);
+const loginErrorMessage = ref('');
 
 /**
  * getMemberInfo 함수
@@ -103,33 +112,60 @@ const getMemberInfo = async () => {
       credentials: 'include',
     });
 
+    // 응답 상태 코드 확인
+    if (!response.ok) {
+      memberCheck.value = false;
+      console.error('로그인 실패: 서버 응답 오류', response.status);
+      return;
+    }
+
     const data = await response.json();
-    localStorage.setItem('access_token', data.token); // JWT 토큰 저장
+    // 토큰 저장 및 Pinia 스토어 업데이트
+    localStorage.setItem('access_token', data.token);
 
     const token = localStorage.getItem('access_token');
     const userInfo = jwtDecode(token); // JWT 디코딩하여 사용자 정보 추출
-
     console.log('유저 정보:', userInfo);
+
+    // userDetails 업데이트
+    userDetails.setAuthentication({
+      id: userInfo.id,
+      username: userInfo.usernmae,
+      email: userInfo.email,
+      nickname: userInfo.nickname,
+      role: userInfo.role.map((role) => role.authority),
+      token: token
+    });
 
     memberCheck.value = null;
 
-    // const memberRole = userInfo.role.map((role) => role.authority);
-    const memberRole = userInfo.role;
+    // 역할 정보 처리
+    const memberRole = Array.isArray(userInfo.role) 
+      ? userInfo.role.map(r => typeof r === 'object' ? r.authority : r)
+      : [userInfo.role];
 
+    // redirect 처리
     if (memberRole.includes('ROLE_MEMBER')) {
-      // const redirectUrl = sessionStorage.getItem('redirectUrl') || '/';
       const fullUrl = sessionStorage.getItem('redirectUrl') || '/';
       const redirectUrl = new URL(fullUrl, window.location.origin).pathname;
       sessionStorage.removeItem('redirectUrl');
       router.push(redirectUrl);
-
     } else if (memberRole.includes('ROLE_ADMIN')) {
       router.push('/admin');
     }
 
   } catch (error) {
     memberCheck.value = false;
-    console.error('로컬 로그인 실패:', error);
+    loginError.value = true;
+    
+    if (error.name === 'TypeError' && error.message.includes('not a function')) {
+      loginErrorMessage.value = '시스템 오류가 발생했습니다. 관리자에게 문의하세요.';
+      console.error('로컬 로그인 실패:', error);
+
+    } else {
+      loginErrorMessage.value = '아이디와 비밀번호를 확인해주세요';
+      console.error('로컬 로그인 실패:', error);
+    }
   }
 };
 

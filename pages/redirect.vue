@@ -72,7 +72,7 @@ onMounted(async () => {
         sessionStorage.removeItem('redirectUrl');
         
         // Nuxt의 navigateTo 사용 (권장)
-        await navigateTo(redirectUrl);
+        await navigateTo(redirectUrl, { external: true});
         return;
       } catch (decodeError) {
         console.error("토큰 디코딩 실패:", decodeError);
