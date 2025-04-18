@@ -6,16 +6,6 @@
           <span>EXPAND YOUR LEISURE LIFE WITH EPIK.</span>
         </div>
         <div class="top-bar__column">
-          <!-- <div v-if="userDetails.isAnonymous()"> -->
-          <!-- <div v-if="authStore.isLoggedIn">
-            <a href="/signup">회원가입</a>
-            <a @click="goToLoginPageHandler">로그인</a>
-          </div> -->
-          <!-- <div v-else="!userDetails.isAnonymous()"> -->
-          <!-- <div v-else>
-            <a href="/mypage">마이페이지</a>
-            <a @click="logoutHandler" href="#">로그아웃</a>
-          </div> -->
           <!-- 로그인 상태일 때 -->
           <div v-if="authStore.isLoggedIn">
             <a href="/mypage">마이페이지</a>
@@ -103,7 +93,6 @@
                 <a @click="logoutHandler" href="#">로그아웃</a>
               </div>
             </div>
-
           </div> <!-- sidebar-inner -->
         </div> <!-- sidebar -->
       </div> <!-- main-header -->
@@ -121,7 +110,6 @@ import { storeToRefs } from 'pinia'
 const router = useRouter()
 const userDetails = useUserDetails();  // 사용자 정보를 가져오는 함수
 const authStore = useAuthStore();
-const { isLoggedIn } = storeToRefs(authStore);
 
 watch(() => authStore.isLoggedIn, (newValue) => {
   console.log('로그인 상태 변경: ', newValue);
@@ -136,10 +124,11 @@ onMounted(() => {
       const userInfo = jwtDecode(token);
       userDetails.setAuthentication({
         id: userInfo.id,
-        username: userInfo.email,
+        username: userInfo.username,
+        email: userInfo.email,
         role: Array.isArray(userInfo.role)
-          ? userInfo.role.map(role => role.authority)
-          : [userInfo.role],
+          ? userInfo.role.map(role => typeof role === 'object' ? role.authority : role).filter(Boolean)
+          : [userInfo.role].filter(Boolean),
         nickname: userInfo.nickname,
         token: token
       });
@@ -149,27 +138,6 @@ onMounted(() => {
     }
   }
 });
-
-// onMounted(() => {
-//   let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
-
-//   if (token) {
-//     // 토큰이 있으면, 토큰을 디코딩하여 사용자 정보 추출
-//     const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
-//     userDetails.setAuthentication({
-//       id: userInfo.id,
-//       username: userInfo.username,
-//       email: userInfo.email,
-//       role: userInfo.role.map(role => role.authority),
-//       token: token
-//     });
-//   }
-// });
-
-// onMounted(() => {
-//   // 인증 상태 확인
-//   userDetails.checkAuthentication();
-// })
 
 //로그인 화면 이동 핸들러
 const goToLoginPageHandler = () => {
@@ -218,6 +186,5 @@ const closeSidebarOnNav = () => {
 
 
 <style lang="css" scoped>
-/* @import url('/public/css/fonts.css'); */
 @import url('/public/css/header.css');
 </style>

@@ -8,11 +8,6 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   actions: {
-    // checkAuth() {
-    //   if(typeof window !== 'undefined') {
-    //     this.isLoggedIn = !!localStorage.getItem('access_token');
-    //   }
-    // },
     checkAuth() {
       if(typeof windwo !== 'undefined') {
         const token = localStorage.getItem('access_token');

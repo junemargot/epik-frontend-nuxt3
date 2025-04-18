@@ -11,6 +11,12 @@ export default () => {
 
   // 인증 정보 설정
   const setAuthentication = (loginInfo) => {
+    const processedTole = loginInfo.role ?
+      (Array.isArray(loginInfo.role) ? 
+      loginInfo.role.filter(r => r !== null) : 
+      [loginInfo.role]).filter(Boolean) : 
+    [];
+
     // 상태 업데이트
     id.value = loginInfo.id;
     username.value = loginInfo.username;
@@ -23,10 +29,10 @@ export default () => {
     if(process.client) {
       localStorage.setItem("id", loginInfo.id);
       localStorage.setItem("username", loginInfo.username);
-      localStorage.setItem("email", loginInfo.email);
-      localStorage.setItem("role", JSON.stringify(loginInfo.role));
+      localStorage.setItem("email", loginInfo.email || '');
+      localStorage.setItem("role", JSON.stringify(processedTole));
       localStorage.setItem("nickname", loginInfo.nickname || "");
-      localStorage.setItem("token", loginInfo.token); // 다른 곳에서 사용하는 키와 동기화
+      localStorage.setItem("access_token", loginInfo.token);
 
       // Pinia 스토어 업데이트
       const authStore = useAuthStore();
@@ -121,20 +127,6 @@ export default () => {
       
       // 토큰이 있으면 토큰 기반으로 사용자 정보 로드
       checkAuthentication(storedToken);
-
-      // id.value = localStorage.getItem("id");
-      // username.value = localStorage.getItem("username");
-      // email.value = localStorage.getItem("email");
-      
-      // try {
-      //   role.value = JSON.parse(localStorage.getItem("role"));
-      // } catch(error) {
-      //   role.value = null;
-      //   console.error("역할 정보 파싱 오류: ", error);
-      // }
-
-      // nickname.value = localStorage.getItem("nickname");
-      // token.value = localStorage.getItem("token") || localStorage.getItem("access_token");
     }
   };
 
@@ -167,17 +159,6 @@ export default () => {
   };
 
   return {
-    // id,
-    // username,
-    // email,
-    // role,
-    // nickname,
-    // token,
-    // isAnonymous,
-    // setAuthentication,
-    // hasRole,
-    // logout,
-    // loadUserFromStorage,
     id,
     username,
     email,

@@ -53,7 +53,6 @@
 import { ref, onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
 import { googleTokenLogin } from 'vue3-google-login';
-import { useAuthStore } from '~/stores/auth.js';
 
 const { $kakao } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
@@ -68,6 +67,22 @@ const memberCheck = ref('');
 const loginError = ref(false);
 const loginErrorMessage = ref('');
 
+// 역할 정보 처리 함수
+const processRoles = (roleData) => {
+  if(!roleData) return [];
+
+  if(Array.isArray(roleData)) {
+    return roleData.map(role => {
+      if(typeof role === 'object' && role !== null && role.authority) {
+        return role.authority;
+      }
+      return role;
+    })
+    .filter(Boolean);
+  }
+  return [roleData].filter(Boolean);
+};
+
 /**
  * getMemberInfo 함수
  * localStorage에 저장된 JWT 토큰을 디코딩하여 사용자 정보를 전역 상태(userDetails)에 업데이트함.
@@ -79,6 +94,8 @@ const getMemberInfo = async () => {
 
     const userInfo = jwtDecode(token);
     console.log("User Info from token:", userInfo);
+    console.log("역할 정보 원본: ", userInfo.role);
+    console.log("처리된 역할 정보: ", processRoles(userInfo.role));
     
     // 전역 상태를 통해 인증 정보를 설정
     userDetails.setAuthentication({
@@ -86,7 +103,7 @@ const getMemberInfo = async () => {
       username: userInfo.username,
       email: userInfo.email,
       nickname: userInfo.nickname,
-      role: userInfo.role.map((role) => role.authority),
+      role: processRoles(userInfo.role),
       token: token
     });
   } catch(error) {
@@ -126,14 +143,16 @@ const getMemberInfo = async () => {
     const token = localStorage.getItem('access_token');
     const userInfo = jwtDecode(token); // JWT 디코딩하여 사용자 정보 추출
     console.log('유저 정보:', userInfo);
+    console.log('역할 정보 원본:', userInfo.role);
+    console.log('처리된 역할 정보:', processRoles(userInfo.role));
 
     // userDetails 업데이트
     userDetails.setAuthentication({
       id: userInfo.id,
-      username: userInfo.usernmae,
+      username: userInfo.username,
       email: userInfo.email,
       nickname: userInfo.nickname,
-      role: userInfo.role.map((role) => role.authority),
+      role: processRoles(userInfo.role),
       token: token
     });
 
@@ -199,44 +218,8 @@ const socialLoginHandler = (provider) => {
   } catch(error) {
     console.error(`소셜 로그인 오류 (${provider}): `, error);
     alert(`소셜 로그인 요청 중 오류가 발생했습니다: ${error.message}`);
-  }
-  
+  } 
 };
-
-onMounted(() => {
-  // 기존 토큰 확인
-  const token = localStorage.getItem("access_token");
-
-  if(token) {
-    try {
-      const userInfo = jwtDecode(token);
-      
-      // 토큰이 유효한지 확인 (만료 시간)
-      const currentTime = Date.now() / 1000;
-      if(userInfo.exp && userInfo.exp > currentTime) {
-        // 전역 사용자 상태 업데이트
-        userDetails.setAuthentication({
-        id: userInfo.id,
-        username: userInfo.username,
-        email: userInfo.email,
-        role: Array.isArray(userInfo.role) ? userInfo.role : [userInfo.role],
-        nickname: userInfo.nickname,
-        token: token
-        });
-
-        // 이미 로그인된 경우 홈으로 리다이렉트
-        router.push('/');
-
-      } else {
-        // 만료 토큰 제거
-        localStorage.removeItem('access_token');
-      }
-    } catch(error) {
-      console.error("토큰 디코딩 오류: ", error);
-      localStorage.removeItem('access_token');
-    }
-  }
-});
 
 /**
  * googleLoginHandler 구글 로그인
@@ -334,30 +317,43 @@ const kakaoLoginHandler = async () => {
  * 페이지가 마운트(로딩)될 때 localStorage에 저장된 JWT 토큰이 있으면,
  * 이를 디코딩하여 전역 사용자 정보(userDetails)를 업데이트.
  */
-onMounted(() => {
+ onMounted(() => {
+  // 기존 토큰 확인
   const token = localStorage.getItem("access_token");
 
-  try {
-    if(token) {
+  if(token) {
+    try {
       const userInfo = jwtDecode(token);
-      userDetails.setAuthentication({
+      console.log('마운트 시 유저 정보: ', userInfo);
+      console.log('마운트 시 역할 정보 원본: ', userInfo.role);
+      console.log('마운트 시 처리된 역할 정보: ', processRoles(userInfo.role));
+      
+      // 토큰이 유효한지 확인 (만료 시간)
+      const currentTime = Date.now() / 1000;
+      if(userInfo.exp && userInfo.exp > currentTime) {
+        // 전역 사용자 상태 업데이트
+        userDetails.setAuthentication({
         id: userInfo.id,
         username: userInfo.username,
         email: userInfo.email,
-        role: userInfo.role.map(role => role.authority),
+        role: processRoles(userInfo.role),
         nickname: userInfo.nickname,
         token: token
-      });
-      localStorage.setItem("username", userInfo.username)
-    }
+        });
 
-  } catch(error) {
-    console.error("토큰 디코딩 오류: ", error);
+        // 이미 로그인된 경우 홈으로 리다이렉트
+        router.push('/');
+
+      } else {
+        // 만료 토큰 제거
+        localStorage.removeItem('access_token');
+      }
+    } catch(error) {
+      console.error("토큰 디코딩 오류: ", error);
+      localStorage.removeItem('access_token');
+    }
   }
 });
-
-
-
 </script>
 
 <style>
