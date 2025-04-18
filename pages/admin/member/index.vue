@@ -42,9 +42,9 @@
               <!-- 아코디언으로 펼쳐질 내용 -->
               <div class="board__user-details" :style="{ display: isDetailsVisible(index) ? 'flex' : 'none' }">
                 <div class="board__user-detail-section-left">
-                  <!-- <div class="board__user-number">
+                  <div class="board__user-number">
                     <p><strong>회원 번호:</strong> {{ member.id }}</p>
-                  </div> -->
+                  </div>
                   <div class="board__user-id">
                     <p><strong>회원 아이디:</strong> {{ member.username }}</p>
                   </div>
@@ -66,8 +66,8 @@
                     <p><strong>누적 신고수:</strong> {{ member.reportedCount }}</p>
                   </div> -->
                   <div class="board__user-status">
-                    <!-- <p><strong>회원 상태:</strong> {{ member.status || '정상' }}</p> -->
-                    <p><strong>회원 상태:</strong>정상</p>
+                    <p><strong>회원 상태:</strong> {{ member.status || '정상' }}</p>
+                    <!-- <p><strong>회원 상태:</strong>정상</p> -->
                   </div>
                   <div class="board__user-signup-date">
                     <p><strong>가입일:</strong> {{ formatDate(member.joinDate) }}</p>

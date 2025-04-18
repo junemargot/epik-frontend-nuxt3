@@ -117,13 +117,11 @@ textarea:-ms-input-placeholder {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: 'Pretendard-Regular', sans-serif; */
 }
 
-body {
+html, body {
   color: var(--black);
-  /* height: 120vh; */
-  /* background: var(--background-1); */
+  font-family: 'Pretendard-regular', sans-serif;
 }
 
 a {

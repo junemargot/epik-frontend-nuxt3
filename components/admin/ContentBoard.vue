@@ -2,7 +2,7 @@
   <section class="board">
     <div class="board__header">
       <h1>{{ title }}</h1>
-      <p>전체 게시물수 {{ postCount }}</p>
+      <p>전체 게시물수 {{ postCount }}건</p>
     </div>
     <div class="board__container">
       <div class="board__list">
@@ -126,6 +126,7 @@ const handlePageChange = (page) => {
 .board .board__header {
   display: flex;
   margin: 20px 0 15px 5px;
+  font-family: 'Pretendard-semibold';
 }
 
 .board .board__header h1 {

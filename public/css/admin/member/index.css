@@ -6,6 +6,7 @@
 .board .board__header { 
   display: flex;
   margin: 20px 0 15px 5px;
+  font-family: 'Pretendard-semibold';
 }
 
 .board .board__header h1{

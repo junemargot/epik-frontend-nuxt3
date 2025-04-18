@@ -3,8 +3,8 @@
     <!-- MAIN -->
     <section class="board">
       <div class="board__header">
-        <h1>공지사항</h1>
-        <p>총 게시물 : {{ totalCount }}건</p>
+        <h1>공지사항 Notice</h1>
+        <p>전체 게시물수 {{ totalCount }}건</p>
       </div>
       <div class="board__container">
         <div class="board__list">
