@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>EPIK</Title>
+    <Title>EPIK | Every Place In Korea</Title>
     <Link rel="stylesheet" href="/css/global.css" />
     <Link rel="stylesheet" href="/css/admin/index.css" />
     <Link rel="stylesheet" href="/css/admin/aside.css" />
