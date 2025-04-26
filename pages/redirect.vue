@@ -24,7 +24,7 @@ const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
 
 const goToLogin = () => {
-  navigateTo.push('/login');
+  navigateTo('/login');
 };
 
 onMounted(async () => {
