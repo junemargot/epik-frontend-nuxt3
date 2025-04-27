@@ -53,12 +53,14 @@
 import { ref, onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
 import { googleTokenLogin } from 'vue3-google-login';
+import { useAuthStore } from '~/stores/auth.js';
 
 const { $kakao } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 const apiBase = runtimeConfig.public.apiBase;
 const router = useRouter();
 
+const authStore = useAuthStore();
 const userDetails = useUserDetails();
 const usernameModel = ref('')
 const passwordModel = ref('')
