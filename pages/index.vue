@@ -198,6 +198,7 @@ const exhibitionItems = ref([]);
 // 팝업 슬라이드 데이터 조회 및 정규화 
 const { data: slidesData, error: slidesError } = await useFetch('/api/v1/popup/random', {
   baseURL: 'http://localhost:8081',
+  credentials: 'include'
 });
 
 if (slidesError.value) {
@@ -213,6 +214,7 @@ if (slidesError.value) {
 // 팝업 데이터 조회 및 정규화
 const { data: popupData, error: popupError } = await useFetch('/api/v1/popup/random', {
   baseURL: 'http://localhost:8081',
+  credentials: 'include'
 });
 
 if (popupError.value) {
@@ -227,6 +229,7 @@ if (popupError.value) {
 // 콘서트 데이터 조회 및 정규화
 const { data: concertData, error: concertError } = await useFetch('/api/v1/concert/random', {
   baseURL: 'http://localhost:8081',
+  credentials: 'include'
 })
 
 if (concertError.value) {
@@ -241,6 +244,7 @@ if (concertError.value) {
 // 뮤지컬 데이터 조회 및 정규화
 const { data: musicalData, error: musicalError } = await useFetch('/api/v1/musical/random', {
   baseURL: 'http://localhost:8081',
+  credentials: 'include'
 })
 
 if (musicalError.value) {
@@ -255,6 +259,7 @@ if (musicalError.value) {
 // 전시회 데이터 조회 및 정규화
 const { data: exhibitionData, error: exhibitionError } = await useFetch('/api/v1/exhibition/random', {
   baseURL: 'http://localhost:8081',
+  credentials: 'include'
 });
 
 if (exhibitionError.value) {
