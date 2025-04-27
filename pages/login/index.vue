@@ -30,8 +30,8 @@
             <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li> -->
             <li class="log-in__icon"><a @click.prevent="socialLoginHandler('kakao')" class="log-in__kakao">카카오<br>로그인</a></li>
             <li class="log-in__icon"><a @click.prevent="socialLoginHandler('naver')" class="log-in__naver">네이버<br>로그인 </a></li>
-            <!-- <li class="log-in__icon"><a @click.prevent="socialLoginHandler('google')" class="log-in__google">구글<br>로그인 </a></li> -->
-            <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li>
+            <li class="log-in__icon"><a @click.prevent="socialLoginHandler('google')" class="log-in__google">구글<br>로그인 </a></li>
+            <!-- <li class="log-in__icon"><a @click.prevent="googleLoginHandler" class="log-in__google">구글<br>로그인 </a></li> -->
           </ul>
         </nav>
 
