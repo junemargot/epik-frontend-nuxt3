@@ -157,6 +157,7 @@ const getMemberInfo = async () => {
     });
 
     memberCheck.value = null;
+    authStore.login();
 
     // 역할 정보 처리
     const memberRole = Array.isArray(userInfo.role) 
@@ -340,6 +341,8 @@ const kakaoLoginHandler = async () => {
         nickname: userInfo.nickname,
         token: token
         });
+
+        authStore.login();
 
         // 이미 로그인된 경우 홈으로 리다이렉트
         router.push('/');

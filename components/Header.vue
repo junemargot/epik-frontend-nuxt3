@@ -84,13 +84,14 @@
             </nav>
 
             <div class="dropdown-menu__auth">
-              <div v-if="userDetails.isAnonymous()">
+              <div v-if="authStore.isLoggedIn">
+                <a href="/mypage">마이페이지</a>
+                <a @click="logoutHandler">로그아웃</a>
+              </div>
+              <!-- 로그아웃 상태일 때 -->
+              <div v-else>
                 <a href="/signup">회원가입</a>
                 <a @click="goToLoginPageHandler">로그인</a>
-              </div>
-              <div v-else="!userDetails.isAnonymous()">
-                <a href="/mypage">마이페이지</a>
-                <a @click="logoutHandler" href="#">로그아웃</a>
               </div>
             </div>
           </div> <!-- sidebar-inner -->
