@@ -2,9 +2,7 @@
   <main class="mypage-wrap">
     <section class="mypage__wrap small-wrap">
       <div class="mypage__intro">
-        <h1 class="mypage__title intro-title">
-          마이페이지
-        </h1>
+        <h1 class="mypage__title">마이페이지</h1>
       </div>
 
       <div class="mypage__wrap-profile gap-mt_3">
@@ -35,25 +33,16 @@
             </div>
           </div>
 
-          <div class="mypage__name gap-mt_2">
+          <div class="mypage__name">
             <div class="mypage__nickname ">
               {{ userDetails.nickname.value }}
             </div>
-
             <div class="mypage__username">
-              <!-- <img class="mypage__username-img" src="/public/images/mypage/member.png"> -->
               {{ userDetails.email.value }}
             </div>
           </div>
-
         </div>
-
-        <hr class="hr_1">
-
         <div class="mypage__wrap-fuction">
-          <div>
-            <h2 hidden>프로필 메뉴</h2>
-          </div>
           <nav>
             <ul class="mypage__fuction-icons">
               <li class="bell">

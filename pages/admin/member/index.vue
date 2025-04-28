@@ -60,7 +60,6 @@
                   </div> -->
                   <div class="board__user-status">
                     <p><strong>회원 상태:</strong> {{ member.status || '정상' }}</p>
-                    <!-- <p><strong>회원 상태:</strong>정상</p> -->
                   </div>
                   <div class="board__user-signup-date">
                     <p><strong>가입일:</strong> {{ formatDate(member.joinDate) }}</p>
@@ -147,6 +146,13 @@ const currentPage = ref(1);
 const hasPrevPage = ref(false);
 const hasNextPage = ref(false);
 const pages = ref([]);
+
+const getMemberStatusText = (status) => {
+  if(status === 1) return '정상회원';
+  if(status === 2) return '탈퇴회원'; 
+  if(status === 3) return '강퇴회원';
+  return '알 수 없음';
+}
 
 // 검색 관련 상태 관리
 const categories = ['통합검색', '아이디 + 닉네임', '아이디', '닉네임']; // 검색 카테고리
