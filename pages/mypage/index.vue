@@ -18,10 +18,12 @@
             <div class="mypage__img-my-box">
               <!-- <img 
                 class="mypage__img-my" 
-                :src="`/images/mypage/${userDetails.profileImage}`" 
+                :src="`/images/mypage/${userDetails.profileImg}`" 
                 alt="profile pic" 
               /> -->
-              <img class="mypage__img-my" src="/public/images/mypage/profile-baek.png" alt="profile pic">
+              <img class="mypage__img-my" :src="profileUrl" alt="프로필이미지" ref="imgProfile" />
+
+              <!-- <img class="mypage__img-my" src="/public/images/mypage/profile-baek.png" alt="profile pic"> -->
             </div>
             <div class="mypage__edit">
               <div class="mypage__edit-icon-box">
@@ -35,12 +37,12 @@
 
           <div class="mypage__name gap-mt_2">
             <div class="mypage__nickname ">
-              {{ userDetails.nickname }}
+              {{ userDetails.nickname.value }}
             </div>
 
             <div class="mypage__username">
               <!-- <img class="mypage__username-img" src="/public/images/mypage/member.png"> -->
-              {{ userDetails.email }}
+              {{ userDetails.email.value }}
             </div>
           </div>
 
@@ -111,31 +113,79 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { jwtDecode } from 'jwt-decode';
+import { useRuntimeConfig } from '#app';
+
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase;
 
 const userDetails = useUserDetails();
-//-----------------------------
-//로컬호스트 유지
 
+const currentProfileImg = computed(() => {
+  // userDetails.profileImg이 null이면 localStorage에서 직접 확인
+  if (!userDetails.profileImg.value && process.client) {
+    const storedProfileImg = localStorage.getItem("profile_img");
+    if (storedProfileImg) return storedProfileImg;
+  }
+  return userDetails.profileImg.value;
+});
+
+// 프로필 이미지 url 생성 함수
+const profileUrl = computed(() => {
+  if (currentProfileImg.value.startsWith('uploads/')) {
+    return `${apiBase}/uploads/${currentProfileImg.value.substring('uploads/'.length)}`;
+  } else {
+    return `${apiBase}/uploads/images/user/basic.png`;
+  }
+});
 
 onMounted(() => {
   let token = localStorage.getItem("access_token");  // 로컬스토리지에서 토큰 가져오기
 
   if (!token) {
     // 토큰이 없으면 메인 페이지로 리디렉션
-    location.href=('http://localhost:3001');  // 홈 페이지로 리디렉션
+    location.href=('http://localhost:3000');
+  
   } else {
-    const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
-    userDetails.setAuthentication({
-      id: userInfo.id,
-      nickname: userInfo.nickname,
-      username: userInfo.username,
-      email: userInfo.email,
-      role: userInfo.role.map(role => role.authority),
-      token: token
-    });
-    console.log("토큰에서 정보 가져오기", userInfo);
+    try {
+      const userInfo = jwtDecode(token);  // JWT 토큰 디코딩
+      console.log("토큰에서 정보 가져오기", userInfo);
+
+      // 먼저 profileImg 값을 명시적으로 확인
+      console.log("토큰의 profileImg 값:", userInfo.profileImg);
+
+      // 역할 정보 처리 (오류 방지)
+      let roles = [];
+      if (userInfo.role) {
+        if (Array.isArray(userInfo.role)) {
+          roles = userInfo.role.map(role => 
+            typeof role === 'object' ? role.authority : role
+          );
+        } else {
+          roles = [userInfo.role];
+        }
+      }
+      
+      userDetails.setAuthentication({
+        id: userInfo.id,
+        nickname: userInfo.nickname,
+        username: userInfo.username,
+        email: userInfo.email,
+        profileImg: userInfo.profileImg,
+        role: userInfo.role.map(role => role.authority),
+        token: token
+      });
+
+      console.log("토큰에서 정보 가져오기", userInfo);
+      console.log("userDetails 설정 후:", {
+        nickname: userDetails.nickname.value,
+        profileImg: userDetails.profileImg.value,
+        email: userDetails.email.value
+      });
+    } catch(error) {
+      console.error('토큰 디코딩 오류: ', error);
+    }
   }
 })
 
@@ -154,6 +204,7 @@ const handleFileChange = async (event) => {
     nickname: userInfo.nickname,
     username: userInfo.username,
     email: userInfo.email,
+    profileImg: userInfo.profileImg || 'basic.png',
     role: userInfo.role.map(role => role.authority),
     token: token
   });

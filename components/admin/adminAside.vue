@@ -264,8 +264,11 @@ const currentProfileImg = computed(() => {
 
 // 프로필 이미지 url 생성 함수
 const profileUrl = computed(() => {
-  
-  return `${apiBase}/images/${currentProfileImg.value}`;
+  if (currentProfileImg.value.startsWith('uploads/')) {
+    return `${apiBase}/uploads/${currentProfileImg.value.substring('uploads/'.length)}`;
+  } else {
+    return `${apiBase}/uploads/images/user/basic.png`;
+  }
 });
 
 // 로그아웃 처리

@@ -88,6 +88,24 @@ const processRoles = (roleData) => {
   return [roleData].filter(Boolean);
 };
 
+const currentProfileImg = computed(() => {
+  // userDetails.profileImg이 null이면 localStorage에서 직접 확인
+  if (!userDetails.profileImg.value && process.client) {
+    const storedProfileImg = localStorage.getItem("profile_img");
+    if (storedProfileImg) return storedProfileImg;
+  }
+  return userDetails.profileImg.value;
+});
+
+// 프로필 이미지 url 생성 함수
+const profileUrl = computed(() => {
+  if (currentProfileImg.value.startsWith('uploads/')) {
+    return `${apiBase}/uploads/${currentProfileImg.value.substring('uploads/'.length)}`;
+  } else {
+    return `${apiBase}/uploads/images/user/basic.png`;
+  }
+});
+
 /**
  * getMemberInfo 함수
  * localStorage에 저장된 JWT 토큰을 디코딩하여 사용자 정보를 전역 상태(userDetails)에 업데이트함.

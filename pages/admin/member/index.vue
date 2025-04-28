@@ -15,7 +15,6 @@
             <div class="board__id">아이디</div>
             <div class="board__nickname">닉네임</div>
             <div class="board__joinDate">가입일</div>
-            <!-- <div class="board__connDate">최근접속일</div> -->
             <div class="board__status">회원상태</div>
             <div class="board__management">계정관리</div>
           </div>
@@ -24,18 +23,12 @@
               <div class="board__no">{{ member.id }}</div>
               <div class="board__type">{{ getLoginTypeLabel(member.loginType) }}</div>
               <div class="board__thumb">
-                <!-- <img :src="member.profileImage" alt=""> -->
                 <img :src="getFullImageUrl(member.profileImg)" alt="프로필이미지" />
               </div>
               <div class="board__id">{{ member.username }}</div><!-- 아이디 -->
               <div class="board__nickname">{{ member.nickname }}</div>
               <div class="board__joinDate">{{ formatDate(member.joinDate) }}</div>
-              <!-- <div class="board__connDate" :class="{'custom-connDate': true}">{{ member.lastAccess }}</div> -->
-              <!-- <div class="board__connDate">
-                <span class="date">{{ member.lastAccess.split(' ')[0] }}</span>
-                <span class="time">{{ member.lastAccess.split(' ')[1] }}</span>
-              </div> -->
-              <div class="board__status">정상</div>
+              <div class="board__status">{{ member.status }}</div>
               <div class="board__management">
                 <button class="delBtn" @click.stop="deleteAccount(member.id)">계정 삭제</button>
               </div>
@@ -380,7 +373,9 @@ const getFullImageUrl = (imagePath) => {
   }
 
   // 아니면 서버 경로와 결합
-  return `${apiBase}/images/${imagePath}`;
+  // return `${apiBase}/images/${imagePath}`;
+  return `${apiBase}/${imagePath}`;
+
 }
 
 onMounted(() => {
