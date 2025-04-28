@@ -84,9 +84,9 @@
     <div class="sidebar__profile">
       <div class="profile" ref="profile">
         <!-- <img src="/images/profile3.jpg" alt="프로필사진" ref="imgProfile" /> -->
-        <img :src="getFullImageUrl(currentUser.profileImg)" alt="프로필이미지" />
+        <img :src="profileUrl" alt="프로필이미지" ref="imgProfile" />
         <div class="profile__name" ref="nameProfile" @click="profileToggleDropdown">
-          {{ currentUser.nickname }}
+          {{ currentNickname }}
           <ul 
             class="profile__link" 
             ref="dropdownProfile" 
@@ -107,18 +107,16 @@
 </template>
 
 <script setup>
+import { jwtDecode } from 'jwt-decode';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
+import { useAuthStore } from '~/stores/auth.js';
 
 const router = useRouter();
 const route = useRoute();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
-
-// 상태 관리 변수
-const currentUser = ref({});
-
 
 // SIDEBAR DROPDOWN ===========================
 // dropdown status
@@ -221,16 +219,6 @@ const profileToggleDropdown = () => {
   profileDropdownVisible.value = !profileDropdownVisible.value;
 };
 
-// click outside handler
-// const handleClickOutside = (e) => {
-//   if (dropdownProfile.value && 
-//       !dropdownProfile.value.contains(e.target) && 
-//       !imgProfile.value.contains(e.target) && 
-//       !nameProfile.value.contains(e.target)) {
-//     profileDropdownVisible.value = false;
-//   }
-// }
-
 const handleClickOutside = (e) => {
   const dropdownEl = dropdownProfile.value;
   const imgEl = imgProfile.value;
@@ -241,7 +229,7 @@ const handleClickOutside = (e) => {
   if(
     dropdownProfile.value?.contains(e.target) ||
     imgProfile.value?.contains(e.target) ||
-    nameProfile.value?.containes(e.target)
+    nameProfile.value?.contains(e.target)
   ) {
     return;
   }
@@ -249,68 +237,94 @@ const handleClickOutside = (e) => {
   profileDropdownVisible.value = false;
 }
 
-onMounted(() => {
-  // imgProfile.value.addEventListener('click', profileToggleDropdown);
-  // nameProfile.value.addEventListener('click', profileToggleDropdown);
-  window.addEventListener('click', handleClickOutside);
-});
-
 // when component unmount remove event
 onBeforeUnmount(() => {
   window.removeEventListener('click', handleClickOutside);
 });
 
-//로그아웃
+// 유저 정보 가져오기
 const userDetails = useUserDetails(); 
-// const currentUser = computed(() => userDetails.user || { name: '관리자' }); // 기본값 설정
 
-const fetchCurrentUser = async () => {
-  try {
-    const { data } = await useFetch('/admin/user/current', {
-      baseURL: apiBase || 'http://localhost:8081/api/v1',
-      headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}`}
-    });
-
-    if(data.value) {
-      currentUser.value = data.value;
-      console.log('현재 사용자 정보: ', currentUser.value);
-    }
-
-  } catch(error) {
-    console.error('관리자 정보 가져오기 실패: ', error);
+const currentNickname = computed(() => {
+  if(!userDetails.nickname.value && process.client) {
+    const storedNickname = localStorage.getItem('nickname');
+    if(storedNickname) return storedNickname;
   }
-};
+  return userDetails.nickname.value || '관리자';
+});
+
+const currentProfileImg = computed(() => {
+  // userDetails.profileImg이 null이면 localStorage에서 직접 확인
+  if (!userDetails.profileImg.value && process.client) {
+    const storedProfileImg = localStorage.getItem("profile_img");
+    if (storedProfileImg) return storedProfileImg;
+  }
+  return userDetails.profileImg.value || 'basic.png';
+});
 
 // 프로필 이미지 url 생성 함수
-const getFullImageUrl = (imagePath) => {
-  return imagePath
-    ? `${apiBase}/images/${imagePath}`
-    : '/images/basic.png';
-}
+const profileUrl = computed(() => {
+  
+  return `${apiBase}/images/${currentProfileImg.value}`;
+});
 
 // 로그아웃 처리
 const logoutHandler = () => {
-  localStorage.removeItem('authToken');
-  router.push('http://localhost:3000/login');
-}
+  if (process.client) {
+    
+    // AuthStore 인스턴스 생성
+    const authStore = useAuthStore();
 
-// const logoutHandler =()=>{
-//   userDetails.logout();
-//   localStorage.clear();
-//   location.href = 'http://localhost:3000'
-// }
+    userDetails.logout(); // userDetails 로그아웃
+    authStore.logout(); // authStore 로그아웃
+    
+    // 로그인 페이지로 리디렉션
+    window.location.href = 'http://localhost:3000/login';
+  }
+};
 
 onMounted(() => {
-  fetchCurrentUser(); // 컴포넌트 마운트 시 사용자 정보 가져오기
+  if (process.client) {
+    // 사용자 정보 로드 시도
+    userDetails.loadUserFromStorage();
+
+    // 여전히 값이 없으면 직접 설정
+    if (!userDetails.nickname.value && localStorage.getItem('nickname')) {
+      userDetails.nickname.value = localStorage.getItem('nickname');
+      console.log('직접 설정 후 nickname:', userDetails.nickname.value);
+    }
+    
+    if (!userDetails.profileImg.value && localStorage.getItem('profile_img')) {
+      userDetails.profileImg.value = localStorage.getItem('profile_img');
+      console.log('직접 설정 후 profileImg:', userDetails.profileImg.value);
+    }
+  }
+  
   window.addEventListener('click', handleClickOutside);
 });
 
+onMounted(() => {
+  if (process.client) {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        console.log('토큰 전체 내용:', decoded);
+        console.log('토큰에 nickname 키 존재:', 'nickname' in decoded);
+        console.log('토큰에 profileImg 키 존재:', 'profileImg' in decoded);
+        
+        // 토큰에 키가 있지만 값이 없는 경우
+        console.log('nickname 값:', decoded.nickname);
+        console.log('profileImg 값:', decoded.profileImg);
+      } catch (e) {
+        console.error('토큰 디코딩 실패:', e);
+      }
+    }
+  }
+});
 
 </script>
-
-
 <style lang="css" scoped>
 @import url("/public/css/admin/aside.css");
-
 
 </style>

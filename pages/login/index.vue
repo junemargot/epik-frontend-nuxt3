@@ -69,6 +69,9 @@ const memberCheck = ref('');
 const loginError = ref(false);
 const loginErrorMessage = ref('');
 
+const feedMenuItems = ref([]);
+const reportMenuItems = ref([]);
+
 // 역할 정보 처리 함수
 const processRoles = (roleData) => {
   if(!roleData) return [];
@@ -105,6 +108,7 @@ const getMemberInfo = async () => {
       username: userInfo.username,
       email: userInfo.email,
       nickname: userInfo.nickname,
+      profileImg: userInfo.profileImg,
       role: processRoles(userInfo.role),
       token: token
     });
@@ -119,7 +123,12 @@ const getMemberInfo = async () => {
  * 2. 백엔드에서 생성한 JWT 토큰을 응답으로 받아 localStorage에 저장.
  * 3. jwtDecode를 통해 토큰에서 사용자 정보를 추출 및 전역 상태에 저장.
  * 4. 사용자 역할에 따라 적절한 페이지로 리디렉션.
- */const localLoginHandler = async () => {
+ */
+const localLoginHandler = async () => {
+  console.log('전송할 자격증명:', {
+  username: usernameModel.value,
+  password: passwordModel.value
+});
   try {
     const response = await fetch(`${apiBase}/auth/login`, {
       method: 'POST',
@@ -131,14 +140,30 @@ const getMemberInfo = async () => {
       credentials: 'include',
     });
 
-    // 응답 상태 코드 확인
+    // 자세한 오류 정보 출력
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('로그인 실패 상세 정보:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
       memberCheck.value = false;
-      console.error('로그인 실패: 서버 응답 오류', response.status);
       return;
     }
 
     const data = await response.json();
+    
+    // 토큰 확인 및 디버깅
+    console.log('서버에서 받은 토큰:', data.token);
+    
+    if (!data.token || typeof data.token !== 'string' || !data.token.includes('.')) {
+      console.error('유효하지 않은 토큰 형식:', data.token);
+      loginError.value = true;
+      loginErrorMessage.value = '인증 토큰 오류. 관리자에게 문의하세요.';
+      return;
+    }
+    
     // 토큰 저장 및 Pinia 스토어 업데이트
     localStorage.setItem('access_token', data.token);
 
@@ -148,18 +173,34 @@ const getMemberInfo = async () => {
     console.log('역할 정보 원본:', userInfo.role);
     console.log('처리된 역할 정보:', processRoles(userInfo.role));
 
+    // 추가 사용자 정보 저장 (명시적으로)
+    localStorage.setItem("id", userInfo.id.toString());
+    localStorage.setItem("username", userInfo.username);
+    localStorage.setItem("email", userInfo.email || '');
+    localStorage.setItem("nickname", userInfo.nickname || '');
+    localStorage.setItem("profile_img", userInfo.profileImg || 'basic.png');
+    localStorage.setItem("role", JSON.stringify(processRoles(userInfo.role)));
+
     // userDetails 업데이트
     userDetails.setAuthentication({
       id: userInfo.id,
       username: userInfo.username,
       email: userInfo.email,
       nickname: userInfo.nickname,
+      profileImg: userInfo.profileImg,
       role: processRoles(userInfo.role),
       token: token
     });
 
     memberCheck.value = null;
-    authStore.login();
+    
+    // 명시적으로 authStore 로그인 처리
+    try {
+      authStore.login(token);
+    } catch (e) {
+      console.error('authStore 로그인 오류:', e);
+      // 오류가 있더라도 계속 진행
+    }
 
     // 역할 정보 처리
     const memberRole = Array.isArray(userInfo.role) 
@@ -341,6 +382,7 @@ const kakaoLoginHandler = async () => {
         email: userInfo.email,
         role: processRoles(userInfo.role),
         nickname: userInfo.nickname,
+        profileImg: userInfo.profileImg,
         token: token
         });
 

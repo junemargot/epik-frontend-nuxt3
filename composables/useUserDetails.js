@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '~/stores/auth.js';
 
 export default () => {
@@ -8,10 +8,11 @@ export default () => {
   const role = useState("role", () => null);
   const nickname = useState("nickname", () => null);
   const token = useState("token", () => null);
+  const profileImg = useState("profileImg", () => null);
 
   // 인증 정보 설정
   const setAuthentication = (loginInfo) => {
-    const processedTole = loginInfo.role ?
+    const processedRole = loginInfo.role ?
       (Array.isArray(loginInfo.role) ? 
       loginInfo.role.filter(r => r !== null) : 
       [loginInfo.role]).filter(Boolean) : 
@@ -22,17 +23,19 @@ export default () => {
     username.value = loginInfo.username;
     email.value = loginInfo.email;
     role.value = loginInfo.role;
-    nickname.value = loginInfo.nickname;
+    nickname.value = loginInfo.nickname || '';
     token.value = loginInfo.token;
+    profileImg.value = loginInfo.profileImg || '';
 
     // localStorage에 저장
     if(process.client) {
       localStorage.setItem("id", loginInfo.id);
       localStorage.setItem("username", loginInfo.username);
       localStorage.setItem("email", loginInfo.email || '');
-      localStorage.setItem("role", JSON.stringify(processedTole));
-      localStorage.setItem("nickname", loginInfo.nickname || "");
+      localStorage.setItem("role", JSON.stringify(processedRole));
+      localStorage.setItem("nickname", loginInfo.nickname || '');
       localStorage.setItem("access_token", loginInfo.token);
+      localStorage.setItem("profile_img", loginInfo.profileImg || '');
 
       // Pinia 스토어 업데이트
       const authStore = useAuthStore();
@@ -59,8 +62,10 @@ export default () => {
       localStorage.removeItem("role");
       localStorage.removeItem("nickname");
       localStorage.removeItem("token");
+      localStorage.removeItem("profile_img");
       localStorage.removeItem("access_token"); // 다른 곳에서 사용하는 키도 제거
 
+      const authStore = useAuthStore();
       if(authStore) {
         authStore.logout();
       }
@@ -75,6 +80,12 @@ export default () => {
 
     if(tokenValue) {
       try {
+        // 토큰 유효성 기본 검사 추가
+        if(!tokenValue.includes('.')) {
+          console.error('유효하지 않은 토큰 형식입니다.');
+          return false;
+        }
+
         // JWT 디코딩
         const userInfo = jwtDecode(tokenValue);
 
@@ -97,6 +108,7 @@ export default () => {
             email: userInfo.email,
             role: userRoles,
             nickname: userInfo.nickname,
+            profileImg: userInfo.profileImg,
             token: tokenValue
           });
           return true;
@@ -106,7 +118,8 @@ export default () => {
         }
       } catch (error) {
         console.error("토큰 검증 오류: ", error);
-        logout();
+        tryLoadFromLocalStorage();
+        // logout();
         return false;
       }
     }
@@ -119,15 +132,77 @@ export default () => {
     authStore = useAuthStore();
   }
 
+  // 새로운 함수: localStorage에서 직접 데이터 로드 시도
+const tryLoadFromLocalStorage = () => {
+  if(process.client) {
+    const storedNickname = localStorage.getItem("nickname");
+    const storedProfileImg = localStorage.getItem("profile_img");
+    
+    if(storedNickname) {
+      nickname.value = storedNickname;
+      profileImg.value = storedProfileImg || 'basic.png';
+      console.log("localStorage에서 직접 로드:", nickname.value, profileImg.value);
+      return true;
+    }
+  }
+  return false;
+};
+
   // localStorage에서 사용자 정보 로드
   const loadUserFromStorage = () => {
     if (process.client) {
+      console.log("loadUserFromStorage 실행");
+
+      // 1. 토큰으로 시도
       const storedToken = localStorage.getItem("access_token");
-      if (!storedToken) return;
+      if (storedToken) {
+        const tokenSuccess = checkAuthentication(storedToken);
+
+        if(tokenSuccess) {
+          console.log("토큰 기반 인증 성공");
+          return true;
+        }
+      }
+
+    
+      // 2. 토큰 인증 실패 시, localStorage에서 직접 값 로드
+      const storedNickname = localStorage.getItem('nickname');
+      const storedProfileImg = localStorage.getItem('profile_img');
+      const storedId = localStorage.getItem('id');
+      const storedUsername = localStorage.getItem('username');
+      const storedEmail = localStorage.getItem('email');
       
-      // 토큰이 있으면 토큰 기반으로 사용자 정보 로드
-      checkAuthentication(storedToken);
+      if(storedNickname || storedUsername) {
+        console.log('localStorage에서 직접 데이터 로드');
+
+        nickname.value = storedNickname || '관리자';
+        profileImg.value = storedProfileImg || 'basic.png';
+        id.value = storedId || null;
+        username.value = storedUsername || null;
+        email.value = storedEmail || '';
+
+        // 역할 정보 파싱
+        try {
+          const roleStr = localStorage.getItem('role');
+          if(roleStr) {
+            role.value = JSON.parse(roleStr);
+          }
+        } catch(e) {
+          console.error('역할 정보 파싱 오류: ', e);
+          role.value = null;
+        }
+
+        token.value = null;
+
+        console.log('loadUserFromStorage 실행 후 nickname: ', nickname.value);
+        console.log('loadUserFromStorage 실행 후 profileImg: ', profileImg.value);
+        return true;
+      }
+
+      console.log('loadUserFromStorage 실패: 저장된 사용자 정보 없음');
+      return false;
     }
+    return false;
   };
 
   // 클라이언트 사이드에서 자동으로 사용자 정보 로드
@@ -164,6 +239,7 @@ export default () => {
     email,
     role,
     nickname,
+    profileImg,
     token,
     isAnonymous,
     setAuthentication,
@@ -173,3 +249,19 @@ export default () => {
     checkAuthentication
   };
 }
+
+onMounted(() => {
+  if (process.client) {
+    const token = localStorage.getItem('access_token');
+    console.log('토큰 존재 여부:', !!token);
+    
+    if (token) {
+      const authResult = userDetails.checkAuthentication(token);
+      console.log('인증 결과:', authResult);
+      
+      // 인증 후 값 확인
+      console.log('인증 후 nickname:', userDetails.nickname.value);
+      console.log('인증 후 profileImg:', userDetails.profileImg.value);
+    }
+  }
+});
