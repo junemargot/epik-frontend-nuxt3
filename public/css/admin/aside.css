@@ -64,6 +64,7 @@
   margin-left: auto;
   transform: all .3s ease;
   font-size: 14px;
+  transition: transform .3s ease;
 }
 
 #sidebar .sidebar__menu {
@@ -107,8 +108,9 @@
   color: var(--white);
 }
 
-#sidebar .sidebar__menu li.active > a .icon-right {
+#sidebar .sidebar__menu li.is-open > a .icon-right {
   transform: rotateZ(90deg);
+  transition: transform .3s ease;
 }
 
 

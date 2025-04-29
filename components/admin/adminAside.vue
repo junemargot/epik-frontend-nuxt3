@@ -12,7 +12,7 @@
         </RouterLink>
       </li>
       <li class="sidebar__menu-divider" data-text="menu">member</li>
-      <li v-for="(item, index) in memberMenuItems" :key="index" :class="{ active: activeMenu === item.name }">
+      <li v-for="(item, index) in memberMenuItems" :key="index" :class="{ active: activeMenu === item.name, 'is-open': activeDropdown === item.name }">
         <a href="#" @click.prevent="toggleDropdown(item.name)">
           <i class='bx bx-user icon'></i>{{ item.label }}
           <i class='bx bxs-chevron-right icon-right'></i>
@@ -24,7 +24,7 @@
         </ul>
       </li>
       <li class="sidebar__menu-divider">contents</li>
-      <li v-for="(item, index) in contentsMenuItems" :key="index">
+      <li v-for="(item, index) in contentsMenuItems" :key="index" :class="{ 'is-open': activeDropdown === item.name }">
         <a href="#" @click.prevent="toggleDropdown(item.name)">
           <i class='bx bx-box icon'></i>{{ item.label }}
           <i class='bx bxs-chevron-right icon-right'></i>
@@ -47,7 +47,7 @@
         </ul>
       </li>
       <li class="sidebar__menu-divider">manage</li>
-      <li v-for="(item, index) in reportMenuItems" :key="index">
+      <li v-for="(item, index) in reportMenuItems" :key="index" :class="{ 'is-open': activeDropdown === item.name }">
         <a href="#" @click.prevent="toggleDropdown(item.name)">
           <i class='bx bx-flag icon'></i>{{ item.label }}
           <i class='bx bxs-chevron-right icon-right'></i>
@@ -58,7 +58,7 @@
           </li>
         </ul>
       </li>
-      <li v-for="(item, index) in inquiryMenuItems" :key="index">
+      <li v-for="(item, index) in inquiryMenuItems" :key="index" :class="{ 'is-open': activeDropdown === item.name }">
         <a href="#" @click.prevent="toggleDropdown(item.name)">
           <i class='bx bx-edit icon'></i>{{ item.label }}
           <i class='bx bxs-chevron-right icon-right'></i>
@@ -69,7 +69,7 @@
           </li>
         </ul>
       </li>
-      <li v-for="(item, index) in noticeMenuItems" :key="index">
+      <li v-for="(item, index) in noticeMenuItems" :key="index" :class="{ 'is-open': activeDropdown === item.name }">
         <a href="#" @click.prevent="toggleDropdown(item.name)">
           <i class='bx bx-bell icon'></i>{{ item.label }}
           <i class='bx bxs-chevron-right icon-right'></i>
