@@ -4,24 +4,11 @@
       <div class="mypage__intro">
         <h1 class="mypage__title">마이페이지</h1>
       </div>
-
-      <div class="mypage__wrap-profile gap-mt_3">
-
+      <div class="mypage__wrap-profile">
         <div class="mypage__profile">
-          <div>
-            <h2 hidden>내 프로필</h2>
-          </div>
-
           <div class="mypage__img">
             <div class="mypage__img-my-box">
-              <!-- <img 
-                class="mypage__img-my" 
-                :src="`/images/mypage/${userDetails.profileImg}`" 
-                alt="profile pic" 
-              /> -->
               <img class="mypage__img-my" :src="profileUrl" alt="프로필이미지" ref="imgProfile" />
-
-              <!-- <img class="mypage__img-my" src="/public/images/mypage/profile-baek.png" alt="profile pic"> -->
             </div>
             <div class="mypage__edit">
               <div class="mypage__edit-icon-box">
@@ -32,7 +19,6 @@
               </div>
             </div>
           </div>
-
           <div class="mypage__name">
             <div class="mypage__nickname ">
               {{ userDetails.nickname.value }}
@@ -46,59 +32,72 @@
           <nav>
             <ul class="mypage__fuction-icons">
               <li class="bell">
-                <a href="./notification.vue"><i class='mypage__bell-icon bx bx-bell'></i>알림</a>
+                <a href="./notification.vue">
+                  <i class='mypage__bell-icon bx bx-bell'></i>알림
+                </a>
               </li>
               <li class="bookmark">
-                <a href="../mypage/1/bookmark"> <i class='mypage__bookmark-icon bx bx-bookmark'></i>북마크</a>
+                <a href="../mypage/1/bookmark">
+                  <i class='mypage__bookmark-icon bx bx-bookmark'></i>북마크
+                </a>
               </li>
               <li class="myfeed">
-                <a href="#"> <i class='mypage__myfeed-icon bx bx-message-alt-minus'></i>마이피드</a>
+                <a href="#">
+                  <i class='mypage__myfeed-icon bx bx-message-alt-minus'></i>마이피드
+                </a>
               </li>
             </ul>
           </nav>
         </div>
-
       </div>
-
       <div class="mypage__wrap-menulist">
-        <div>
-          <h2 hidden>마이 페이지 메뉴</h2>
-        </div>
         <nav>
           <ul class="mypage__menulist">
             <li>
               <a href="../mypage/info/modify" class="mypage__memberInfoUpdate">
-                <div class="mypage__icon-wrap"><i class='mypage__user-icon bx bx-user-circle'></i>회원정보수정</div>
-                <div><i class='mypage__angleright-icon bx bx-chevron-right'></i></div>
+                <div class="mypage__icon-wrap">
+                  <i class='mypage__user-icon bx bx-user-circle'></i>회원정보수정
+                </div>
+                <div>
+                  <i class='mypage__angleright-icon bx bx-chevron-right'></i>
+                </div>
               </a>
             </li>
-
             <li>
               <a href="../mypage/password/check" class="mypage__passwordChange">
-                <div class="mypage__icon-wrap"><i class='mypage__lock-icon bx bx-lock-alt'></i>비밀번호 변경</div>
-                <div><i class='mypage__angleright-icon bx bx-chevron-right'></i></div>
+                <div class="mypage__icon-wrap">
+                  <i class='mypage__lock-icon bx bx-lock-alt'></i>비밀번호 변경
+                </div>
+                <div>
+                  <i class='mypage__angleright-icon bx bx-chevron-right'></i>
+                </div>
               </a>
             </li>
             <li>
               <a href="../mypage/inquiry" class="mypage__inquiry">
-                <div class="mypage__icon-wrap"><i class='mypage__headset-icon bx bx-support'></i>문의내역
+                <div class="mypage__icon-wrap">
+                  <i class='mypage__headset-icon bx bx-support'></i>문의내역
                 </div>
-                <div><i class='mypage__angleright-icon bx bx-chevron-right'></i></div>
+                <div>
+                  <i class='mypage__angleright-icon bx bx-chevron-right'></i>
+                </div>
               </a>
             </li>
             <li>
               <a href="../mypage/block" class="mypage__blockMember">
-                <div class="mypage__icon-wrap"><i class='mypage__userlock-icon bx bxs-user-x'></i>차단 계정 관리</div>
-                <div><i class='mypage__angleright-icon bx bx-chevron-right'></i></div>
+                <div class="mypage__icon-wrap">
+                  <i class='mypage__userlock-icon bx bxs-user-x'></i>차단 계정 관리
+                </div>
+                <div>
+                  <i class='mypage__angleright-icon bx bx-chevron-right'></i>
+                </div>
               </a>
             </li>
           </ul>
         </nav>
       </div>
-
     </section>
   </main>
-
 </template>
 
 <script setup>
@@ -228,11 +227,6 @@ const handleFileChange = async (event) => {
 
 <style scoped>
 @import url('/public/css/mypage/mypageMain.css');
-
-
-fieldset {
-  border: none
-}
 
 .mypage__menulist li a,
 .mypage__fuction-icons li a {

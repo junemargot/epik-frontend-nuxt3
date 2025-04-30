@@ -3,7 +3,6 @@
     <section class="board">
       <div class="board__header">
         <h1>회원 목록</h1>
-        <!-- <p>총 가입자수 180명</p> -->
         <p>전체 회원수 : {{ totalCount }}명</p>
       </div>
       <div class="board__container">
@@ -370,16 +369,12 @@ const handleClickOutside = (e) => {
 
 // 프로필 이미지 url 생성 함수
 const getFullImageUrl = (imagePath) => {
-  // if(!imagePath) return `${apiBase}/images/basic.png`;
-
   // URL 형식인지 확인
   if(typeof imagePath === 'string' && (imagePath.startsWith('http://') || imagePath.startsWith('https://'))) {
-  // if(imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath; // 이미 URL이면 그대로 반환
   }
 
   // 아니면 서버 경로와 결합
-  // return `${apiBase}/images/${imagePath}`;
   return `${apiBase}/${imagePath}`;
 
 }
