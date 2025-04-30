@@ -3,7 +3,7 @@
     <section class="board">
       <div class="board__header">
         <h1>회원 목록</h1>
-        <p>전체 회원수 : {{ totalCount }}명</p>
+        <p>전체 회원수 {{ totalCount }}명</p>
       </div>
       <div class="board__container">
         <div class="board__list">
@@ -27,7 +27,7 @@
               <div class="board__id">{{ member.username }}</div><!-- 아이디 -->
               <div class="board__nickname">{{ member.nickname }}</div>
               <div class="board__joinDate">{{ formatDate(member.joinDate) }}</div>
-              <div class="board__status">{{ member.status }}</div>
+              <div class="board__status">정상</div>
               <div class="board__management">
                 <button class="delBtn" @click.stop="deleteAccount(member.id)">계정 삭제</button>
               </div>
@@ -51,14 +51,14 @@
                   <div class="board__user-type">
                     <p><strong>가입 유형:</strong>{{ getLoginTypeLabel(member.loginType) }}</p>
                   </div>
-                  <div class="board__user-feed-count">
+                  <!-- <div class="board__user-feed-count">
                     <p><strong>작성 피드:</strong> {{ member.writtenFeedCount }}</p>
-                  </div>
+                  </div> -->
                   <!-- <div class="board__user-report-count">
                     <p><strong>누적 신고수:</strong> {{ member.reportedCount }}</p>
                   </div> -->
                   <div class="board__user-status">
-                    <p><strong>회원 상태:</strong> {{ member.status || '정상' }}</p>
+                    <p><strong>회원 상태:</strong>정상</p>
                   </div>
                   <div class="board__user-signup-date">
                     <p><strong>가입일:</strong> {{ formatDate(member.joinDate) }}</p>
@@ -67,71 +67,54 @@
                     <p><strong>최근 접속일:</strong> {{ formatDateTime(member.lastAccess) }}</p>
                   </div>
                 </div>
-              </div><!-- board__user-details -->
+              </div>
             </div>
-          </div> <!-- END BOARD BODY -->
-        </div> <!-- END BOARD LIST-->
+          </div>
+        </div>
       </div>
       <!-- END BOARD CONTAINER -->
-
-      <!-- PAGINATION / REGISTRATION -->
-      <div class="pagination-wrapper">
-        <div class="pagination">
-          <button type="button" class="page-btn start-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(1)">
-            <i class="bx bx-chevrons-left"></i>
-          </button>
-          <button type="button" class="page-btn prev-page" :disabled="!hasPrevPage"
-            @click.prevent.stop="changePage(currentPage - 1)">
-            <i class="bx bx-chevron-left"></i>
-          </button>
-          <button v-for="page in pages" :key="page" type="button" class="page-btn"
-            :class="{ active: currentPage === page }" @click.prevent.stop="changePage(page)">
-            {{ page }}
-          </button>
-          <button type="button" class="page-btn next-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(currentPage + 1)">
-            <i class="bx bx-chevron-right"></i>
-          </button>
-          <button type="button" class="page-btn end-page" :disabled="!hasNextPage"
-            @click.prevent.stop="changePage(totalPages)">
-            <i class="bx bx-chevrons-right"></i>
-          </button>
-        </div>
-      </div>
-      <!-- END PAGINATION -->
-    </section>
-
-    <!-- SEARCH BAR -->
-    <section class="search">
-      <div class="search__bar">
-        <div class="search__dropdown">
-          <div id="drop-text" class="search__text" @click="toggleDropdown">
-            <span id="span">{{ selectedCategory }}</span>
-            <i id="icon" class='bx bx-chevron-down' :style="{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }">
-            </i>
-          </div>
-          <ul id="drop-list" class="search__list" :class="{ show: isOpen }">
-            <li class="search__item" v-for="item in categories" :key="item" @click="selectCategory(item)">
-              {{ item }}
-            </li>
-          </ul>
-        </div>
-        <div class="search__box">
-          <input type="text" id="search-input" :placeholder="inputPlaceholder" v-model="searchQuery"
-            @keyup.enter="performSearch" />
-          <i class='bx bx-search' @click.prevent.stop='performSearch'></i>
-        </div>
+      <!-- PAGINATION -->
+      <div class="pagination-registration-container">
+        <Pagination 
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          :has-prev-page="currentPage > 1"
+          :has-next-page="currentPage < totalPages"
+          :visible-pages="pages"
+          @page-change="changePage"
+        />
       </div>
     </section>
-    <!-- END SEARCH BAR -->
   </div>
+  <!-- SEARCH BAR -->
+  <SearchBar
+    :initial-category="getInitialCategory()"
+    :initial-query="searchQuery"
+    @search="handleSearch"
+  />
 </template>
 
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useDataFetch } from '~/composables/useDataFetch';
+import { useRoute, useRouter } from 'vue-router';
+import { usePaginationStore } from '~/stores/pagination';
+import Pagination from '~/components/admin/Pagination.vue';
+import SearchBar from '~/components/admin/SearchBar.vue';
+import { categoryMapping } from '~/utils/categoryMapping';
+
+// Pinia 스토어 초기화
+const paginationStore = usePaginationStore();
+
+// computed 상태 (Pinia 스토어와 실시간 동기화)
+const totalPages = computed(() => paginationStore.totalPages);
+const currentPage = computed(() => paginationStore.currentPage);
+const hasPrevPage = computed(() => paginationStore.hasPrevPage);
+const hasNextPage = computed(() => paginationStore.hasNextPage);
+const pages = computed(() => paginationStore.visiblePages);
+
+const router = useRouter();
+const route = useRoute();
 
 // API 기본 URL 설정
 const config = useRuntimeConfig();
@@ -140,11 +123,7 @@ const apiBase = config.public.apiBase;
 // 회원 데이터 및 페이지네이션 상태 관리
 const members = ref([]);
 const totalCount = ref(0);
-const totalPages = ref(0);
-const currentPage = ref(1);
-const hasPrevPage = ref(false);
-const hasNextPage = ref(false);
-const pages = ref([]);
+const searchQuery = ref('');
 
 const getMemberStatusText = (status) => {
   if(status === 1) return '정상회원';
@@ -152,21 +131,6 @@ const getMemberStatusText = (status) => {
   if(status === 3) return '강퇴회원';
   return '알 수 없음';
 }
-
-// 검색 관련 상태 관리
-const categories = ['통합검색', '아이디 + 닉네임', '아이디', '닉네임']; // 검색 카테고리
-const selectedCategory = ref('통합검색');
-const inputPlaceholder = ref('검색어를 입력해주세요');
-const searchQuery = ref('');
-const isOpen = ref(false); // dropdown 상태
-
-const categoryMapping = {
-  '통합검색': 'ALL',
-  '아이디 + 닉네임': 'USERNAME_NICKNAME',
-  '아이디': 'ID',
-  '닉네임': 'NICKNAME'
-};
-
 
 const getLoginTypeLabel = (loginType) => {
   // loginType이 객체인 경우
@@ -183,6 +147,103 @@ const getLoginTypeLabel = (loginType) => {
     default: return '알 수 없음';
   }
 }
+
+// 검색 초기 카테고리 값 가져오기
+const getInitialCategory = () => {
+  const searchType = route.query.s;
+  if(!searchType) return '통합검색';
+
+  // searchType 파라미터 값에 따라 적절한 카테고리 반환
+  const category = Object.entries(categoryMapping)
+    .find(([key, value]) => value === searchType)?.[0];
+
+  return category || '통합검색';
+};
+
+// 회원 목록 조회
+const fetchMembers = async (page = 1) => {
+  try {
+    const params = {
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(route.query.s && { s: route.query.s })
+    };
+
+    const queryString = new URLSearchParams(params).toString();
+    const fullUrl = `${apiBase}/admin/member?${queryString}`;
+    console.log("[REQUEST URL]: ", fullUrl);
+
+    // API 요청
+    const responseData = await $fetch(fullUrl);
+    console.log("[API 응답 전체]: ", responseData);
+
+    members.value = responseData.memberList || [];
+    totalCount.value = responseData.totalCount || 0;
+
+    // Pinia 스토어 업데이트
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: responseData.totalPages || 1, // API 응답 데이터 반영
+      hasPrevPage: responseData.hasPrev || false,
+      hasNextPage: responseData.hasNext || false
+    });
+  } catch(error) {
+    console.error("Error Fetching Member List: ", error);
+
+    if(error.message) {
+      console.error("Error Response: ", await error.response.text());
+    }
+
+    paginationStore.setPagination({
+      currentPage: page,
+      totalPages: 1,
+      hasPrevPage: false,
+      hasNextPage: false
+    });
+  };
+};
+
+// 페이지 변경 핸들러
+const changePage = async (page) => {
+  if (page < 1 || page > paginationStore.totalPages) return;
+
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      p: page,
+      ...(searchQuery.value && { k: searchQuery.value }),
+      ...(route.query.s && { s: route.query.s })
+    }
+  });
+
+  // 데이터 재요청
+  await fetchMembers(page);
+};
+
+// 검색 핸들러
+const handleSearch = async (searchData) => {
+  searchQuery.value = searchData.query;
+  console.log('검색 데이터: ', searchData);
+
+  // 페이지 초기화
+  paginationStore.setPagination({
+    currentPage: 1,
+    totalPages: paginationStore.totalPages,
+    hasPrevPage: false,
+    hasNextPage: paginationStore.hasNextPage
+  });
+
+  // URL 쿼리 파라미터 업데이트
+  router.push({
+    query: {
+      p: 1,
+      ...(searchData.query ? { k: searchData.query } : {}),
+      s: searchData.categoryCode || 'ALL'
+    }
+  });
+
+  await fetchMembers(1);
+};
 
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
@@ -208,58 +269,16 @@ const formatDateTime = (dateString) => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-// 회원 목록 조회
-const fetchMembers = async (page = 1) => {
-  const pageNumber = page;
-
-  const { data, error } = await useFetch('/admin/member', {
-    baseURL: apiBase || 'http://localhost:8081/api/v1',
-    params: {
-      p: pageNumber,
-      k: searchQuery.value,
-      s: categoryMapping[selectedCategory.value] || 'ALL'
-    },
-    cache: false,
-    key: `members-page-${page}`,
-    // credentials: 'include',
-    onResponse({ response }) {
-      console.log("SERVER RAW RESPONSE: ", response._data);
-    }
-  });
-
-  let responseData;
-
-  if (error.value) {
-    console.error("페치 에러: ", error.value);
+// 프로필 이미지 url 생성 함수
+const getFullImageUrl = (imagePath) => {
+  // URL 형식인지 확인
+  if(typeof imagePath === 'string' && (imagePath.startsWith('http://') || imagePath.startsWith('https://'))) {
+    return imagePath; // 이미 URL이면 그대로 반환
   }
 
-  if (data.value) {
-    responseData = data.value;
-    console.log('API 응답: ', data.value);
-
-    members.value = responseData.memberList || [];
-    totalCount.value = responseData.totalCount || 0;
-    totalPages.value = responseData.totalPages || 0;
-    hasPrevPage.value = responseData.hasPrev || false;
-    hasNextPage.value = responseData.hasNext || false;
-    pages.value = responseData.pages || [];
-
-    console.log("MEMBER LIST: ", members.value);
-
-    // 페이지 번호 계산
-    const rangeStart = Math.max(1, page - 2);
-    const rangeEnd = Math.min(totalPages.value, page + 2);
-    pages.value = Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
-
-    currentPage.value = page;
-  } else {
-    console.warn("NO DATA RECEIVED");
-  }
-
-  console.log("server response data:", responseData);
-
-};
-
+  // 아니면 서버 경로와 결합
+  return `${apiBase}/${imagePath}`;
+}
 
 // 계정 삭제
 const deleteAccount = async (id) => {
@@ -285,6 +304,18 @@ const deleteAccount = async (id) => {
   }
 };
 
+// route 변경 감지
+const watchRouteQuery = () => {
+  const newPage = parseInt(route.query.p) || 1;
+  const newSearchQuery = route.query.k || '';
+  const newSearchType = route.query.s || '';
+
+  paginationStore.currentPage = newPage;
+  searchQuery.value = newSearchQuery;
+  fetchMembers(newPage);
+}
+
+
 onMounted(() => {
   const storeMembers = localStorage.getItem('cachedMembers');
   if(storeMembers) {
@@ -298,6 +329,32 @@ onMounted(() => {
   }
 });
 
+// onMounted 시 초기 데이터 로드
+onMounted(async () => {
+  // 초기 검색어 설정
+  searchQuery.value = route.query.k || '';
+
+  // 페이지 번호 설정
+  const page = parseInt(route.query.p) || 1;
+
+  // 초기 데이터 로드
+  await fetchMembers(page);
+
+  // 라우드 변경 감지
+  watch(() => route.query, async (newQuery) => {
+    const newPage = parseInt(newQuery.p) || 1;
+    searchQuery.value = newQuery.k || '';
+
+    await fetchMembers(newPage);
+  }, {deep: true});
+});
+
+// beforeRouteUpdate 가드
+const beforeRouteUpdate = async (to, from, next) => {
+  await watchRouteQuery();
+  next();
+};
+defineExpose({ beforeRouteUpdate });
 
 const visibleDetailsIndex = ref(null);
 
@@ -308,85 +365,6 @@ const toggleDetails = (index) => {
 
 // 세부 정보 표시 여부 확인 함수
 const isDetailsVisible = computed(() => (index) => visibleDetailsIndex.value === index);
-
-
-// 페이지 이동 핸들러
-const changePage = async (page) => {
-  if (page < 1 || page > totalPages.value) {
-    console.warn("INVALID PAGE NUMBER:", page);
-    return;
-  }
-
-  console.log(`Changing to page: ${page}`); // 페이지 디버깅
-  await fetchMembers(page);
-  console.log("Current Page Data: ", members.value);
-};
-
-
-
-
-
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
-
-const selectCategory = (category) => {
-  selectedCategory.value = category;
-  updatePlaceholder(category);
-  isOpen.value = false; // 선택 후 드롭다운 클로즈
-};
-
-const updatePlaceholder = (category) => {
-  if (category === '통합검색') {
-    inputPlaceholder.value = '검색어를 입력해주세요';
-  } else if (category === '아이디') {
-    inputPlaceholder.value = `검색할 ${category}를 입력해주세요`;
-  } else if (category === '닉네임') {
-    inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
-  } else {
-    inputPlaceholder.value = `검색할 ${category}을 입력해주세요`;
-  }
-};
-
-const performSearch = async () => {
-  currentPage.value = 1;
-
-  await fetchMembers();
-  router.push({
-    query: {
-      k: searchQuery.value,
-      s: categoryMapping[selectedCategory.value]
-    }
-  });
-}
-
-// 클릭 외부 영역 처리
-const handleClickOutside = (e) => {
-  if (!e.target.closest('.search')) {
-    isOpen.value = false;
-  }
-};
-
-// 프로필 이미지 url 생성 함수
-const getFullImageUrl = (imagePath) => {
-  // URL 형식인지 확인
-  if(typeof imagePath === 'string' && (imagePath.startsWith('http://') || imagePath.startsWith('https://'))) {
-    return imagePath; // 이미 URL이면 그대로 반환
-  }
-
-  // 아니면 서버 경로와 결합
-  return `${apiBase}/${imagePath}`;
-
-}
-
-onMounted(() => {
-  window.addEventListener('click', handleClickOutside);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('click', handleClickOutside);
-});
-
 
 </script>
 

@@ -283,48 +283,6 @@ onMounted(async () => {
   }, {deep: true});
 });
 
-// onMounted(async () => {
-//   const storedNotices = JSON.parse(localStorage.getItem('notices'));
-//   const storedPage = JSON.parse(localStorage.getItem('currentPage'));
-//   const storedTotalPages = JSON.parse(localStorage.getItem('totalPages'));
-//   const storedPages = JSON.parse(localStorage.getItem('pages'));
-//   const storedTotalCount = JSON.parse(localStorage.getItem('totalCount')); // 추가
-
-//   if (storedNotices && storedPage && storedTotalPages && storedPages && storedTotalCount) {
-//     // 로컬 스토리지에 데이터가 있다면 복원
-//     notices.value = storedNotices;
-//     paginationStore.currentPage = storedPage;
-//     totalPages.value = storedTotalPages;
-
-//     paginationStore.setPagination({
-//       currentPage: storedPage,
-//       totalPages: storedTotalPages,
-//       hasPrevPage: storedPage > 1,
-//       hasNextPage: storedPage < storedTotalPages
-//     });
-    
-//     console.log("로컬 스토리지에서 데이터 복구 완료.");
-
-//   } else {
-//     // 초기 검색어 설정
-//     searchQuery.value = route.query.k || '';
-
-//     // 페이지 번호 설정
-//     const page = parseInt(route.query.p) || 1;
-
-//     // 초기 데이터 로드
-//     await fetchNotices(page);
-//   }
-
-//   // 라우트 변경 감지
-//   watch(() => route.query, async (newQuery) => {
-//     const newPage = parseInt(newQuery.p) || 1;
-//     searchQuery.value = newQuery.k || '';
-
-//     await fetchNotices(newPage);
-//   }, {deep: true});
-// });
-
 // beforeRouteUpdate 가드
 const beforeRouteUpdate = async (to, from, next) => {
   await watchRouteQuery();
