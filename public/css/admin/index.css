@@ -4,20 +4,14 @@ main {
   padding: 10px 20px 20px 20px !important;
 }
 
-main .content__title {
-  font-size: 24px;
-  font-weight: 600;
-}
-
 main .content__info-data {
-  /* margin-top: 36px; */
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   grid-gap: 20px;
 }
 
-main .content__info-data .card {
+.card {
   padding: 20px;
   border-radius: 10px;
   background: var(--white);
@@ -81,33 +75,50 @@ main .card .label {
 
 /* main datas ====================== */
 main .data {
-  display: flex;
-  grid-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  grid-auto-rows: minmax(300px, auto);
   margin-top: 20px;
-  flex-wrap: wrap;
+  align-items: stretch;
 }
 
-/* content data 아래 */
 main .data .content-data {
   flex-grow: 1;
-  /* flex-basis: 400px; */
   flex-basis: 600px;
   padding: 20px;
   background: var(--white);
   border-radius: 10px;
   box-shadow: var(--shadow-2);
+  height: 100%;
 }
 
 main .content-data .head {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
-main .content-data .head .h3 {
-  font-size: 20px;
-  font-weight: 600;
+main .content-data .head h3 {
+  flex: 1;
+  margin: 0;
+  text-align: left;
+  font-weight: 600 !important;
+  font-size: 18px;
+}
+
+main .data .content-data .head h3 > a {
+  display: block;
+  text-align: left;
+  font-family: 'Pretendard-Bold', sans-serif;
+}
+
+main .content-data .notice table tbody td {
+  text-align: center;
+}
+
+main .content-data .notice table tbody td.content-title {
+  text-align: left;
 }
 
 main .content-data .head .menu {
@@ -178,11 +189,11 @@ main .content-data .notice table > thead > tr > th {
 }
 
 main .content-data .notice table > tbody > tr > td {
-  padding-top: 8px;
+  padding-top: 12px;
 }
 
 .content-num {
-  width: 10%;
+  width: 7%;
 }
 
 .content-title {
@@ -194,7 +205,7 @@ main .content-data .notice table > tbody > tr > td {
   text-decoration: underline;
 }
 .content-writer {
-  width: 10%;
+  width: 15%;
 }
 
 .content-date {

@@ -22,7 +22,7 @@
           <div class="content-data" v-for="(section, index) in contentSections" :key="index">
             <div class="head">
               <h3>
-                <Router-Link :to="section.link">{{ section.title }}</Router-Link> <!-- 소제목 링크 달기 -->
+                <Router-Link :to="section.link">{{ section.title }}</Router-Link>
               </h3>
               <div class="menu">
                 <i class='bx bx-dots-horizontal-rounded icon' @click="toggleMenu(index)"></i>
@@ -32,7 +32,7 @@
                   </li>
                   <li v-if="section.title === '공지사항'">
                     <RouterLink to="/admin/notice/new">글작성</RouterLink>
-                  </li> <!-- 수정 다른 하위 메뉴에선 안보이도록 -->
+                  </li>
                 </ul>
               </div>
             </div>
@@ -54,10 +54,6 @@
                     </td>
                     <td class="content-writer">{{ notice.writer }}</td>
                     <td class="content-date">{{ formatDate(notice.writeDate) }}</td>
-                    <!-- <td class="content-num">{{ item.number }}</td>
-                    <td class="content-title">{{ item.title }}</td>
-                    <td class="content-writer">{{ item.writer }}</td>
-                    <td class="content-date">{{ item.date }}</td> -->
                   </tr>
                 </tbody>
               </table>
@@ -114,7 +110,7 @@ const getRandomInt = (min, max) => {
 }
 
 const progressItems = ref([
-  { value: getRandomInt(100, 200), description: '오늘 방문자 수', date: getToday(), unit: '명', progress: '60%' },
+  { value: getRandomInt(20, 60), description: '오늘 방문자 수', date: getToday(), unit: '명', progress: '60%' },
   { value: getRandomInt(5, 20), description: '오늘 신규회원', date: getToday(), unit: '명', progress: '30%' },
   { value: getRandomInt(5, 10), description: '새로 등록된 피드', date: getToday(), unit: '건', progress: '40%' },
   { value: getRandomInt(1, 10), description: '1:1 문의접수', date: getToday(), unit: '건', progress: '50%' },
@@ -191,9 +187,9 @@ onMounted(async () => {
       title: '비즈니스 문의내역',
       link: '/admin/inquiries/business',
       items: [
-        { id: 5, title: '협찬 제안 문의', writer: 'ABC기업', writeDate: '2024-11-25' },
-        { id: 4, title: '공동 이벤트 제안', writer: 'XYZ회사', writeDate: '2024-11-23' },
-        { id: 3, title: '탈퇴 신청 문의', writer: '김철수', writeDate: '2024-11-20' },
+        { id: 5, title: '협찬 제안 문의', writer: '김경민', writeDate: '2024-11-25' },
+        { id: 4, title: '공동 이벤트 제안', writer: '담당자', writeDate: '2024-11-23' },
+        { id: 3, title: '탈퇴 신청 문의', writer: '김철재', writeDate: '2024-11-20' },
         { id: 2, title: '이메일 인증 실패', writer: '박민수', writeDate: '2024-11-20' },
         { id: 1, title: '포인트 적립 관련 문의', writer: '최유리', writeDate: '2024-11-19' },
       ]
@@ -202,9 +198,9 @@ onMounted(async () => {
       title: '피드 신고내역',
       link: '/admin/reports/feed',
       items: [
-        { id: 5, title: '게시물 수정 요청드립니다.', writer: '바니띵크', writeDate: '2024-11-25' },
-        { id: 4, title: '공동 이벤트 제안', writer: 'XYZ회사', writeDate: '2024-11-23' },
-        { id: 3, title: '탈퇴 신청 문의', writer: '김철수', writeDate: '2024-11-20' },
+        { id: 5, title: '게시물 수정 요청드립니다.', writer: '바니', writeDate: '2024-11-25' },
+        { id: 4, title: '공동 이벤트 제안', writer: '래빗', writeDate: '2024-11-23' },
+        { id: 3, title: '탈퇴 신청 문의', writer: '애플', writeDate: '2024-11-20' },
         { id: 2, title: '이메일 인증 실패', writer: '박민수', writeDate: '2024-11-20' },
         { id: 1, title: '포인트 적립 관련 문의', writer: '최유리', writeDate: '2024-11-19' },
       ]
@@ -224,5 +220,5 @@ const formatDate = (dateString) => {
 </script>
 
 <style lang="css" scoped>
-@import 'public/css/admin/index.css';
+@import url('public/css/admin/index.css');
 </style>
