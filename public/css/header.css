@@ -2,7 +2,9 @@
 
 /* ****** header ******  */
 .header-box {
-  width: 960px;
+  /* width: 960px; */
+  /* width: 1400px; */
+  width: 100%;
   margin: 0 auto;
   background-color: var(--background-1);
 }
@@ -68,7 +70,8 @@
 
 /* ****** dropdown-menu ******  */
 .dropdown-menu {
-  width: 960px;
+  /* width: 960px; */
+  width: 100%;
   height: 800px;
   position: fixed;
   top: -710px;
@@ -82,7 +85,8 @@
 .move-sidebar {
   display: block;
   background-color: var(--background-1);
-  width: 960px;
+  /* width: 960px; */
+  width: 100%;
   height: 860px;
   position: fixed;
   top: 0;

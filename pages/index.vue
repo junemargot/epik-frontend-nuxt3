@@ -1,6 +1,6 @@
 <!-- MAIN PAGE -->
 <template>
-  <div class="container">
+  <div class="main-container">
     <div class="photo-slider">
       <div class="photo-slider__container" ref="sliderRef" :style="sliderStyle">
         <div v-for="(slide, index) in slides" :key="index" class="photo-slider__item">
@@ -36,8 +36,20 @@
       </div>
     </div>
 
+    <div class="tag-buttons">
+      <button class="tag-button">🎫 티켓 오픈 임박</button>
+      <button class="tag-button">🔥 인기급상승 콘서트</button>
+      <button class="tag-button">🎻 핫이슈 클래식 & 무용</button>
+      <button class="tag-button">🖼️ 봄날에 가기 좋은 전시</button>
+      <button class="tag-button">🛩️ 해외 내한 공연</button>
+      <button class="tag-button">📈 조회수 급상승</button>
+      <button class="tag-button">🍭 애니메이션 팝업</button>
+      <button class="tag-button">🌈 체험형 인터랙티브</button>
+      <button class="tag-button">🖋️ 기록덕후 추천 팝업</button>
+    </div>
+
     <!-- 팝업 -->
-    <div class="popup">
+    <div class="popup-area">
       <h2 class="card__title">Pop-up</h2>
       <div class="card__grid">
         <div v-for="(item, index) in popupItems" :key="index" class="card__item">
@@ -64,18 +76,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 배너 섹션 -->
-    <!-- <div class="banner">
-      <div class="banner__grid">
-        <img src="/images/베너1.png" alt="Banner 1" class="banner__item">
-        <a href="http://localhost:3001/popup/159"><img src="/images/베너2.png" alt="Banner 2" class="banner__item"></a>
-        <a href="http://localhost:3001/musical/146"><img src="/images/베너3.png" alt="Banner 3" class="banner__item"></a>
-        <img src="/images/베너4.png" alt="Banner 4" class="banner__item">
-        <img src="/images/베너5.png" alt="Banner 5" class="banner__item">
-        <img src="/images/베너6.png" alt="Banner 6" class="banner__item">
-      </div>
-    </div> -->
 
     <!-- 콘서트 -->
     <div class="concert">
@@ -206,10 +206,9 @@ if (slidesError.value) {
 
 } else if (slidesData.value) {
   const rawData = Array.isArray(slidesData.value) ? slidesData.value : [slidesData.value];
-  slides.value = normalizeImageField(rawData.slice(0, 6), 'popup');
-  console.log('=== 슬라이드 팝업 데이터 ===:', slides.value)
+  slides.value = normalizeImageField(rawData.slice(0, 10), 'popup');
+  // slides.value = normalizeImageField(rawData, 'popup');
 }
-
 
 // 팝업 데이터 조회 및 정규화
 const { data: popupData, error: popupError } = await useFetch('/api/v1/popup/random', {
@@ -222,8 +221,7 @@ if (popupError.value) {
 
 } else if (popupData.value) {
   const rawData = Array.isArray(popupData.value) ? popupData.value : [popupData.value];
-  popupItems.value = normalizeImageField(rawData.slice(0, 4), 'popup');
-  console.log('=== 팝업 데이터 ===:', popupItems.value)
+  popupItems.value = normalizeImageField(rawData.slice(0, 6), 'popup');
 }
 
 // 콘서트 데이터 조회 및 정규화
@@ -237,8 +235,7 @@ if (concertError.value) {
 
 } else if (concertData.value) {
   const rawData = Array.isArray(concertData.value) ? concertData.value : [concertData.value];
-  concertItems.value = normalizeImageField(rawData.slice(0, 4), 'concert');
-  console.log('=== 콘서트 데이터 ===:', concertItems.value)
+  concertItems.value = normalizeImageField(rawData.slice(0, 6), 'concert');
 }
 
 // 뮤지컬 데이터 조회 및 정규화
@@ -252,8 +249,7 @@ if (musicalError.value) {
 
 } else if (musicalData.value) {
   const rawData = Array.isArray(musicalData.value) ? musicalData.value : [musicalData.value];
-  musicalItems.value = normalizeImageField(rawData.slice(0, 4), 'musical');
-  console.log('=== 뮤지컬 데이터 ===:', musicalItems.value)
+  musicalItems.value = normalizeImageField(rawData.slice(0, 6), 'musical');
 }
 
 // 전시회 데이터 조회 및 정규화
@@ -264,35 +260,13 @@ const { data: exhibitionData, error: exhibitionError } = await useFetch('/api/v1
 
 if (exhibitionError.value) {
   const rawData = Array.isArray(exhibitionData.value) ? exhibitionData.value : [exhibitionData.value];
-  console.log('Raw Exhibition data:', JSON.stringify(rawData, null, 2));
   console.error('전시회 API 호출 에러:', exhibitionError.value)
   
-  exhibitionItems.value = normalizeImageField(rawData.slice(0, 4), 'exhibition');
-  console.log('Normalized exhibition items:', JSON.stringify(exhibitionItems.value, null, 2));
-
-  exhibitionItems.value.forEach((item, index) => {
-    console.log(`Exhibition ${index}:`, 
-      'Original fileSaveName:', item.fileSaveName,
-      'Normalized imageFileName:', item.imageFileName);
-  });
+  exhibitionItems.value = normalizeImageField(rawData.slice(0, 6), 'exhibition');
 
 } else if (exhibitionData.value) {
   const rawData = Array.isArray(exhibitionData.value) ? exhibitionData.value : [exhibitionData.value];
-  exhibitionItems.value = normalizeImageField(rawData.slice(0, 4), 'exhibition');
-
-  // 정규화된 데이터 확인
-  console.log('Raw Exhibition data:', rawData);
-  console.log('Normalized exhibition items:', exhibitionItems.value);
-
-  // 각 항목의 이미지 필드 확인
-  exhibitionItems.value.forEach((item, index) => {
-    console.log(`Exhibition ${index} - Original field:`,
-      item.fileSaveName,
-      'Normalized field:',
-      item.imageFileName);
-  });
-
-  console.log('=== 전시회 데이터 ===:', exhibitionItems.value)
+  exhibitionItems.value = normalizeImageField(rawData.slice(0, 6), 'exhibition');
 };
 
 // 날짜 포맷팅 함수
