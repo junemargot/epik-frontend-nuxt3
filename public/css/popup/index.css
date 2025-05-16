@@ -6,8 +6,8 @@ body {
 
 .main-container {
   /* width: 960px; */
-  /* width: 100%; */
-  width: 1480px;
+  width: 100%;
+  /* width: 1480px; */
   margin: 0 auto;
   padding: 20px 20px;
   box-sizing: border-box;

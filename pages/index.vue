@@ -42,7 +42,6 @@
       <button class="tag-button">🎻 핫이슈 클래식 & 무용</button>
       <button class="tag-button">🖼️ 봄날에 가기 좋은 전시</button>
       <button class="tag-button">🛩️ 해외 내한 공연</button>
-      <button class="tag-button">📈 조회수 급상승</button>
       <button class="tag-button">🍭 애니메이션 팝업</button>
       <button class="tag-button">🌈 체험형 인터랙티브</button>
       <button class="tag-button">🖋️ 기록덕후 추천 팝업</button>

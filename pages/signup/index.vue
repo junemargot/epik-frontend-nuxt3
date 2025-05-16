@@ -388,6 +388,7 @@ input[type="checkbox"] {
 
 .sign-in__title {
   text-align: center;
+  font-family: 'Pretendard-SemiBold' !important;
 }
 
 .sign-in__text {

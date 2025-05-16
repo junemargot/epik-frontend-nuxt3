@@ -33,7 +33,7 @@ hr {
   width: 162px;
   height: 160px;
   border-radius: 15px;
-  border: solid 1.5px #222222;
+  border: solid 1px #222222;
   overflow: hidden;
   display: flex;
   flex-direction: column;
